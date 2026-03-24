@@ -15,6 +15,7 @@
   .field-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
   .field-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
   .field-row-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .field-row-5 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
   .field { display: flex; flex-direction: column; gap: 5px; }
   .field label { font-size: 12px; color: #666; font-weight: 500; }
   .req { color: #E24B4A; margin-left: 2px; }
@@ -25,30 +26,19 @@
   }
   .field input:focus, .field select:focus { border-color: #378ADD; }
   .field input::placeholder { color: #bbb; }
-  .field input:disabled, .field select:disabled { background: #F5F5F0; color: #bbb; cursor: not-allowed; }
+  .field input:disabled { background: #F5F5F0; color: #bbb; cursor: not-allowed; }
 
   /* Date click anywhere */
   .date-wrap { position: relative; }
   input[type="date"] { cursor: pointer; }
   input[type="date"]::-webkit-calendar-picker-indicator { position: absolute; left: 0; right: 0; top: 0; bottom: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
-  input[type="date"]:disabled::-webkit-calendar-picker-indicator { cursor: not-allowed; }
 
-  /* Validation states */
-  .field input.error, .field select.error { border-color: #E24B4A; background: #FFF8F8; }
+  /* Validation */
+  .field input.error { border-color: #E24B4A; background: #FFF8F8; }
   .field-error { font-size: 11px; color: #E24B4A; margin-top: 3px; display: none; }
   .field-error.show { display: block; }
-  .field-hint { font-size: 11px; color: #999; margin-top: 3px; }
 
   .divider { height: 1px; background: #F0EFE9; margin: 24px 0; }
-
-  /* Tabs */
-  .tabs-wrap { display: flex; border: 1px solid #D8D7D0; border-radius: 8px; overflow: hidden; margin-bottom: 20px; width: fit-content; }
-  .tab-btn { padding: 9px 32px; font-size: 13px; cursor: pointer; border: none; background: #F5F5F0; color: #888; border-right: 1px solid #D8D7D0; font-family: inherit; transition: background 0.15s; }
-  .tab-btn:last-child { border-right: none; }
-  .tab-btn.active-tv { background: #E6F1FB; color: #185FA5; font-weight: 600; }
-  .tab-btn.active-poster { background: #E1F5EE; color: #0F6E56; font-weight: 600; }
-  .panel { display: none; }
-  .panel.active { display: block; }
 
   /* Searchable customer */
   .search-select-wrap { position: relative; }
@@ -87,6 +77,8 @@
   .group-header-left { display: flex; align-items: center; gap: 10px; }
   .group-index { width: 24px; height: 24px; border-radius: 50%; background: #E6F1FB; color: #185FA5; font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .group-name-preview { font-size: 13px; font-weight: 600; color: #1a1a1a; }
+  .group-ch-badge { font-size: 11px; padding: 2px 8px; border-radius: 20px; background: #E6F1FB; color: #185FA5; font-weight: 500; }
+  .group-ch-badge.poster { background: #E1F5EE; color: #0F6E56; }
   .group-header-right { display: flex; align-items: center; gap: 8px; }
   .arrow { font-size: 11px; color: #999; transition: transform 0.2s; display: inline-block; }
   .arrow.open { transform: rotate(180deg); }
@@ -94,6 +86,20 @@
   .del-group:hover { background: #FEE8E8; border-color: #F7C1C1; }
   .group-body { padding: 16px; border-top: 1px solid #F0EFE9; display: none; }
   .group-body.open { display: block; }
+
+  /* Number input formatted */
+  .num-input-wrap { position: relative; }
+  .num-display { height: 38px; border: 1px solid #D8D7D0; border-radius: 8px; padding: 0 12px; font-size: 13px; color: #1a1a1a; background: #fff; width: 100%; outline: none; transition: border 0.15s; cursor: text; display: flex; align-items: center; }
+  .num-display:focus-within { border-color: #378ADD; }
+  .num-real { position: absolute; opacity: 0; pointer-events: none; width: 1px; }
+
+
+  /* Channel selector inside group */
+  .ch-selector { display: flex; gap: 8px; margin-bottom: 14px; }
+  .ch-btn { padding: 6px 20px; font-size: 12px; cursor: pointer; border: 1.5px solid #D8D7D0; border-radius: 8px; background: #F9F9F6; color: #999; font-family: inherit; transition: all 0.15s; }
+  .ch-btn:hover { border-color: #B0B0B0; color: #555; }
+  .ch-btn.active-tv { border-color: #185FA5; background: #E6F1FB; color: #185FA5; font-weight: 600; }
+  .ch-btn.active-poster { border-color: #0F6E56; background: #E1F5EE; color: #0F6E56; font-weight: 600; }
 
   /* Media */
   .media-label-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap; }
@@ -110,17 +116,26 @@
   .dropdown-item:hover { background: #F5F5F0; }
   .di-dot { width: 6px; height: 6px; border-radius: 50%; background: #D8D7D0; flex-shrink: 0; }
 
-  /* TVC */
+  /* TVC block — updated with date fields */
   .tvc-block { background: #F9F9F6; border: 1px solid #E5E4DE; border-radius: 8px; margin-bottom: 8px; overflow: hidden; }
-  .tvc-block-header { display: flex; align-items: center; justify-content: space-between; padding: 9px 14px; }
-  .tvc-block-left { display: flex; align-items: center; gap: 8px; }
+  .tvc-block-header { display: flex; align-items: center; gap: 10px; padding: 9px 14px; flex-wrap: wrap; }
+  .tvc-block-left { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
   .tvc-dot { width: 8px; height: 8px; border-radius: 50%; background: #378ADD; flex-shrink: 0; }
-  .tvc-block-name { font-size: 13px; font-weight: 600; color: #1a1a1a; }
-  .tvc-block-right { display: flex; align-items: center; gap: 8px; }
+  .tvc-block-name { font-size: 13px; font-weight: 600; color: #1a1a1a; white-space: nowrap; }
+  .tvc-dates { display: flex; align-items: center; gap: 6px; flex: 1; }
+  .tvc-date-label { font-size: 11px; color: #999; white-space: nowrap; flex-shrink: 0; }
+  .tvc-date-input { height: 28px; border: 1px solid #D8D7D0; border-radius: 6px; padding: 0 8px; font-size: 12px; background: #fff; color: #1a1a1a; font-family: inherit; outline: none; width: 130px; cursor: pointer; }
+  .tvc-date-input:focus { border-color: #378ADD; }
+  .tvc-date-input.error { border-color: #E24B4A; background: #FFF8F8; }
+  .tvc-date-err { font-size: 11px; color: #E24B4A; display: none; white-space: nowrap; }
+  .tvc-date-err.show { display: inline; }
+  .tvc-block-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; margin-left: auto; }
   .add-url-btn { font-size: 11px; color: #185FA5; cursor: pointer; padding: 4px 10px; border-radius: 6px; border: 1px solid #B5D4F4; background: #fff; font-family: inherit; }
   .add-url-btn:hover { background: #E6F1FB; }
   .tvc-del-btn { font-size: 12px; color: #E24B4A; cursor: pointer; padding: 3px 8px; border-radius: 6px; }
   .tvc-del-btn:hover { background: #FEE8E8; }
+
+  /* URL rows */
   .url-list { border-top: 1px solid #EEEEE9; display: none; }
   .url-row { display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-bottom: 1px solid #EEEEE9; }
   .url-row:last-child { border-bottom: none; }
@@ -154,10 +169,7 @@
   .logo-dot { width: 28px; height: 28px; border-radius: 6px; background: #E8A020; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #fff; }
   .topbar-right { font-size: 12px; color: #999; }
   .tag { font-size: 10px; padding: 2px 8px; border-radius: 20px; background: #E6F1FB; color: #185FA5; font-weight: 500; margin-left: 6px; }
-
-  /* Date range info badge */
-  .date-range-info { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; color: #185FA5; background: #E6F1FB; padding: 3px 10px; border-radius: 20px; margin-bottom: 12px; }
-  .date-range-info.warn { color: #92600A; background: #FEF3CD; }
+  .ch-label { font-size: 12px; color: #666; font-weight: 500; margin-bottom: 6px; }
 </style>
 </head>
 <body>
@@ -176,7 +188,7 @@
   <div class="form-title">Tạo chiến dịch mới</div>
   <div class="form-subtitle">Điền đầy đủ thông tin bên dưới để khởi tạo chiến dịch</div>
 
-  <!-- THÔNG TIN CHUNG -->
+  <!-- THÔNG TIN CHUNG — giữ nguyên -->
   <div class="section-label">Thông tin chung</div>
   <div class="field-grid-2" style="margin-bottom:14px">
     <div class="field">
@@ -199,118 +211,24 @@
   <div class="field-grid-2" style="margin-bottom:4px">
     <div class="field">
       <label>Ngày bắt đầu chiến dịch <span class="req">*</span></label>
-      <div class="date-wrap">
-        <input type="date" id="camp-start" onchange="onCampDateChange()">
-      </div>
+      <div class="date-wrap"><input type="date" id="camp-start" onchange="onCampDateChange()"></div>
       <span class="field-error" id="err-camp-start"></span>
     </div>
     <div class="field">
       <label>Ngày kết thúc chiến dịch <span class="req">*</span></label>
-      <div class="date-wrap">
-        <input type="date" id="camp-end" onchange="onCampDateChange()">
-      </div>
+      <div class="date-wrap"><input type="date" id="camp-end" onchange="onCampDateChange()"></div>
       <span class="field-error" id="err-camp-end"></span>
     </div>
   </div>
 
   <div class="divider"></div>
 
-  <!-- CẤU HÌNH KÊNH -->
-  <div class="section-label">Cấu hình kênh</div>
-  <div class="tabs-wrap">
-    <button class="tab-btn active-tv" onclick="switchTab('tv',this)">TV</button>
-    <button class="tab-btn" onclick="switchTab('poster',this)">Poster</button>
-  </div>
-
-  <!-- TV Panel -->
-  <div id="panel-tv" class="panel active">
-    <div id="camp-range-hint-tv" style="display:none" class="date-range-info"></div>
-    <div class="field-grid-3" style="margin-bottom:4px">
-      <div class="field">
-        <label>Gói tính năng <span class="req">*</span></label>
-        <select onchange="onPackageChange('tv',this.value)">
-          <option value="">Chọn gói</option>
-          <option value="standard">Tiêu chuẩn</option>
-          <option value="advanced">Nâng cao</option>
-          <option value="premium">Cao cấp</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>Ngày bắt đầu kênh <span class="req">*</span></label>
-        <div class="date-wrap">
-          <input type="date" id="ch-start-tv" onchange="onChannelDateChange('tv')" disabled>
-        </div>
-        <span class="field-error" id="err-ch-start-tv"></span>
-        <span class="field-hint" id="hint-ch-start-tv" style="display:none">Chọn ngày chiến dịch trước</span>
-      </div>
-      <div class="field">
-        <label>Ngày kết thúc kênh <span class="req">*</span></label>
-        <div class="date-wrap">
-          <input type="date" id="ch-end-tv" onchange="onChannelDateChange('tv')" disabled>
-        </div>
-        <span class="field-error" id="err-ch-end-tv"></span>
-      </div>
-    </div>
-    <div id="addon-tv" style="display:none;margin-top:14px" class="addon-row">
-      <div class="addon-box" id="addonbox-tv">
-        <div class="addon-left">
-          <div><div class="addon-label">Tính năng NFC</div><div class="addon-desc" id="addondesc-tv">Chưa kích hoạt</div></div>
-          <span class="addon-badge" id="addonbadge-tv">Add-on</span>
-        </div>
-        <div class="switch-wrap">
-          <span class="switch-text" id="switchtext-tv">Tắt</span>
-          <div class="switch" id="switch-tv" onclick="toggleNfc('tv')"><div class="switch-knob"></div></div>
-        </div>
-      </div>
-    </div>
-    <div style="margin-top:14px" id="tv-groups"></div>
-    <button class="add-group-btn" onclick="addGroup('tv')"><div class="plus-circle">+</div> Thêm nhóm quảng cáo</button>
-  </div>
-
-  <!-- Poster Panel -->
-  <div id="panel-poster" class="panel">
-    <div id="camp-range-hint-poster" style="display:none" class="date-range-info"></div>
-    <div class="field-grid-3" style="margin-bottom:4px">
-      <div class="field">
-        <label>Gói tính năng <span class="req">*</span></label>
-        <select onchange="onPackageChange('poster',this.value)">
-          <option value="">Chọn gói</option>
-          <option value="standard">Tiêu chuẩn</option>
-          <option value="advanced">Nâng cao</option>
-          <option value="premium">Cao cấp</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>Ngày bắt đầu kênh <span class="req">*</span></label>
-        <div class="date-wrap">
-          <input type="date" id="ch-start-poster" onchange="onChannelDateChange('poster')" disabled>
-        </div>
-        <span class="field-error" id="err-ch-start-poster"></span>
-        <span class="field-hint" id="hint-ch-start-poster" style="display:none">Chọn ngày chiến dịch trước</span>
-      </div>
-      <div class="field">
-        <label>Ngày kết thúc kênh <span class="req">*</span></label>
-        <div class="date-wrap">
-          <input type="date" id="ch-end-poster" onchange="onChannelDateChange('poster')" disabled>
-        </div>
-        <span class="field-error" id="err-ch-end-poster"></span>
-      </div>
-    </div>
-    <div id="addon-poster" style="display:none;margin-top:14px" class="addon-row">
-      <div class="addon-box" id="addonbox-poster">
-        <div class="addon-left">
-          <div><div class="addon-label">Tính năng NFC</div><div class="addon-desc" id="addondesc-poster">Chưa kích hoạt</div></div>
-          <span class="addon-badge" id="addonbadge-poster">Add-on</span>
-        </div>
-        <div class="switch-wrap">
-          <span class="switch-text" id="switchtext-poster">Tắt</span>
-          <div class="switch" id="switch-poster" onclick="toggleNfc('poster')"><div class="switch-knob"></div></div>
-        </div>
-      </div>
-    </div>
-    <div style="margin-top:14px" id="poster-groups"></div>
-    <button class="add-group-btn" onclick="addGroup('poster')"><div class="plus-circle">+</div> Thêm nhóm quảng cáo</button>
-  </div>
+  <!-- NHÓM QUẢNG CÁO -->
+  <div class="section-label">Nhóm quảng cáo</div>
+  <div id="all-groups"></div>
+  <button class="add-group-btn" onclick="addGroup()">
+    <div class="plus-circle">+</div> Thêm nhóm quảng cáo
+  </button>
 
   <div class="footer">
     <button class="btn-cancel">× Hủy</button>
@@ -320,14 +238,16 @@
 </div>
 
 <script>
-const counters={tv:0,poster:0}
-const nfcState={tv:false,poster:false}
-const mockMedia={
-  tv:['TVC_Summer_15s','TVC_Summer_30s','TVC_Brand_15s','TVC_Promo_10s','TVC_Awareness_30s'],
-  poster:['Poster_Summer_A','Poster_Summer_B','Poster_Promo_01','Poster_Brand_02','Poster_Event_05']
+let groupCounter = 0
+const nfcState = {}
+const groupChannel = {}
+
+const mockMedia = {
+  tv: ['TVC_Summer_15s','TVC_Summer_30s','TVC_Brand_15s','TVC_Promo_10s','TVC_Awareness_30s'],
+  poster: ['Poster_Summer_A','Poster_Summer_B','Poster_Promo_01','Poster_Brand_02','Poster_Event_05']
 }
-const customers=['Coca-Cola Vietnam','Vinamilk','Masan Group','TH True Milk','Unilever Vietnam','P&G Vietnam','Nestlé Vietnam','Heineken Vietnam','Grab Vietnam','Samsung Vietnam']
-let selectedCustomer=''
+const customers = ['Coca-Cola Vietnam','Vinamilk','Masan Group','TH True Milk','Unilever Vietnam','P&G Vietnam','Nestlé Vietnam','Heineken Vietnam','Grab Vietnam','Samsung Vietnam']
+let selectedCustomer = ''
 
 // ── Customer search ──
 function openCustomerDd(){ renderCustomers(document.getElementById('customer-input').value) }
@@ -355,141 +275,197 @@ function fmt(d){ if(!d) return ''; const p=d.split('-'); return p[2]+'/'+p[1]+'/
 function setErr(id,msg){ const el=document.getElementById(id); if(!el) return; el.textContent=msg; el.className='field-error'+(msg?' show':'') }
 function clearErr(id){ setErr(id,'') }
 
-// ── Campaign date change ──
+// ── Campaign date ──
 function onCampDateChange(){
   const cs=document.getElementById('camp-start').value
   const ce=document.getElementById('camp-end').value
   clearErr('err-camp-start'); clearErr('err-camp-end')
-
-  if(cs && ce && cs>ce){
-    setErr('err-camp-end','Ngày kết thúc phải sau ngày bắt đầu')
-    return
-  }
-
-  // Unlock channel dates if both campaign dates set
-  ;['tv','poster'].forEach(ch=>{
-    const s=document.getElementById('ch-start-'+ch)
-    const e=document.getElementById('ch-end-'+ch)
-    const h=document.getElementById('hint-ch-start-'+ch)
-    const hint=document.getElementById('camp-range-hint-'+ch)
-
-    if(cs && ce){
-      s.disabled=false; e.disabled=false
-      if(h) h.style.display='none'
-      hint.style.display='inline-flex'
-      hint.textContent='Thời gian chiến dịch: '+fmt(cs)+' – '+fmt(ce)
-      // Re-validate channel dates if already filled
-      if(s.value||e.value) onChannelDateChange(ch)
-    } else {
-      s.disabled=true; e.disabled=true; s.value=''; e.value=''
-      if(h) h.style.display='block'
-      hint.style.display='none'
-      clearErr('err-ch-start-'+ch); clearErr('err-ch-end-'+ch)
-    }
+  if(cs && ce && cs>ce){ setErr('err-camp-end','Ngày kết thúc phải sau ngày bắt đầu'); return }
+  document.querySelectorAll('.group-card').forEach(g=>{
+    const id=g.id.replace('group-','')
+    applyGroupDateRange(id)
   })
 }
 
-// ── Channel date change ──
-function onChannelDateChange(ch){
+// Apply campaign min/max to group date inputs
+function applyGroupDateRange(groupId){
   const cs=document.getElementById('camp-start').value
   const ce=document.getElementById('camp-end').value
-  const s=document.getElementById('ch-start-'+ch).value
-  const e=document.getElementById('ch-end-'+ch).value
-  clearErr('err-ch-start-'+ch); clearErr('err-ch-end-'+ch)
+  const gs=document.getElementById('gstart-'+groupId)
+  const ge=document.getElementById('gend-'+groupId)
+  if(gs){ gs.min=cs||''; gs.max=ce||'' }
+  if(ge){ ge.min=cs||''; ge.max=ce||'' }
+  if(gs&&gs.value&&cs&&gs.value<cs){ gs.value=''; if(ge) ge.value='' }
+  if(ge&&ge.value&&ce&&ge.value>ce){ ge.value='' }
+  onGroupDateChange(groupId)
+}
 
-  if(s && s<cs) { setErr('err-ch-start-'+ch,'Phải từ '+fmt(cs)+' trở đi'); return }
-  if(s && s>ce) { setErr('err-ch-start-'+ch,'Phải trước '+fmt(ce)); return }
-  if(e && e<cs) { setErr('err-ch-end-'+ch,'Phải từ '+fmt(cs)+' trở đi'); return }
-  if(e && e>ce) { setErr('err-ch-end-'+ch,'Phải trước hoặc bằng '+fmt(ce)); return }
-  if(s && e && s>e) { setErr('err-ch-end-'+ch,'Phải sau ngày bắt đầu kênh'); return }
-
-  // Re-validate all groups in this channel
-  document.querySelectorAll('#'+ch+'-groups .group-card').forEach(g=>{
-    const gid=g.id.replace('group-','')
-    validateGroupDates(gid,ch)
+// ── Group date change → set min/max on TVC dates ──
+function onGroupDateChange(groupId){
+  const gs=document.getElementById('gstart-'+groupId)
+  const ge=document.getElementById('gend-'+groupId)
+  const sv=gs?gs.value:'', ev=ge?ge.value:''
+  // Update min/max on all TVC date inputs
+  document.querySelectorAll('#tvcarea-'+groupId+' .tvc-block').forEach(block=>{
+    const tvcId=block.id.replace('tvcblock-','')
+    const ts=document.getElementById('tvcstart-'+tvcId)
+    const te=document.getElementById('tvcend-'+tvcId)
+    if(ts){ ts.min=sv||''; ts.max=ev||'' }
+    if(te){ te.min=sv||''; te.max=ev||'' }
+    if(ts&&ts.value&&sv&&ts.value<sv){ ts.value='' }
+    if(te&&te.value&&ev&&te.value>ev){ te.value='' }
   })
 }
 
-// ── Group date validation ──
-function getGroupDateInputs(groupId){
-  const body=document.getElementById('body-'+groupId)
-  if(!body) return {}
-  const dates=body.querySelectorAll('input[type="date"]')
-  return { start: dates[0], end: dates[1] }
+// ── Channel selector inside group ──
+function selectChannel(groupId, ch, el){
+  groupChannel[groupId] = ch
+  el.closest('.ch-selector').querySelectorAll('.ch-btn').forEach(b=>b.classList.remove('active-tv','active-poster'))
+  el.classList.add('active-'+ch)
+  const badge=document.getElementById('chbadge-'+groupId)
+  if(badge){
+    badge.textContent=ch==='tv'?'TV':'Poster'
+    badge.className='group-ch-badge'+(ch==='poster'?' poster':'')
+    badge.style.display='inline-block'
+  }
+
+  // Enable all fields below channel selector
+  ;['inp-name-','inp-kv-','inp-ltn-','inp-slot-','gstart-','gend-','pkg-'].forEach(prefix=>{
+    const el2=document.getElementById(prefix+groupId)
+    if(el2){ el2.disabled=false }
+  })
+  const numDisp=document.getElementById('numdisp-'+groupId)
+  if(numDisp){ numDisp.style.opacity='1'; numDisp.style.pointerEvents='auto' }
+  const numReal=numDisp?numDisp.querySelector('input'):null
+  if(numReal) numReal.disabled=false
+
+  // Re-apply campaign date range now that inputs are enabled
+  applyGroupDateRange(groupId)
+
+  const searchEl=document.getElementById('search-'+groupId)
+  if(searchEl){
+    const pkgVal=document.getElementById('pkg-'+groupId)?document.getElementById('pkg-'+groupId).value:''
+    if(pkgVal){
+      searchEl.disabled=false
+      searchEl.placeholder=ch==='tv'?'Tìm kiếm và chọn Media cho báo cáo TV':'Tìm kiếm và chọn Media cho báo cáo Poster'
+    } else {
+      searchEl.placeholder=ch==='tv'?'Tìm kiếm và chọn Media cho báo cáo TV':'Tìm kiếm và chọn Media cho báo cáo Poster'
+    }
+  }
+  const area=document.getElementById('tvcarea-'+groupId)
+  if(area){ area.innerHTML='<div class="empty-hint">Chưa có media nào được chọn</div>'; updateMediaCount(groupId) }
+  const addonRow=document.getElementById('addon-'+groupId)
+  if(addonRow) addonRow.style.display='block'
 }
 
-function validateGroupDates(groupId, ch){
-  const chS=document.getElementById('ch-start-'+ch).value
-  const chE=document.getElementById('ch-end-'+ch).value
-  const {start,end}=getGroupDateInputs(groupId)
-  if(!start||!end) return
-  const es=document.getElementById('gerr-start-'+groupId)
-  const ee=document.getElementById('gerr-end-'+groupId)
-  if(es) es.textContent=''; if(ee) ee.textContent=''
-  if(start.classList) start.classList.remove('error')
-  if(end.classList) end.classList.remove('error')
+// ── NFC per group ──
+function onPackageChange(groupId, val){
+  const row=document.getElementById('addon-'+groupId)
+  const box=document.getElementById('addonbox-'+groupId)
+  const badge=document.getElementById('addonbadge-'+groupId)
+  const desc=document.getElementById('addondesc-'+groupId)
+  const sw=document.getElementById('switch-'+groupId)
+  const swt=document.getElementById('switchtext-'+groupId)
+  const searchEl=document.getElementById('search-'+groupId)
 
-  if(!chS||!chE){ return }
-  const sv=start.value, ev=end.value
-  if(sv && sv<chS){ start.classList.add('error'); if(es){es.textContent='Phải từ '+fmt(chS)+' trở đi'; es.className='field-error show'} return }
-  if(sv && sv>chE){ start.classList.add('error'); if(es){es.textContent='Phải trước '+fmt(chE); es.className='field-error show'} return }
-  if(ev && ev<chS){ end.classList.add('error'); if(ee){ee.textContent='Phải từ '+fmt(chS)+' trở đi'; ee.className='field-error show'} return }
-  if(ev && ev>chE){ end.classList.add('error'); if(ee){ee.textContent='Phải trước hoặc bằng '+fmt(chE); ee.className='field-error show'} return }
-  if(sv && ev && sv>ev){ end.classList.add('error'); if(ee){ee.textContent='Phải sau ngày bắt đầu nhóm'; ee.className='field-error show'} }
-}
+  // Fix 2: enable media search only when package chosen
+  if(searchEl){
+    const ch=groupChannel[groupId]
+    if(val && ch){
+      searchEl.disabled=false
+      searchEl.placeholder=ch==='tv'?'Tìm kiếm và chọn Media cho báo cáo TV':'Tìm kiếm và chọn Media cho báo cáo Poster'
+    } else if(!val){
+      searchEl.disabled=true
+      searchEl.placeholder='Chọn gói tính năng trước...'
+    }
+  }
 
-// ── Tab switch ──
-function switchTab(tab,el){
-  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active-tv','active-poster'))
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'))
-  el.classList.add('active-'+tab)
-  document.getElementById('panel-'+tab).classList.add('active')
-}
+  // Fix 3: always reset NFC state fully when package changes
+  nfcState[groupId]=false
+  // Clear all URL rows from all TVC blocks and hide NFC elements
+  document.querySelectorAll('#tvcarea-'+groupId+' .url-list').forEach(l=>{ l.innerHTML=''; l.style.display='none' })
+  document.querySelectorAll('#tvcarea-'+groupId+' .add-url-btn').forEach(b=>b.style.display='none')
+  document.querySelectorAll('#tvcarea-'+groupId+' .nfc-locked-notice').forEach(n=>{ n.style.display='flex'; n.textContent='NFC chưa được kích hoạt cho gói tính năng này' })
 
-// ── Package / NFC ──
-function onPackageChange(ch,val){
-  const row=document.getElementById('addon-'+ch)
-  const box=document.getElementById('addonbox-'+ch)
-  const badge=document.getElementById('addonbadge-'+ch)
-  const desc=document.getElementById('addondesc-'+ch)
-  const sw=document.getElementById('switch-'+ch)
-  const swt=document.getElementById('switchtext-'+ch)
-  if(!val){row.style.display='none';return}
+  if(!val){ row.style.display='none'; return }
   row.style.display='block'
+
   if(val==='premium'){
-    nfcState[ch]=true
+    nfcState[groupId]=true
     box.className='addon-box active'
     badge.className='addon-badge included'; badge.textContent='Đã bao gồm'
     desc.className='addon-desc active'; desc.textContent='Đã kích hoạt — gói Cao cấp'
     sw.className='switch on'; swt.className='switch-text on'; swt.textContent='Bật'
   } else {
-    nfcState[ch]=false
     box.className='addon-box'
     badge.className='addon-badge'; badge.textContent='Add-on'
     desc.className='addon-desc'; desc.textContent='Chưa kích hoạt'
     sw.className='switch'; swt.className='switch-text'; swt.textContent='Tắt'
   }
-  refreshNfc(ch)
+  refreshNfc(groupId)
 }
-function toggleNfc(ch){
-  if(document.querySelector('#panel-'+ch+' select').value==='premium') return
-  nfcState[ch]=!nfcState[ch]
-  const box=document.getElementById('addonbox-'+ch), desc=document.getElementById('addondesc-'+ch)
-  const sw=document.getElementById('switch-'+ch), swt=document.getElementById('switchtext-'+ch)
-  if(nfcState[ch]){
+
+function toggleNfc(groupId){
+  const pkg=document.querySelector('#body-'+groupId+' select')
+  if(pkg && pkg.value==='premium') return
+  nfcState[groupId]=!nfcState[groupId]
+  const box=document.getElementById('addonbox-'+groupId)
+  const desc=document.getElementById('addondesc-'+groupId)
+  const sw=document.getElementById('switch-'+groupId)
+  const swt=document.getElementById('switchtext-'+groupId)
+  if(nfcState[groupId]){
     box.className='addon-box active'; desc.className='addon-desc active'; desc.textContent='Đã kích hoạt — Add-on'
     sw.className='switch on'; swt.className='switch-text on'; swt.textContent='Bật'
   } else {
     box.className='addon-box'; desc.className='addon-desc'; desc.textContent='Chưa kích hoạt'
     sw.className='switch'; swt.className='switch-text'; swt.textContent='Tắt'
   }
-  refreshNfc(ch)
+  refreshNfc(groupId)
 }
-function refreshNfc(ch){
-  const on=nfcState[ch]
-  document.querySelectorAll('#'+ch+'-groups .url-list').forEach(l=>{ if(on&&l.querySelectorAll('.url-row').length>0) l.style.display='block'; else if(!on) l.style.display='none' })
-  document.querySelectorAll('#'+ch+'-groups .add-url-btn').forEach(b=>b.style.display=on?'inline-block':'none')
-  document.querySelectorAll('#'+ch+'-groups .nfc-locked-notice').forEach(n=>n.style.display=on?'none':'flex')
+
+function refreshNfc(groupId){
+  const on=nfcState[groupId]
+  document.querySelectorAll('#tvcarea-'+groupId+' .url-list').forEach(l=>{ if(on&&l.querySelectorAll('.url-row').length>0) l.style.display='block'; else if(!on) l.style.display='none' })
+  document.querySelectorAll('#tvcarea-'+groupId+' .add-url-btn').forEach(b=>b.style.display=on?'inline-block':'none')
+  document.querySelectorAll('#tvcarea-'+groupId+' .nfc-locked-notice').forEach(n=>n.style.display=on?'none':'flex')
+}
+
+// ── TVC date validation (must be within group dates) ──
+function validateTvcDates(tvcId, groupId){
+  const body=document.getElementById('body-'+groupId)
+  if(!body) return
+  const groupDates=body.querySelectorAll('input[type="date"]')
+  const gs=groupDates[0]?groupDates[0].value:''
+  const ge=groupDates[1]?groupDates[1].value:''
+  const sv=document.getElementById('tvcstart-'+tvcId)
+  const ev=document.getElementById('tvcend-'+tvcId)
+  const es=document.getElementById('tvcerr-start-'+tvcId)
+  const ee=document.getElementById('tvcerr-end-'+tvcId)
+  if(!sv||!ev||!es||!ee) return
+
+  sv.classList.remove('error'); ev.classList.remove('error')
+  es.textContent=''; es.className='tvc-date-err'
+  ee.textContent=''; ee.className='tvc-date-err'
+
+  if(!gs||!ge) return
+  const s=sv.value, e=ev.value
+  if(s && s<gs){ sv.classList.add('error'); es.textContent='Phải từ '+fmt(gs)+' trở đi'; es.className='tvc-date-err show'; return }
+  if(s && s>ge){ sv.classList.add('error'); es.textContent='Phải trước '+fmt(ge); es.className='tvc-date-err show'; return }
+  if(e && e<gs){ ev.classList.add('error'); ee.textContent='Phải từ '+fmt(gs)+' trở đi'; ee.className='tvc-date-err show'; return }
+  if(e && e>ge){ ev.classList.add('error'); ee.textContent='Phải trước hoặc bằng '+fmt(ge); ee.className='tvc-date-err show'; return }
+  if(s && e && s>e){ ev.classList.add('error'); ee.textContent='Phải sau ngày bắt đầu media'; ee.className='tvc-date-err show' }
+}
+
+// ── Number formatting ──
+function formatNum(id, val){
+  const text=document.getElementById('numtext-'+id)
+  if(!text) return
+  const num=parseInt(val.replace(/\D/g,''),10)
+  if(!val||isNaN(num)){
+    text.textContent='Nhập số thiết bị'; text.style.color='#bbb'
+  } else {
+    text.textContent=num.toLocaleString('vi-VN'); text.style.color='#1a1a1a'
+  }
 }
 
 // ── Group ──
@@ -500,20 +476,23 @@ function toggleGroup(id){
 function removeGroup(id){ document.getElementById('group-'+id).remove() }
 
 // ── Media ──
-function showDropdown(id,type,val){
+function showDropdown(id, val){
+  const type = groupChannel[id] || 'tv'
   const dd=document.getElementById('dd-'+id)
   const existing=Array.from(document.querySelectorAll('#tvcarea-'+id+' .tvc-block-name')).map(e=>e.textContent)
   const items=mockMedia[type].filter(m=>m.toLowerCase().includes(val.toLowerCase())&&!existing.includes(m))
   if(!val||!items.length){dd.classList.remove('show');return}
-  dd.innerHTML=items.map(m=>`<div class="dropdown-item" onmousedown="selectMedia('${id}','${m}','${type}')"><div class="di-dot"></div>${m}</div>`).join('')
+  dd.innerHTML=items.map(m=>`<div class="dropdown-item" onmousedown="selectMedia('${id}','${m}')"><div class="di-dot"></div>${m}</div>`).join('')
   dd.classList.add('show')
 }
-function selectMedia(groupId,name,type){
+
+function selectMedia(groupId, name){
   document.getElementById('dd-'+groupId).classList.remove('show')
   document.getElementById('search-'+groupId).value=''
-  addTvcBlock(groupId,name,type)
+  addTvcBlock(groupId, name)
   updateMediaCount(groupId)
 }
+
 function updateMediaCount(groupId){
   const count=document.querySelectorAll('#tvcarea-'+groupId+' .tvc-block').length
   const badge=document.getElementById('mediacount-'+groupId)
@@ -521,7 +500,8 @@ function updateMediaCount(groupId){
   badge.textContent='Danh sách media đã chọn — Đã chọn '+count+' Media'
   badge.className='media-count-badge'+(count>0?' has-items':'')
 }
-function makeUrlRow(tvcId,idx){
+
+function makeUrlRow(tvcId, idx){
   return `<div class="url-row" id="urlrow-${tvcId}-${idx}">
     <input class="url-input" type="text" placeholder="Nhập URL NFC...">
     <div class="tog-wrap">
@@ -531,32 +511,55 @@ function makeUrlRow(tvcId,idx){
     <span class="url-del" onclick="removeUrl('${tvcId}',${idx})">×</span>
   </div>`
 }
-function addTvcBlock(groupId,name,type){
+
+function addTvcBlock(groupId, name){
   const area=document.getElementById('tvcarea-'+groupId)
   const empty=area.querySelector('.empty-hint')
   if(empty) empty.remove()
   const tvcId=groupId+'-tvc-'+Date.now()
-  const nfcOn=nfcState[type]
+  const nfcOn=nfcState[groupId]||false
+  const gs=document.getElementById('gstart-'+groupId)
+  const ge=document.getElementById('gend-'+groupId)
+  const gsv=gs?gs.value:''
+  const gev=ge?ge.value:''
   const block=document.createElement('div')
   block.className='tvc-block'; block.id='tvcblock-'+tvcId
+
   block.innerHTML=`
     <div class="tvc-block-header">
-      <div class="tvc-block-left"><div class="tvc-dot"></div><div class="tvc-block-name">${name}</div></div>
+      <div class="tvc-block-left">
+        <div class="tvc-dot"></div>
+        <div class="tvc-block-name">${name}</div>
+      </div>
+      <div class="tvc-dates">
+        <span class="tvc-date-label">Từ</span>
+        <div style="display:flex;flex-direction:column;gap:2px">
+          <div class="date-wrap"><input class="tvc-date-input" type="date" id="tvcstart-${tvcId}" min="${gsv}" max="${gev}" onchange="validateTvcDates('${tvcId}','${groupId}')"></div>
+          <span class="tvc-date-err" id="tvcerr-start-${tvcId}"></span>
+        </div>
+        <span class="tvc-date-label">đến</span>
+        <div style="display:flex;flex-direction:column;gap:2px">
+          <div class="date-wrap"><input class="tvc-date-input" type="date" id="tvcend-${tvcId}" min="${gsv}" max="${gev}" onchange="validateTvcDates('${tvcId}','${groupId}')"></div>
+          <span class="tvc-date-err" id="tvcerr-end-${tvcId}"></span>
+        </div>
+      </div>
       <div class="tvc-block-right">
         <button class="add-url-btn" style="display:${nfcOn?'inline-block':'none'}" onclick="addUrlRow('${tvcId}')">+ Thêm URL NFC</button>
         <span class="tvc-del-btn" onclick="document.getElementById('tvcblock-${tvcId}').remove();checkEmpty('${groupId}');updateMediaCount('${groupId}')">Xóa</span>
       </div>
     </div>
     <div class="url-list" id="urllist-${tvcId}"></div>
-    <div class="nfc-locked-notice" style="display:${nfcOn?'none':'flex'}">NFC chưa được kích hoạt cho kênh này</div>`
+    <div class="nfc-locked-notice" style="display:${nfcOn?'none':'flex'}">NFC chưa được kích hoạt cho gói tính năng này</div>`
   area.appendChild(block)
 }
+
 function addUrlRow(tvcId){
   const list=document.getElementById('urllist-'+tvcId)
-  list.insertAdjacentHTML('beforeend',makeUrlRow(tvcId,list.querySelectorAll('.url-row').length))
+  list.insertAdjacentHTML('beforeend', makeUrlRow(tvcId, list.querySelectorAll('.url-row').length))
   list.style.display='block'
 }
-function activateUrl(tvcId,activeIdx){
+
+function activateUrl(tvcId, activeIdx){
   document.getElementById('urllist-'+tvcId).querySelectorAll('.url-row').forEach((row,i)=>{
     const inp=row.querySelector('.url-input'),tog=row.querySelector('.tog'),lbl=row.querySelector('.tog-label')
     if(i===activeIdx){
@@ -566,12 +569,14 @@ function activateUrl(tvcId,activeIdx){
     } else { tog.classList.remove('on');lbl.classList.remove('on');lbl.textContent='Tắt';inp.classList.remove('active-input') }
   })
 }
-function removeUrl(tvcId,idx){
+
+function removeUrl(tvcId, idx){
   const row=document.getElementById('urlrow-'+tvcId+'-'+idx)
   if(row) row.remove()
   const list=document.getElementById('urllist-'+tvcId)
   if(list&&list.querySelectorAll('.url-row').length===0) list.style.display='none'
 }
+
 function checkEmpty(groupId){
   const area=document.getElementById('tvcarea-'+groupId)
   if(!area.querySelectorAll('.tvc-block').length)
@@ -579,16 +584,12 @@ function checkEmpty(groupId){
 }
 
 // ── Add group ──
-function addGroup(type){
-  const id=type+'-'+(++counters[type])
-  const container=document.getElementById(type+'-groups')
+function addGroup(){
+  const id = 'g'+(++groupCounter)
+  const container=document.getElementById('all-groups')
   const num=container.querySelectorAll('.group-card').length+1
-  const ph=type==='tv'?'Tìm kiếm và chọn TVC...':'Tìm kiếm và chọn Poster...'
-  const chS=document.getElementById('ch-start-'+type).value
-  const chE=document.getElementById('ch-end-'+type).value
-  const dateDisabled=(!chS||!chE)?'disabled':''
-  const dateHint=(!chS||!chE)?'<span class="field-hint">Chọn ngày kênh trước</span>':''
-  const rangeText=(chS&&chE)?`<div class="date-range-info" style="margin-bottom:10px">Thời gian kênh: ${fmt(chS)} – ${fmt(chE)}</div>`:''
+  nfcState[id]=false
+  groupChannel[id]=''
 
   const div=document.createElement('div')
   div.className='group-card'; div.id='group-'+id
@@ -596,7 +597,10 @@ function addGroup(type){
     <div class="group-header" onclick="toggleGroup('${id}')">
       <div class="group-header-left">
         <div class="group-index">${num}</div>
-        <div><div class="group-name-preview">Nhóm quảng cáo ${num}</div></div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div class="group-name-preview">Nhóm quảng cáo ${num}</div>
+          <span class="group-ch-badge" id="chbadge-${id}" style="display:none"></span>
+        </div>
       </div>
       <div class="group-header-right">
         <div class="del-group" onclick="event.stopPropagation();removeGroup('${id}')">Xóa</div>
@@ -604,46 +608,84 @@ function addGroup(type){
       </div>
     </div>
     <div class="group-body open" id="body-${id}">
-      ${rangeText}
-      <div class="field-row-4">
-        <div class="field"><label>Tên nhóm <span class="req">*</span></label>
-          <input type="text" placeholder="Nhập tên nhóm" oninput="document.querySelector('#group-${id} .group-name-preview').textContent=this.value||'Nhóm quảng cáo ${num}'">
-        </div>
-        <div class="field"><label>Khu vực <span class="req">*</span></label>
-          <select><option value="">Chọn khu vực</option><option value="all">Toàn Quốc</option><option value="north">Miền Bắc</option><option value="south">Miền Nam</option></select>
-        </div>
-        <div class="field"><label>Loại tòa nhà <span class="req">*</span></label>
-          <select><option value="">Loại tòa nhà</option><option value="all">Tất cả</option><option value="apartment">Chung cư</option><option value="office">Văn phòng</option></select>
-        </div>
-        <div class="field"><label>Số slot <span class="req">*</span></label>
-          <input type="number" value="1" min="1">
+
+      <div style="margin-bottom:14px">
+        <div class="ch-label">Kênh thiết bị <span class="req">*</span></div>
+        <div class="ch-selector">
+          <button class="ch-btn" onclick="selectChannel('${id}','tv',this)">TV</button>
+          <button class="ch-btn" onclick="selectChannel('${id}','poster',this)">Poster</button>
         </div>
       </div>
+
+      <div class="field-row-4">
+        <div class="field"><label>Tên nhóm quảng cáo <span class="req">*</span></label>
+          <input type="text" id="inp-name-${id}" placeholder="Nhập tên nhóm" disabled oninput="document.querySelector('#group-${id} .group-name-preview').textContent=this.value||'Nhóm quảng cáo ${num}'">
+        </div>
+        <div class="field"><label>Khu vực <span class="req">*</span></label>
+          <select id="inp-kv-${id}" disabled><option value="">Chọn khu vực</option><option value="all">Toàn Quốc</option><option value="north">Miền Bắc</option><option value="south">Miền Nam</option></select>
+        </div>
+        <div class="field"><label>Loại tòa nhà <span class="req">*</span></label>
+          <select id="inp-ltn-${id}" disabled><option value="">Loại tòa nhà</option><option value="all">Tất cả</option><option value="apartment">Chung cư</option><option value="office">Văn phòng</option></select>
+        </div>
+        <div class="field"><label>Số slot <span class="req">*</span></label>
+          <input type="number" id="inp-slot-${id}" value="1" min="1" disabled>
+        </div>
+      </div>
+
       <div class="field-grid-2" style="margin-bottom:14px">
         <div class="field">
           <label>Ngày bắt đầu nhóm <span class="req">*</span></label>
-          <div class="date-wrap"><input type="date" ${dateDisabled} onchange="validateGroupDates('${id}','${type}')"></div>
-          ${dateHint}
+          <div class="date-wrap"><input type="date" id="gstart-${id}" disabled onchange="onGroupDateChange('${id}')"></div>
           <span class="field-error" id="gerr-start-${id}"></span>
         </div>
         <div class="field">
           <label>Ngày kết thúc nhóm <span class="req">*</span></label>
-          <div class="date-wrap"><input type="date" ${dateDisabled} onchange="validateGroupDates('${id}','${type}')"></div>
+          <div class="date-wrap"><input type="date" id="gend-${id}" disabled onchange="onGroupDateChange('${id}')"></div>
           <span class="field-error" id="gerr-end-${id}"></span>
         </div>
       </div>
-      <div class="field" style="margin-bottom:16px">
-        <label>Số thiết bị theo hợp đồng <span class="req">*</span></label>
-        <input type="text" placeholder="Nhập số thiết bị">
+
+      <div class="field-grid-2" style="margin-bottom:14px">
+        <div class="field"><label>Số thiết bị theo hợp đồng <span class="req">*</span></label>
+          <div class="num-input-wrap">
+            <div class="num-display" id="numdisp-${id}" style="opacity:0.45;pointer-events:none" onclick="this.querySelector('input').focus()">
+              <span id="numtext-${id}" style="color:#bbb">Nhập số thiết bị</span>
+              <input class="num-real" type="number" min="0" disabled oninput="formatNum('${id}',this.value)">
+            </div>
+          </div>
+        </div>
+        <div class="field"><label>Gói tính năng <span class="req">*</span></label>
+          <select id="pkg-${id}" disabled onchange="onPackageChange('${id}',this.value)">
+            <option value="">Chọn gói</option>
+            <option value="standard">Tiêu chuẩn</option>
+            <option value="advanced">Nâng cao</option>
+            <option value="premium">Cao cấp</option>
+          </select>
+        </div>
       </div>
+
+      <div id="addon-${id}" style="display:none" class="addon-row">
+        <div class="addon-box" id="addonbox-${id}">
+          <div class="addon-left">
+            <div><div class="addon-label">Tính năng NFC</div><div class="addon-desc" id="addondesc-${id}">Chưa kích hoạt</div></div>
+            <span class="addon-badge" id="addonbadge-${id}">Add-on</span>
+          </div>
+          <div class="switch-wrap">
+            <span class="switch-text" id="switchtext-${id}">Tắt</span>
+            <div class="switch" id="switch-${id}" onclick="toggleNfc('${id}')"><div class="switch-knob"></div></div>
+          </div>
+        </div>
+      </div>
+
       <div>
         <div class="media-label-row">
           <span class="media-label">Media <span class="req">*</span></span>
           <span class="media-count-badge" id="mediacount-${id}">Danh sách media đã chọn — Đã chọn 0 Media</span>
         </div>
         <div class="media-search-wrap">
-          <input id="search-${id}" class="media-search" type="text" placeholder="${ph}"
-            oninput="showDropdown('${id}','${type}',this.value)"
+          <input id="search-${id}" class="media-search" type="text" placeholder="Chọn gói tính năng trước..."
+            disabled
+            oninput="showDropdown('${id}',this.value)"
             onblur="setTimeout(()=>{const d=document.getElementById('dd-${id}');if(d)d.classList.remove('show')},150)">
           <div id="dd-${id}" class="dropdown"></div>
         </div>
@@ -651,12 +693,11 @@ function addGroup(type){
       </div>
     </div>`
   container.appendChild(div)
+  // Apply campaign date range to new group's date inputs
+  applyGroupDateRange(id)
 }
 
-// Init: show hints on channel date fields
-;['tv','poster'].forEach(ch=>{
-  document.getElementById('hint-ch-start-'+ch).style.display='block'
-})
+// Không tạo sẵn nhóm
 </script>
 </body>
 </html>
