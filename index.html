@@ -13,34 +13,20 @@
   .form-subtitle { font-size: 13px; color: #888; margin-bottom: 24px; }
   .section-label { font-size: 10px; font-weight: 600; color: #999; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 14px; }
   .field-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-  .field-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
   .field-row-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
-  .field-row-5 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
   .field { display: flex; flex-direction: column; gap: 5px; }
   .field label { font-size: 12px; color: #666; font-weight: 500; }
   .req { color: #E24B4A; margin-left: 2px; }
-  .field input, .field select {
-    height: 38px; border: 1px solid #D8D7D0; border-radius: 8px;
-    padding: 0 12px; font-size: 13px; color: #1a1a1a;
-    background: #fff; width: 100%; outline: none; transition: border 0.15s;
-  }
+  .field input, .field select { height: 38px; border: 1px solid #D8D7D0; border-radius: 8px; padding: 0 12px; font-size: 13px; color: #1a1a1a; background: #fff; width: 100%; outline: none; transition: border 0.15s; }
   .field input:focus, .field select:focus { border-color: #378ADD; }
   .field input::placeholder { color: #bbb; }
-  .field input:disabled { background: #F5F5F0; color: #bbb; cursor: not-allowed; }
-
-  /* Date click anywhere */
   .date-wrap { position: relative; }
   input[type="date"] { cursor: pointer; }
   input[type="date"]::-webkit-calendar-picker-indicator { position: absolute; left: 0; right: 0; top: 0; bottom: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
-
-  /* Validation */
-  .field input.error { border-color: #E24B4A; background: #FFF8F8; }
   .field-error { font-size: 11px; color: #E24B4A; margin-top: 3px; display: none; }
   .field-error.show { display: block; }
-
   .divider { height: 1px; background: #F0EFE9; margin: 24px 0; }
 
-  /* Searchable customer */
   .search-select-wrap { position: relative; }
   .search-select-input { height: 38px; border: 1px solid #D8D7D0; border-radius: 8px; padding: 0 12px; font-size: 13px; color: #1a1a1a; background: #fff; width: 100%; outline: none; transition: border 0.15s; }
   .search-select-input:focus { border-color: #378ADD; }
@@ -52,7 +38,6 @@
   .ss-item.selected { background: #E6F1FB; color: #185FA5; font-weight: 500; }
   .ss-empty { padding: 10px 14px; font-size: 12px; color: #bbb; font-style: italic; }
 
-  /* NFC addon */
   .addon-row { margin-bottom: 16px; }
   .addon-box { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-radius: 10px; border: 1px solid #E5E4DE; background: #F9F9F6; transition: all 0.2s; }
   .addon-box.active { background: #F0FAF5; border-color: #1D9E75; }
@@ -70,15 +55,12 @@
   .switch-knob { width: 18px; height: 18px; border-radius: 50%; background: #fff; position: absolute; top: 3px; left: 3px; transition: left 0.18s; box-shadow: 0 1px 4px rgba(0,0,0,0.18); }
   .switch.on .switch-knob { left: 21px; }
 
-  /* Group cards */
   .group-card { border: 1px solid #E5E4DE; border-radius: 10px; margin-bottom: 10px; overflow: hidden; }
   .group-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; cursor: pointer; background: #F9F9F6; user-select: none; }
   .group-header:hover { background: #F3F2EC; }
   .group-header-left { display: flex; align-items: center; gap: 10px; }
   .group-index { width: 24px; height: 24px; border-radius: 50%; background: #E6F1FB; color: #185FA5; font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .group-name-preview { font-size: 13px; font-weight: 600; color: #1a1a1a; }
-  .group-ch-badge { font-size: 11px; padding: 2px 8px; border-radius: 20px; background: #E6F1FB; color: #185FA5; font-weight: 500; }
-  .group-ch-badge.poster { background: #E1F5EE; color: #0F6E56; }
   .group-header-right { display: flex; align-items: center; gap: 8px; }
   .arrow { font-size: 11px; color: #999; transition: transform 0.2s; display: inline-block; }
   .arrow.open { transform: rotate(180deg); }
@@ -87,21 +69,27 @@
   .group-body { padding: 16px; border-top: 1px solid #F0EFE9; display: none; }
   .group-body.open { display: block; }
 
-  /* Number input formatted */
+  /* Header channel badges */
+  .ch-badge-tv { font-size: 10px; padding: 2px 8px; border-radius: 20px; background: #E6F1FB; color: #185FA5; font-weight: 500; margin-left: 4px; }
+  .ch-badge-poster { font-size: 10px; padding: 2px 8px; border-radius: 20px; background: #E1F5EE; color: #0F6E56; font-weight: 500; margin-left: 4px; }
+
+  /* Inner channel tabs */
+  .ch-label { font-size: 12px; color: #666; font-weight: 500; margin-bottom: 8px; }
+  .ch-tabs { display: flex; gap: 0; border: 1px solid #D8D7D0; border-radius: 8px; overflow: hidden; margin-bottom: 16px; width: fit-content; }
+  .ch-tab-btn { padding: 8px 28px; font-size: 13px; cursor: pointer; border: none; background: #F5F5F0; color: #888; border-right: 1px solid #D8D7D0; font-family: inherit; transition: background 0.15s; }
+  .ch-tab-btn:last-child { border-right: none; }
+  .ch-tab-btn.active-tv { background: #E6F1FB; color: #185FA5; font-weight: 600; }
+  .ch-tab-btn.active-poster { background: #E1F5EE; color: #0F6E56; font-weight: 600; }
+  /* KEY: dùng display none/block để giữ dữ liệu khi chuyển tab */
+  .ch-panel { display: none; }
+  .ch-panel.active { display: block; }
+
+  /* Number input */
   .num-input-wrap { position: relative; }
   .num-display { height: 38px; border: 1px solid #D8D7D0; border-radius: 8px; padding: 0 12px; font-size: 13px; color: #1a1a1a; background: #fff; width: 100%; outline: none; transition: border 0.15s; cursor: text; display: flex; align-items: center; }
   .num-display:focus-within { border-color: #378ADD; }
   .num-real { position: absolute; opacity: 0; pointer-events: none; width: 1px; }
 
-
-  /* Channel selector inside group */
-  .ch-selector { display: flex; gap: 8px; margin-bottom: 14px; }
-  .ch-btn { padding: 6px 20px; font-size: 12px; cursor: pointer; border: 1.5px solid #D8D7D0; border-radius: 8px; background: #F9F9F6; color: #999; font-family: inherit; transition: all 0.15s; }
-  .ch-btn:hover { border-color: #B0B0B0; color: #555; }
-  .ch-btn.active-tv { border-color: #185FA5; background: #E6F1FB; color: #185FA5; font-weight: 600; }
-  .ch-btn.active-poster { border-color: #0F6E56; background: #E1F5EE; color: #0F6E56; font-weight: 600; }
-
-  /* Media */
   .media-label-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap; }
   .media-label { font-size: 12px; color: #666; font-weight: 500; }
   .media-count-badge { font-size: 11px; color: #999; background: #F0EFE9; padding: 2px 10px; border-radius: 20px; }
@@ -110,32 +98,28 @@
   .media-search { width: 100%; height: 36px; border: 1px solid #D8D7D0; border-radius: 8px; padding: 0 12px; font-size: 13px; background: #fff; color: #1a1a1a; font-family: inherit; outline: none; transition: border 0.15s; }
   .media-search:focus { border-color: #378ADD; }
   .media-search::placeholder { color: #bbb; }
+  .media-search:disabled { background: #F5F5F0; color: #bbb; cursor: not-allowed; }
   .dropdown { position: absolute; top: 40px; left: 0; right: 0; background: #fff; border: 1px solid #D8D7D0; border-radius: 8px; z-index: 100; display: none; box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
   .dropdown.show { display: block; }
   .dropdown-item { padding: 9px 14px; font-size: 13px; cursor: pointer; color: #1a1a1a; display: flex; align-items: center; gap: 10px; }
   .dropdown-item:hover { background: #F5F5F0; }
   .di-dot { width: 6px; height: 6px; border-radius: 50%; background: #D8D7D0; flex-shrink: 0; }
 
-  /* TVC block — updated with date fields */
   .tvc-block { background: #F9F9F6; border: 1px solid #E5E4DE; border-radius: 8px; margin-bottom: 8px; overflow: hidden; }
   .tvc-block-header { display: flex; align-items: center; gap: 10px; padding: 9px 14px; flex-wrap: wrap; }
   .tvc-block-left { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
-  .tvc-dot { width: 8px; height: 8px; border-radius: 50%; background: #378ADD; flex-shrink: 0; }
+  .tvc-dot-tv { width: 8px; height: 8px; border-radius: 50%; background: #378ADD; flex-shrink: 0; }
+  .tvc-dot-poster { width: 8px; height: 8px; border-radius: 50%; background: #1D9E75; flex-shrink: 0; }
   .tvc-block-name { font-size: 13px; font-weight: 600; color: #1a1a1a; white-space: nowrap; }
   .tvc-dates { display: flex; align-items: center; gap: 6px; flex: 1; }
   .tvc-date-label { font-size: 11px; color: #999; white-space: nowrap; flex-shrink: 0; }
   .tvc-date-input { height: 28px; border: 1px solid #D8D7D0; border-radius: 6px; padding: 0 8px; font-size: 12px; background: #fff; color: #1a1a1a; font-family: inherit; outline: none; width: 130px; cursor: pointer; }
   .tvc-date-input:focus { border-color: #378ADD; }
-  .tvc-date-input.error { border-color: #E24B4A; background: #FFF8F8; }
-  .tvc-date-err { font-size: 11px; color: #E24B4A; display: none; white-space: nowrap; }
-  .tvc-date-err.show { display: inline; }
   .tvc-block-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; margin-left: auto; }
   .add-url-btn { font-size: 11px; color: #185FA5; cursor: pointer; padding: 4px 10px; border-radius: 6px; border: 1px solid #B5D4F4; background: #fff; font-family: inherit; }
   .add-url-btn:hover { background: #E6F1FB; }
   .tvc-del-btn { font-size: 12px; color: #E24B4A; cursor: pointer; padding: 3px 8px; border-radius: 6px; }
   .tvc-del-btn:hover { background: #FEE8E8; }
-
-  /* URL rows */
   .url-list { border-top: 1px solid #EEEEE9; display: none; }
   .url-row { display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-bottom: 1px solid #EEEEE9; }
   .url-row:last-child { border-bottom: none; }
@@ -157,29 +141,22 @@
   .add-group-btn { display: flex; align-items: center; gap: 10px; padding: 11px 16px; border: 1px dashed #D8D7D0; border-radius: 10px; cursor: pointer; font-size: 13px; color: #999; width: 100%; background: transparent; margin-top: 6px; font-family: inherit; transition: all 0.15s; }
   .add-group-btn:hover { background: #F5F5F0; color: #1a1a1a; border-color: #999; }
   .plus-circle { width: 22px; height: 22px; border-radius: 50%; background: #E6F1FB; color: #185FA5; display: flex; align-items: center; justify-content: center; font-size: 16px; line-height: 1; flex-shrink: 0; }
-
   .footer { display: flex; justify-content: flex-end; align-items: center; gap: 10px; margin-top: 28px; padding-top: 20px; border-top: 1px solid #F0EFE9; }
   .btn-cancel { height: 38px; padding: 0 20px; border: 1px solid #D8D7D0; border-radius: 8px; font-size: 13px; color: #666; background: transparent; cursor: pointer; font-family: inherit; }
   .btn-cancel:hover { background: #F5F5F0; }
   .btn-submit { height: 38px; padding: 0 22px; border: none; border-radius: 8px; font-size: 13px; color: #fff; background: #1D9E75; cursor: pointer; font-family: inherit; font-weight: 600; }
   .btn-submit:hover { background: #0F6E56; }
-
   .topbar { display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; background: #fff; border-bottom: 1px solid #E5E4DE; }
   .logo { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 600; color: #1a1a1a; }
   .logo-dot { width: 28px; height: 28px; border-radius: 6px; background: #E8A020; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #fff; }
   .topbar-right { font-size: 12px; color: #999; }
   .tag { font-size: 10px; padding: 2px 8px; border-radius: 20px; background: #E6F1FB; color: #185FA5; font-weight: 500; margin-left: 6px; }
-  .ch-label { font-size: 12px; color: #666; font-weight: 500; margin-bottom: 6px; }
 </style>
 </head>
 <body>
 
 <div class="topbar">
-  <div class="logo">
-    <div class="logo-dot">C</div>
-    C-Report
-    <span class="tag">Mockup UI</span>
-  </div>
+  <div class="logo"><div class="logo-dot">C</div>C-Report<span class="tag">Mockup UI</span></div>
   <div class="topbar-right">Chicilon Digital Media · Trang tạo chiến dịch</div>
 </div>
 
@@ -188,7 +165,6 @@
   <div class="form-title">Tạo chiến dịch mới</div>
   <div class="form-subtitle">Điền đầy đủ thông tin bên dưới để khởi tạo chiến dịch</div>
 
-  <!-- THÔNG TIN CHUNG — giữ nguyên -->
   <div class="section-label">Thông tin chung</div>
   <div class="field-grid-2" style="margin-bottom:14px">
     <div class="field">
@@ -222,8 +198,6 @@
   </div>
 
   <div class="divider"></div>
-
-  <!-- NHÓM QUẢNG CÁO -->
   <div class="section-label">Nhóm quảng cáo</div>
   <div id="all-groups"></div>
   <button class="add-group-btn" onclick="addGroup()">
@@ -239,8 +213,9 @@
 
 <script>
 let groupCounter = 0
+// key = groupId+'-'+ch (vd: 'g1-tv', 'g1-poster')
 const nfcState = {}
-const groupChannel = {}
+const pkgState = {}
 
 const mockMedia = {
   tv: ['TVC_Summer_15s','TVC_Summer_30s','TVC_Brand_15s','TVC_Promo_10s','TVC_Awareness_30s'],
@@ -249,7 +224,6 @@ const mockMedia = {
 const customers = ['Coca-Cola Vietnam','Vinamilk','Masan Group','TH True Milk','Unilever Vietnam','P&G Vietnam','Nestlé Vietnam','Heineken Vietnam','Grab Vietnam','Samsung Vietnam']
 let selectedCustomer = ''
 
-// ── Customer search ──
 function openCustomerDd(){ renderCustomers(document.getElementById('customer-input').value) }
 function closeCustomerDd(){
   document.getElementById('customer-dd').classList.remove('show')
@@ -270,24 +244,18 @@ function pickCustomer(name){
   document.getElementById('customer-dd').classList.remove('show')
 }
 
-// ── Helpers ──
 function fmt(d){ if(!d) return ''; const p=d.split('-'); return p[2]+'/'+p[1]+'/'+p[0] }
 function setErr(id,msg){ const el=document.getElementById(id); if(!el) return; el.textContent=msg; el.className='field-error'+(msg?' show':'') }
 function clearErr(id){ setErr(id,'') }
 
-// ── Campaign date ──
 function onCampDateChange(){
   const cs=document.getElementById('camp-start').value
   const ce=document.getElementById('camp-end').value
   clearErr('err-camp-start'); clearErr('err-camp-end')
   if(cs && ce && cs>ce){ setErr('err-camp-end','Ngày kết thúc phải sau ngày bắt đầu'); return }
-  document.querySelectorAll('.group-card').forEach(g=>{
-    const id=g.id.replace('group-','')
-    applyGroupDateRange(id)
-  })
+  document.querySelectorAll('.group-card').forEach(g=>{ applyGroupDateRange(g.id.replace('group-','')) })
 }
 
-// Apply campaign min/max to group date inputs
 function applyGroupDateRange(groupId){
   const cs=document.getElementById('camp-start').value
   const ce=document.getElementById('camp-end').value
@@ -300,98 +268,57 @@ function applyGroupDateRange(groupId){
   onGroupDateChange(groupId)
 }
 
-// ── Group date change → set min/max on TVC dates ──
 function onGroupDateChange(groupId){
-  const gs=document.getElementById('gstart-'+groupId)
-  const ge=document.getElementById('gend-'+groupId)
-  const sv=gs?gs.value:'', ev=ge?ge.value:''
-  // Update min/max on all TVC date inputs
-  document.querySelectorAll('#tvcarea-'+groupId+' .tvc-block').forEach(block=>{
-    const tvcId=block.id.replace('tvcblock-','')
-    const ts=document.getElementById('tvcstart-'+tvcId)
-    const te=document.getElementById('tvcend-'+tvcId)
-    if(ts){ ts.min=sv||''; ts.max=ev||'' }
-    if(te){ te.min=sv||''; te.max=ev||'' }
-    if(ts&&ts.value&&sv&&ts.value<sv){ ts.value='' }
-    if(te&&te.value&&ev&&te.value>ev){ te.value='' }
+  const sv=document.getElementById('gstart-'+groupId)?.value||''
+  const ev=document.getElementById('gend-'+groupId)?.value||''
+  ;['tv','poster'].forEach(ch=>{
+    document.querySelectorAll('#tvcarea-'+ch+'-'+groupId+' .tvc-block').forEach(block=>{
+      const tid=block.id.replace('tvcblock-','')
+      const ts=document.getElementById('tvcstart-'+tid)
+      const te=document.getElementById('tvcend-'+tid)
+      if(ts){ ts.min=sv; ts.max=ev }
+      if(te){ te.min=sv; te.max=ev }
+      if(ts&&ts.value&&sv&&ts.value<sv) ts.value=''
+      if(te&&te.value&&ev&&te.value>ev) te.value=''
+    })
   })
 }
 
-// ── Channel selector inside group ──
-function selectChannel(groupId, ch, el){
-  groupChannel[groupId] = ch
-  el.closest('.ch-selector').querySelectorAll('.ch-btn').forEach(b=>b.classList.remove('active-tv','active-poster'))
+// ── Tab bên trong nhóm: dùng display none/block → dữ liệu KHÔNG mất ──
+function switchChTab(groupId, ch, el){
+  el.closest('.ch-tabs').querySelectorAll('.ch-tab-btn').forEach(b=>b.classList.remove('active-tv','active-poster'))
   el.classList.add('active-'+ch)
-  const badge=document.getElementById('chbadge-'+groupId)
-  if(badge){
-    badge.textContent=ch==='tv'?'TV':'Poster'
-    badge.className='group-ch-badge'+(ch==='poster'?' poster':'')
-    badge.style.display='inline-block'
-  }
-
-  // Enable all fields below channel selector
-  ;['inp-name-','inp-kv-','inp-ltn-','inp-slot-','gstart-','gend-','pkg-'].forEach(prefix=>{
-    const el2=document.getElementById(prefix+groupId)
-    if(el2){ el2.disabled=false }
-  })
-  const numDisp=document.getElementById('numdisp-'+groupId)
-  if(numDisp){ numDisp.style.opacity='1'; numDisp.style.pointerEvents='auto' }
-  const numReal=numDisp?numDisp.querySelector('input'):null
-  if(numReal) numReal.disabled=false
-
-  // Re-apply campaign date range now that inputs are enabled
-  applyGroupDateRange(groupId)
-
-  const searchEl=document.getElementById('search-'+groupId)
-  if(searchEl){
-    const pkgVal=document.getElementById('pkg-'+groupId)?document.getElementById('pkg-'+groupId).value:''
-    if(pkgVal){
-      searchEl.disabled=false
-      searchEl.placeholder=ch==='tv'?'Tìm kiếm và chọn Media cho báo cáo TV':'Tìm kiếm và chọn Media cho báo cáo Poster'
-    } else {
-      searchEl.placeholder=ch==='tv'?'Tìm kiếm và chọn Media cho báo cáo TV':'Tìm kiếm và chọn Media cho báo cáo Poster'
-    }
-  }
-  const area=document.getElementById('tvcarea-'+groupId)
-  if(area){ area.innerHTML='<div class="empty-hint">Chưa có media nào được chọn</div>'; updateMediaCount(groupId) }
-  const addonRow=document.getElementById('addon-'+groupId)
-  if(addonRow) addonRow.style.display='block'
+  document.getElementById('ch-panel-tv-'+groupId).classList.remove('active')
+  document.getElementById('ch-panel-poster-'+groupId).classList.remove('active')
+  document.getElementById('ch-panel-'+ch+'-'+groupId).classList.add('active')
 }
 
-// ── NFC per group ──
-function onPackageChange(groupId, val){
-  const row=document.getElementById('addon-'+groupId)
-  const box=document.getElementById('addonbox-'+groupId)
-  const badge=document.getElementById('addonbadge-'+groupId)
-  const desc=document.getElementById('addondesc-'+groupId)
-  const sw=document.getElementById('switch-'+groupId)
-  const swt=document.getElementById('switchtext-'+groupId)
-  const searchEl=document.getElementById('search-'+groupId)
+function onPackageChange(groupId, ch, val){
+  const key=groupId+'-'+ch
+  pkgState[key]=val
+  const row=document.getElementById('addon-'+key)
+  const box=document.getElementById('addonbox-'+key)
+  const badge=document.getElementById('addonbadge-'+key)
+  const desc=document.getElementById('addondesc-'+key)
+  const sw=document.getElementById('switch-'+key)
+  const swt=document.getElementById('switchtext-'+key)
+  const searchEl=document.getElementById('search-'+key)
 
-  // Fix 2: enable media search only when package chosen
+  nfcState[key]=false
+  document.querySelectorAll('#tvcarea-'+ch+'-'+groupId+' .url-list').forEach(l=>{ l.innerHTML=''; l.style.display='none' })
+  document.querySelectorAll('#tvcarea-'+ch+'-'+groupId+' .add-url-btn').forEach(b=>b.style.display='none')
+  document.querySelectorAll('#tvcarea-'+ch+'-'+groupId+' .nfc-locked-notice').forEach(n=>n.style.display='flex')
+
   if(searchEl){
-    const ch=groupChannel[groupId]
-    if(val && ch){
-      searchEl.disabled=false
-      searchEl.placeholder=ch==='tv'?'Tìm kiếm và chọn Media cho báo cáo TV':'Tìm kiếm và chọn Media cho báo cáo Poster'
-    } else if(!val){
-      searchEl.disabled=true
-      searchEl.placeholder='Chọn gói tính năng trước...'
-    }
+    if(val){ searchEl.disabled=false; searchEl.placeholder=ch==='tv'?'Tìm kiếm và chọn Media cho báo cáo TV':'Tìm kiếm và chọn Media cho báo cáo Poster' }
+    else { searchEl.disabled=true; searchEl.placeholder='Chọn gói tính năng trước...' }
   }
 
-  // Fix 3: always reset NFC state fully when package changes
-  nfcState[groupId]=false
-  // Clear all URL rows from all TVC blocks and hide NFC elements
-  document.querySelectorAll('#tvcarea-'+groupId+' .url-list').forEach(l=>{ l.innerHTML=''; l.style.display='none' })
-  document.querySelectorAll('#tvcarea-'+groupId+' .add-url-btn').forEach(b=>b.style.display='none')
-  document.querySelectorAll('#tvcarea-'+groupId+' .nfc-locked-notice').forEach(n=>{ n.style.display='flex'; n.textContent='NFC chưa được kích hoạt cho gói tính năng này' })
-
-  if(!val){ row.style.display='none'; return }
-  row.style.display='block'
+  if(!val){ if(row) row.style.display='none'; return }
+  if(row) row.style.display='block'
 
   if(val==='premium'){
-    nfcState[groupId]=true
+    nfcState[key]=true
     box.className='addon-box active'
     badge.className='addon-badge included'; badge.textContent='Đã bao gồm'
     desc.className='addon-desc active'; desc.textContent='Đã kích hoạt — gói Cao cấp'
@@ -402,103 +329,72 @@ function onPackageChange(groupId, val){
     desc.className='addon-desc'; desc.textContent='Chưa kích hoạt'
     sw.className='switch'; swt.className='switch-text'; swt.textContent='Tắt'
   }
-  refreshNfc(groupId)
+  refreshNfc(groupId, ch)
 }
 
-function toggleNfc(groupId){
-  const pkg=document.querySelector('#body-'+groupId+' select')
-  if(pkg && pkg.value==='premium') return
-  nfcState[groupId]=!nfcState[groupId]
-  const box=document.getElementById('addonbox-'+groupId)
-  const desc=document.getElementById('addondesc-'+groupId)
-  const sw=document.getElementById('switch-'+groupId)
-  const swt=document.getElementById('switchtext-'+groupId)
-  if(nfcState[groupId]){
+function toggleNfc(groupId, ch){
+  const key=groupId+'-'+ch
+  if(pkgState[key]==='premium') return
+  nfcState[key]=!nfcState[key]
+  const box=document.getElementById('addonbox-'+key), desc=document.getElementById('addondesc-'+key)
+  const sw=document.getElementById('switch-'+key), swt=document.getElementById('switchtext-'+key)
+  if(nfcState[key]){
     box.className='addon-box active'; desc.className='addon-desc active'; desc.textContent='Đã kích hoạt — Add-on'
     sw.className='switch on'; swt.className='switch-text on'; swt.textContent='Bật'
   } else {
     box.className='addon-box'; desc.className='addon-desc'; desc.textContent='Chưa kích hoạt'
     sw.className='switch'; swt.className='switch-text'; swt.textContent='Tắt'
   }
-  refreshNfc(groupId)
+  refreshNfc(groupId, ch)
 }
 
-function refreshNfc(groupId){
-  const on=nfcState[groupId]
-  document.querySelectorAll('#tvcarea-'+groupId+' .url-list').forEach(l=>{ if(on&&l.querySelectorAll('.url-row').length>0) l.style.display='block'; else if(!on) l.style.display='none' })
-  document.querySelectorAll('#tvcarea-'+groupId+' .add-url-btn').forEach(b=>b.style.display=on?'inline-block':'none')
-  document.querySelectorAll('#tvcarea-'+groupId+' .nfc-locked-notice').forEach(n=>n.style.display=on?'none':'flex')
+function refreshNfc(groupId, ch){
+  const on=nfcState[groupId+'-'+ch]
+  document.querySelectorAll('#tvcarea-'+ch+'-'+groupId+' .url-list').forEach(l=>{ if(on&&l.querySelectorAll('.url-row').length>0) l.style.display='block'; else if(!on) l.style.display='none' })
+  document.querySelectorAll('#tvcarea-'+ch+'-'+groupId+' .add-url-btn').forEach(b=>b.style.display=on?'inline-block':'none')
+  document.querySelectorAll('#tvcarea-'+ch+'-'+groupId+' .nfc-locked-notice').forEach(n=>n.style.display=on?'none':'flex')
 }
 
-// ── TVC date validation (must be within group dates) ──
-function validateTvcDates(tvcId, groupId){
-  const body=document.getElementById('body-'+groupId)
-  if(!body) return
-  const groupDates=body.querySelectorAll('input[type="date"]')
-  const gs=groupDates[0]?groupDates[0].value:''
-  const ge=groupDates[1]?groupDates[1].value:''
-  const sv=document.getElementById('tvcstart-'+tvcId)
-  const ev=document.getElementById('tvcend-'+tvcId)
-  const es=document.getElementById('tvcerr-start-'+tvcId)
-  const ee=document.getElementById('tvcerr-end-'+tvcId)
-  if(!sv||!ev||!es||!ee) return
-
-  sv.classList.remove('error'); ev.classList.remove('error')
-  es.textContent=''; es.className='tvc-date-err'
-  ee.textContent=''; ee.className='tvc-date-err'
-
-  if(!gs||!ge) return
-  const s=sv.value, e=ev.value
-  if(s && s<gs){ sv.classList.add('error'); es.textContent='Phải từ '+fmt(gs)+' trở đi'; es.className='tvc-date-err show'; return }
-  if(s && s>ge){ sv.classList.add('error'); es.textContent='Phải trước '+fmt(ge); es.className='tvc-date-err show'; return }
-  if(e && e<gs){ ev.classList.add('error'); ee.textContent='Phải từ '+fmt(gs)+' trở đi'; ee.className='tvc-date-err show'; return }
-  if(e && e>ge){ ev.classList.add('error'); ee.textContent='Phải trước hoặc bằng '+fmt(ge); ee.className='tvc-date-err show'; return }
-  if(s && e && s>e){ ev.classList.add('error'); ee.textContent='Phải sau ngày bắt đầu media'; ee.className='tvc-date-err show' }
-}
-
-// ── Number formatting ──
-function formatNum(id, val){
-  const text=document.getElementById('numtext-'+id)
-  if(!text) return
-  const num=parseInt(val.replace(/\D/g,''),10)
-  if(!val||isNaN(num)){
-    text.textContent='Nhập số thiết bị'; text.style.color='#bbb'
-  } else {
-    text.textContent=num.toLocaleString('vi-VN'); text.style.color='#1a1a1a'
-  }
-}
-
-// ── Group ──
 function toggleGroup(id){
   document.getElementById('body-'+id).classList.toggle('open')
   document.getElementById('arrow-'+id).classList.toggle('open')
 }
 function removeGroup(id){ document.getElementById('group-'+id).remove() }
 
-// ── Media ──
-function showDropdown(id, val){
-  const type = groupChannel[id] || 'tv'
-  const dd=document.getElementById('dd-'+id)
-  const existing=Array.from(document.querySelectorAll('#tvcarea-'+id+' .tvc-block-name')).map(e=>e.textContent)
-  const items=mockMedia[type].filter(m=>m.toLowerCase().includes(val.toLowerCase())&&!existing.includes(m))
+function showDropdown(groupId, ch, val){
+  const key=groupId+'-'+ch
+  const dd=document.getElementById('dd-'+key)
+  const existing=Array.from(document.querySelectorAll('#tvcarea-'+ch+'-'+groupId+' .tvc-block-name')).map(e=>e.textContent)
+  const items=mockMedia[ch].filter(m=>m.toLowerCase().includes(val.toLowerCase())&&!existing.includes(m))
   if(!val||!items.length){dd.classList.remove('show');return}
-  dd.innerHTML=items.map(m=>`<div class="dropdown-item" onmousedown="selectMedia('${id}','${m}')"><div class="di-dot"></div>${m}</div>`).join('')
+  dd.innerHTML=items.map(m=>`<div class="dropdown-item" onmousedown="selectMedia('${groupId}','${ch}','${m}')"><div class="di-dot"></div>${m}</div>`).join('')
   dd.classList.add('show')
 }
 
-function selectMedia(groupId, name){
-  document.getElementById('dd-'+groupId).classList.remove('show')
-  document.getElementById('search-'+groupId).value=''
-  addTvcBlock(groupId, name)
-  updateMediaCount(groupId)
+function selectMedia(groupId, ch, name){
+  const key=groupId+'-'+ch
+  document.getElementById('dd-'+key).classList.remove('show')
+  document.getElementById('search-'+key).value=''
+  addTvcBlock(groupId, ch, name)
+  updateMediaCount(groupId, ch)
+  updateHeaderBadges(groupId)
 }
 
-function updateMediaCount(groupId){
-  const count=document.querySelectorAll('#tvcarea-'+groupId+' .tvc-block').length
-  const badge=document.getElementById('mediacount-'+groupId)
+function updateMediaCount(groupId, ch){
+  const count=document.querySelectorAll('#tvcarea-'+ch+'-'+groupId+' .tvc-block').length
+  const badge=document.getElementById('mediacount-'+ch+'-'+groupId)
   if(!badge) return
   badge.textContent='Danh sách media đã chọn — Đã chọn '+count+' Media'
   badge.className='media-count-badge'+(count>0?' has-items':'')
+}
+
+function updateHeaderBadges(groupId){
+  const tvCount=document.querySelectorAll('#tvcarea-tv-'+groupId+' .tvc-block').length
+  const posterCount=document.querySelectorAll('#tvcarea-poster-'+groupId+' .tvc-block').length
+  const tvB=document.getElementById('hbadge-tv-'+groupId)
+  const posterB=document.getElementById('hbadge-poster-'+groupId)
+  if(tvB) tvB.style.display=tvCount?'inline-block':'none'
+  if(posterB) posterB.style.display=posterCount?'inline-block':'none'
 }
 
 function makeUrlRow(tvcId, idx){
@@ -512,40 +408,33 @@ function makeUrlRow(tvcId, idx){
   </div>`
 }
 
-function addTvcBlock(groupId, name){
-  const area=document.getElementById('tvcarea-'+groupId)
+function addTvcBlock(groupId, ch, name){
+  const area=document.getElementById('tvcarea-'+ch+'-'+groupId)
   const empty=area.querySelector('.empty-hint')
   if(empty) empty.remove()
-  const tvcId=groupId+'-tvc-'+Date.now()
-  const nfcOn=nfcState[groupId]||false
-  const gs=document.getElementById('gstart-'+groupId)
-  const ge=document.getElementById('gend-'+groupId)
-  const gsv=gs?gs.value:''
-  const gev=ge?ge.value:''
+  const tvcId=groupId+'-'+ch+'-'+Date.now()
+  const key=groupId+'-'+ch
+  const nfcOn=nfcState[key]||false
+  const gsv=document.getElementById('gstart-'+groupId)?.value||''
+  const gev=document.getElementById('gend-'+groupId)?.value||''
+  const dotCls=ch==='tv'?'tvc-dot-tv':'tvc-dot-poster'
   const block=document.createElement('div')
   block.className='tvc-block'; block.id='tvcblock-'+tvcId
-
   block.innerHTML=`
     <div class="tvc-block-header">
       <div class="tvc-block-left">
-        <div class="tvc-dot"></div>
+        <div class="${dotCls}"></div>
         <div class="tvc-block-name">${name}</div>
       </div>
       <div class="tvc-dates">
         <span class="tvc-date-label">Từ</span>
-        <div style="display:flex;flex-direction:column;gap:2px">
-          <div class="date-wrap"><input class="tvc-date-input" type="date" id="tvcstart-${tvcId}" min="${gsv}" max="${gev}" onchange="validateTvcDates('${tvcId}','${groupId}')"></div>
-          <span class="tvc-date-err" id="tvcerr-start-${tvcId}"></span>
-        </div>
+        <div class="date-wrap"><input class="tvc-date-input" type="date" id="tvcstart-${tvcId}" min="${gsv}" max="${gev}"></div>
         <span class="tvc-date-label">đến</span>
-        <div style="display:flex;flex-direction:column;gap:2px">
-          <div class="date-wrap"><input class="tvc-date-input" type="date" id="tvcend-${tvcId}" min="${gsv}" max="${gev}" onchange="validateTvcDates('${tvcId}','${groupId}')"></div>
-          <span class="tvc-date-err" id="tvcerr-end-${tvcId}"></span>
-        </div>
+        <div class="date-wrap"><input class="tvc-date-input" type="date" id="tvcend-${tvcId}" min="${gsv}" max="${gev}"></div>
       </div>
       <div class="tvc-block-right">
         <button class="add-url-btn" style="display:${nfcOn?'inline-block':'none'}" onclick="addUrlRow('${tvcId}')">+ Thêm URL NFC</button>
-        <span class="tvc-del-btn" onclick="document.getElementById('tvcblock-${tvcId}').remove();checkEmpty('${groupId}');updateMediaCount('${groupId}')">Xóa</span>
+        <span class="tvc-del-btn" onclick="document.getElementById('tvcblock-${tvcId}').remove();checkEmpty('${groupId}','${ch}');updateMediaCount('${groupId}','${ch}');updateHeaderBadges('${groupId}')">Xóa</span>
       </div>
     </div>
     <div class="url-list" id="urllist-${tvcId}"></div>
@@ -555,11 +444,11 @@ function addTvcBlock(groupId, name){
 
 function addUrlRow(tvcId){
   const list=document.getElementById('urllist-'+tvcId)
-  list.insertAdjacentHTML('beforeend', makeUrlRow(tvcId, list.querySelectorAll('.url-row').length))
+  list.insertAdjacentHTML('beforeend',makeUrlRow(tvcId,list.querySelectorAll('.url-row').length))
   list.style.display='block'
 }
 
-function activateUrl(tvcId, activeIdx){
+function activateUrl(tvcId,activeIdx){
   document.getElementById('urllist-'+tvcId).querySelectorAll('.url-row').forEach((row,i)=>{
     const inp=row.querySelector('.url-input'),tog=row.querySelector('.tog'),lbl=row.querySelector('.tog-label')
     if(i===activeIdx){
@@ -570,26 +459,79 @@ function activateUrl(tvcId, activeIdx){
   })
 }
 
-function removeUrl(tvcId, idx){
+function removeUrl(tvcId,idx){
   const row=document.getElementById('urlrow-'+tvcId+'-'+idx)
   if(row) row.remove()
   const list=document.getElementById('urllist-'+tvcId)
   if(list&&list.querySelectorAll('.url-row').length===0) list.style.display='none'
 }
 
-function checkEmpty(groupId){
-  const area=document.getElementById('tvcarea-'+groupId)
+function checkEmpty(groupId, ch){
+  const area=document.getElementById('tvcarea-'+ch+'-'+groupId)
   if(!area.querySelectorAll('.tvc-block').length)
     area.innerHTML='<div class="empty-hint">Chưa có media nào được chọn</div>'
 }
 
-// ── Add group ──
+function formatNum(key, val){
+  const text=document.getElementById('numtext-'+key)
+  if(!text) return
+  const num=parseInt(val.replace(/\D/g,''),10)
+  if(!val||isNaN(num)){ text.textContent='Nhập số thiết bị'; text.style.color='#bbb' }
+  else { text.textContent=num.toLocaleString('vi-VN'); text.style.color='#1a1a1a' }
+}
+
+function buildChPanel(groupId, ch){
+  const key=groupId+'-'+ch
+  const label=ch==='tv'?'Media TV':'Media Poster'
+  return `
+    <div class="field-grid-2" style="margin-bottom:14px">
+      <div class="field"><label>Gói tính năng <span class="req">*</span></label>
+        <select id="pkg-${key}" onchange="onPackageChange('${groupId}','${ch}',this.value)">
+          <option value="">Chọn gói</option>
+          <option value="standard">Tiêu chuẩn</option>
+          <option value="advanced">Nâng cao</option>
+          <option value="premium">Cao cấp</option>
+        </select>
+      </div>
+      <div class="field"><label>Số thiết bị theo hợp đồng <span class="req">*</span></label>
+        <div class="num-input-wrap">
+          <div class="num-display" onclick="this.querySelector('input').focus()">
+            <span id="numtext-${key}" style="color:#bbb">Nhập số thiết bị</span>
+            <input class="num-real" type="number" min="0" oninput="formatNum('${key}',this.value)">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="addon-${key}" style="display:none" class="addon-row">
+      <div class="addon-box" id="addonbox-${key}">
+        <div class="addon-left">
+          <div><div class="addon-label">Tính năng NFC</div><div class="addon-desc" id="addondesc-${key}">Chưa kích hoạt</div></div>
+          <span class="addon-badge" id="addonbadge-${key}">Add-on</span>
+        </div>
+        <div class="switch-wrap">
+          <span class="switch-text" id="switchtext-${key}">Tắt</span>
+          <div class="switch" id="switch-${key}" onclick="toggleNfc('${groupId}','${ch}')"><div class="switch-knob"></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="media-label-row">
+      <span class="media-label">${label} <span class="req">*</span></span>
+      <span class="media-count-badge" id="mediacount-${ch}-${groupId}">Danh sách media đã chọn — Đã chọn 0 Media</span>
+    </div>
+    <div class="media-search-wrap">
+      <input id="search-${key}" class="media-search" type="text" placeholder="Chọn gói tính năng trước..." disabled
+        oninput="showDropdown('${groupId}','${ch}',this.value)"
+        onblur="setTimeout(()=>{const d=document.getElementById('dd-${key}');if(d)d.classList.remove('show')},150)">
+      <div id="dd-${key}" class="dropdown"></div>
+    </div>
+    <div id="tvcarea-${ch}-${groupId}"><div class="empty-hint">Chưa có media nào được chọn</div></div>`
+}
+
 function addGroup(){
-  const id = 'g'+(++groupCounter)
+  const id='g'+(++groupCounter)
   const container=document.getElementById('all-groups')
   const num=container.querySelectorAll('.group-card').length+1
-  nfcState[id]=false
-  groupChannel[id]=''
+  ;['tv','poster'].forEach(ch=>{ nfcState[id+'-'+ch]=false; pkgState[id+'-'+ch]='' })
 
   const div=document.createElement('div')
   div.className='group-card'; div.id='group-'+id
@@ -597,9 +539,10 @@ function addGroup(){
     <div class="group-header" onclick="toggleGroup('${id}')">
       <div class="group-header-left">
         <div class="group-index">${num}</div>
-        <div style="display:flex;align-items:center;gap:8px">
+        <div style="display:flex;align-items:center;gap:4px">
           <div class="group-name-preview">Nhóm quảng cáo ${num}</div>
-          <span class="group-ch-badge" id="chbadge-${id}" style="display:none"></span>
+          <span class="ch-badge-tv" id="hbadge-tv-${id}" style="display:none">TV</span>
+          <span class="ch-badge-poster" id="hbadge-poster-${id}" style="display:none">Poster</span>
         </div>
       </div>
       <div class="group-header-right">
@@ -608,96 +551,45 @@ function addGroup(){
       </div>
     </div>
     <div class="group-body open" id="body-${id}">
-
-      <div style="margin-bottom:14px">
-        <div class="ch-label">Kênh thiết bị <span class="req">*</span></div>
-        <div class="ch-selector">
-          <button class="ch-btn" onclick="selectChannel('${id}','tv',this)">TV</button>
-          <button class="ch-btn" onclick="selectChannel('${id}','poster',this)">Poster</button>
-        </div>
-      </div>
-
       <div class="field-row-4">
         <div class="field"><label>Tên nhóm quảng cáo <span class="req">*</span></label>
-          <input type="text" id="inp-name-${id}" placeholder="Nhập tên nhóm" disabled oninput="document.querySelector('#group-${id} .group-name-preview').textContent=this.value||'Nhóm quảng cáo ${num}'">
+          <input type="text" placeholder="Nhập tên nhóm"
+            oninput="document.querySelector('#group-${id} .group-name-preview').textContent=this.value||'Nhóm quảng cáo ${num}'">
         </div>
         <div class="field"><label>Khu vực <span class="req">*</span></label>
-          <select id="inp-kv-${id}" disabled><option value="">Chọn khu vực</option><option value="all">Toàn Quốc</option><option value="north">Miền Bắc</option><option value="south">Miền Nam</option></select>
+          <select><option value="">Chọn khu vực</option><option value="all">Toàn Quốc</option><option value="north">Miền Bắc</option><option value="south">Miền Nam</option></select>
         </div>
         <div class="field"><label>Loại tòa nhà <span class="req">*</span></label>
-          <select id="inp-ltn-${id}" disabled><option value="">Loại tòa nhà</option><option value="all">Tất cả</option><option value="apartment">Chung cư</option><option value="office">Văn phòng</option></select>
+          <select><option value="">Loại tòa nhà</option><option value="all">Tất cả</option><option value="apartment">Chung cư</option><option value="office">Văn phòng</option></select>
         </div>
         <div class="field"><label>Số slot <span class="req">*</span></label>
-          <input type="number" id="inp-slot-${id}" value="1" min="1" disabled>
+          <input type="number" value="1" min="1">
         </div>
       </div>
-
-      <div class="field-grid-2" style="margin-bottom:14px">
+      <div class="field-grid-2" style="margin-bottom:16px">
         <div class="field">
           <label>Ngày bắt đầu nhóm <span class="req">*</span></label>
-          <div class="date-wrap"><input type="date" id="gstart-${id}" disabled onchange="onGroupDateChange('${id}')"></div>
+          <div class="date-wrap"><input type="date" id="gstart-${id}" onchange="onGroupDateChange('${id}')"></div>
           <span class="field-error" id="gerr-start-${id}"></span>
         </div>
         <div class="field">
           <label>Ngày kết thúc nhóm <span class="req">*</span></label>
-          <div class="date-wrap"><input type="date" id="gend-${id}" disabled onchange="onGroupDateChange('${id}')"></div>
+          <div class="date-wrap"><input type="date" id="gend-${id}" onchange="onGroupDateChange('${id}')"></div>
           <span class="field-error" id="gerr-end-${id}"></span>
         </div>
       </div>
 
-      <div class="field-grid-2" style="margin-bottom:14px">
-        <div class="field"><label>Số thiết bị theo hợp đồng <span class="req">*</span></label>
-          <div class="num-input-wrap">
-            <div class="num-display" id="numdisp-${id}" style="opacity:0.45;pointer-events:none" onclick="this.querySelector('input').focus()">
-              <span id="numtext-${id}" style="color:#bbb">Nhập số thiết bị</span>
-              <input class="num-real" type="number" min="0" disabled oninput="formatNum('${id}',this.value)">
-            </div>
-          </div>
-        </div>
-        <div class="field"><label>Gói tính năng <span class="req">*</span></label>
-          <select id="pkg-${id}" disabled onchange="onPackageChange('${id}',this.value)">
-            <option value="">Chọn gói</option>
-            <option value="standard">Tiêu chuẩn</option>
-            <option value="advanced">Nâng cao</option>
-            <option value="premium">Cao cấp</option>
-          </select>
-        </div>
+      <div class="ch-label">Cấu hình theo kênh</div>
+      <div class="ch-tabs">
+        <button class="ch-tab-btn active-tv" onclick="switchChTab('${id}','tv',this)">TV</button>
+        <button class="ch-tab-btn" onclick="switchChTab('${id}','poster',this)">Poster</button>
       </div>
-
-      <div id="addon-${id}" style="display:none" class="addon-row">
-        <div class="addon-box" id="addonbox-${id}">
-          <div class="addon-left">
-            <div><div class="addon-label">Tính năng NFC</div><div class="addon-desc" id="addondesc-${id}">Chưa kích hoạt</div></div>
-            <span class="addon-badge" id="addonbadge-${id}">Add-on</span>
-          </div>
-          <div class="switch-wrap">
-            <span class="switch-text" id="switchtext-${id}">Tắt</span>
-            <div class="switch" id="switch-${id}" onclick="toggleNfc('${id}')"><div class="switch-knob"></div></div>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <div class="media-label-row">
-          <span class="media-label">Media <span class="req">*</span></span>
-          <span class="media-count-badge" id="mediacount-${id}">Danh sách media đã chọn — Đã chọn 0 Media</span>
-        </div>
-        <div class="media-search-wrap">
-          <input id="search-${id}" class="media-search" type="text" placeholder="Chọn gói tính năng trước..."
-            disabled
-            oninput="showDropdown('${id}',this.value)"
-            onblur="setTimeout(()=>{const d=document.getElementById('dd-${id}');if(d)d.classList.remove('show')},150)">
-          <div id="dd-${id}" class="dropdown"></div>
-        </div>
-        <div id="tvcarea-${id}"><div class="empty-hint">Chưa có media nào được chọn</div></div>
-      </div>
+      <div id="ch-panel-tv-${id}" class="ch-panel active">${buildChPanel(id,'tv')}</div>
+      <div id="ch-panel-poster-${id}" class="ch-panel">${buildChPanel(id,'poster')}</div>
     </div>`
   container.appendChild(div)
-  // Apply campaign date range to new group's date inputs
   applyGroupDateRange(id)
 }
-
-// Không tạo sẵn nhóm
 </script>
 </body>
 </html>
