@@ -279,23 +279,35 @@ function applyGroupDateRange(groupId){
   const ge=document.getElementById('gend-'+groupId)
   if(gs){ gs.min=cs||''; gs.max=ce||'' }
   if(ge){ ge.min=cs||''; ge.max=ce||'' }
+  // Xóa giá trị nếu out of range
   if(gs&&gs.value&&cs&&gs.value<cs){ gs.value=''; if(ge) ge.value='' }
+  if(gs&&gs.value&&ce&&gs.value>ce){ gs.value=''; if(ge) ge.value='' }
+  if(ge&&ge.value&&cs&&ge.value<cs){ ge.value='' }
   if(ge&&ge.value&&ce&&ge.value>ce){ ge.value='' }
   onGroupDateChange(groupId)
 }
 
 function onGroupDateChange(groupId){
-  const sv=document.getElementById('gstart-'+groupId)?.value||''
-  const ev=document.getElementById('gend-'+groupId)?.value||''
+  const gs=document.getElementById('gstart-'+groupId)
+  const ge=document.getElementById('gend-'+groupId)
+  const sv=gs?.value||''
+  const ev=ge?.value||''
   ;['tv','poster'].forEach(ch=>{
     document.querySelectorAll('#tvcarea-'+ch+'-'+groupId+' .tvc-block').forEach(block=>{
-      const tid=block.id.replace('tvcblock-','')
-      const ts=document.getElementById('tvcstart-'+tid)
-      const te=document.getElementById('tvcend-'+tid)
-      if(ts){ ts.min=sv; ts.max=ev }
-      if(te){ te.min=sv; te.max=ev }
-      if(ts&&ts.value&&sv&&ts.value<sv) ts.value=''
-      if(te&&te.value&&ev&&te.value>ev) te.value=''
+      const tvcId=block.id.replace('tvcblock-','')
+      const container=document.getElementById('tscontainer-'+tvcId)
+      if(!container) return
+      container.querySelectorAll('.ts-slot').forEach((slot,i)=>{
+        const tsStart=document.getElementById('ts-start-'+tvcId+'-'+i)
+        const tsEnd=document.getElementById('ts-end-'+tvcId+'-'+i)
+        if(tsStart){ tsStart.min=sv||''; tsStart.max=ev||'' }
+        if(tsEnd){ tsEnd.min=sv||''; tsEnd.max=ev||'' }
+        // Xóa nếu out of range
+        if(tsStart&&tsStart.value&&sv&&tsStart.value<sv) tsStart.value=''
+        if(tsStart&&tsStart.value&&ev&&tsStart.value>ev) tsStart.value=''
+        if(tsEnd&&tsEnd.value&&sv&&tsEnd.value<sv) tsEnd.value=''
+        if(tsEnd&&tsEnd.value&&ev&&tsEnd.value>ev) tsEnd.value=''
+      })
     })
   })
 }
@@ -366,9 +378,38 @@ function toggleNfc(groupId, ch){
 
 function refreshNfc(groupId, ch){
   const on=nfcState[groupId+'-'+ch]
-  document.querySelectorAll('#tvcarea-'+ch+'-'+groupId+' .url-list').forEach(l=>{ if(on&&l.querySelectorAll('.url-row').length>0) l.style.display='block'; else if(!on) l.style.display='none' })
-  document.querySelectorAll('#tvcarea-'+ch+'-'+groupId+' .add-url-btn').forEach(b=>b.style.display=on?'inline-block':'none')
-  document.querySelectorAll('#tvcarea-'+ch+'-'+groupId+' .nfc-locked-notice').forEach(n=>n.style.display=on?'none':'flex')
+  document.querySelectorAll('#tvcarea-'+ch+'-'+groupId+' .tvc-block').forEach(block=>{
+    const tvcId=block.id.replace('tvcblock-','')
+    const container=document.getElementById('tscontainer-'+tvcId)
+    if(!container) return
+    // Rebuild mỗi slot để thêm/bỏ phần URL NFC
+    const slots=container.querySelectorAll('.ts-slot')
+    const gsv=document.getElementById('gstart-'+groupId)?.value||''
+    const gev=document.getElementById('gend-'+groupId)?.value||''
+    slots.forEach((slot,i)=>{
+      const urlSection=slot.querySelector('[id^="urlarea-"]')?.closest('div[style*="border-top"]')
+      if(on && !urlSection){
+        // Thêm phần URL NFC vào
+        const noticeDiv=slot.querySelector('.nfc-locked-inner')
+        slot.insertAdjacentHTML('beforeend',`
+          <div style="border-top:1px solid #EEEEE9;">
+            <div id="urlarea-${tvcId}-s${i}">
+              ${makeUrlNfcRow(tvcId, i, 0)}
+            </div>
+            <div style="padding:5px 10px;">
+              <button onclick="addSlotUrl('${tvcId}',${i})"
+                style="font-size:11px;color:#185FA5;cursor:pointer;padding:3px 8px;border-radius:6px;border:1px solid #B5D4F4;background:#fff;font-family:inherit;">
+                + Thêm URL NFC
+              </button>
+            </div>
+          </div>`)
+      } else if(!on && urlSection){
+        urlSection.remove()
+      }
+    })
+    const notice=block.querySelector('.nfc-locked-notice')
+    if(notice) notice.style.display=on?'none':'flex'
+  })
 }
 
 function toggleGroup(id){
@@ -413,40 +454,169 @@ function updateHeaderBadges(groupId){
   if(posterB) posterB.style.display=posterCount?'inline-block':'none'
 }
 
-function makeUrlRow(tvcId, idx){
-  return `<div class="url-row" id="urlrow-${tvcId}-${idx}">
-    <input class="url-input" type="text" placeholder="Nhập URL NFC...">
+// ── Timeslot: mỗi khung giờ có nhiều URL, chỉ 1 active/khung, validate overlap ──
+
+function makeUrlNfcRow(tvcId, slotIdx, urlIdx){
+  const uid=`${tvcId}-s${slotIdx}-u${urlIdx}`
+  return `<div class="url-row" id="urlnfcrow-${uid}" style="display:flex;align-items:center;gap:8px;padding:5px 10px;border-bottom:1px solid #EEEEE9;">
+    <input class="url-input" type="text" placeholder="Nhập URL NFC..." id="urlnfc-${uid}"
+      style="flex:1;height:28px;border:1px solid #D8D7D0;border-radius:6px;padding:0 10px;font-size:12px;background:#fff;color:#888;outline:none;">
     <div class="tog-wrap">
-      <span class="tog-label" id="toglabel-${tvcId}-${idx}">Tắt</span>
-      <div class="tog" id="tog-${tvcId}-${idx}" onclick="activateUrl('${tvcId}',${idx})"><div class="tog-knob"></div></div>
+      <span class="tog-label" id="urntog-lbl-${uid}">Tắt</span>
+      <div class="tog" id="urntog-${uid}" onclick="activateSlotUrl('${tvcId}',${slotIdx},${urlIdx})"><div class="tog-knob"></div></div>
     </div>
-    <span class="url-del" onclick="removeUrl('${tvcId}',${idx})">×</span>
+    <span class="url-del" onclick="removeSlotUrl('${tvcId}',${slotIdx},${urlIdx})">×</span>
   </div>`
 }
 
-function makeTimeslotRow(tvcId, idx){
-  return `<div class="timeslot-row" id="tsrow-${tvcId}-${idx}">
-    <span class="ts-label">Khung giờ</span>
-    <input class="ts-time" type="time" value="07:00" id="ts-from-${tvcId}-${idx}">
-    <span class="ts-label">tới</span>
-    <input class="ts-time" type="time" value="11:00" id="ts-to-${tvcId}-${idx}">
-    <span class="ts-label">Từ ngày</span>
-    <div style="position:relative"><input class="ts-date" type="date" id="ts-start-${tvcId}-${idx}"></div>
-    <span class="ts-label">tới ngày</span>
-    <div style="position:relative"><input class="ts-date" type="date" id="ts-end-${tvcId}-${idx}"></div>
-    <span class="ts-del" onclick="removeTimeslot('${tvcId}',${idx})" title="Xóa khung giờ">×</span>
+function activateSlotUrl(tvcId, slotIdx, activeUrlIdx){
+  // Chỉ tắt các URL trong cùng 1 khung giờ (slotIdx)
+  const urlArea=document.getElementById('urlarea-'+tvcId+'-s'+slotIdx)
+  if(!urlArea) return
+  urlArea.querySelectorAll('.url-row').forEach((row,i)=>{
+    const inp=row.querySelector('.url-input')
+    const tog=row.querySelector('.tog')
+    const lbl=row.querySelector('.tog-label')
+    if(!inp||!tog||!lbl) return
+    if(i===activeUrlIdx){
+      const isOn=tog.classList.contains('on')
+      if(isOn){
+        tog.classList.remove('on'); lbl.classList.remove('on'); lbl.textContent='Tắt'
+        inp.style.borderColor=''; inp.style.background=''; inp.style.color='#888'
+      } else {
+        tog.classList.add('on'); lbl.classList.add('on'); lbl.textContent='Bật'
+        inp.style.borderColor='#1D9E75'; inp.style.background='#F0FAF5'; inp.style.color='#1a1a1a'
+      }
+    } else {
+      tog.classList.remove('on'); lbl.classList.remove('on'); lbl.textContent='Tắt'
+      inp.style.borderColor=''; inp.style.background=''; inp.style.color='#888'
+    }
+  })
+}
+
+function addSlotUrl(tvcId, slotIdx){
+  const urlArea=document.getElementById('urlarea-'+tvcId+'-s'+slotIdx)
+  if(!urlArea) return
+  const idx=urlArea.querySelectorAll('.url-row').length
+  urlArea.insertAdjacentHTML('beforeend', makeUrlNfcRow(tvcId, slotIdx, idx))
+}
+
+function removeSlotUrl(tvcId, slotIdx, urlIdx){
+  const uid=`${tvcId}-s${slotIdx}-u${urlIdx}`
+  const row=document.getElementById('urlnfcrow-'+uid)
+  if(row) row.remove()
+}
+
+function getSlotData(tvcId){
+  // Trả về mảng các {fromTime, toTime, startDate, endDate} của tất cả khung giờ
+  const container=document.getElementById('tscontainer-'+tvcId)
+  if(!container) return []
+  return Array.from(container.querySelectorAll('.ts-slot')).map((slot,i)=>{
+    return {
+      idx: i,
+      fromTime: document.getElementById('ts-from-'+tvcId+'-'+i)?.value||'',
+      toTime:   document.getElementById('ts-to-'+tvcId+'-'+i)?.value||'',
+      startDate:document.getElementById('ts-start-'+tvcId+'-'+i)?.value||'',
+      endDate:  document.getElementById('ts-end-'+tvcId+'-'+i)?.value||''
+    }
+  })
+}
+
+function timeToMins(t){ const [h,m]=t.split(':').map(Number); return h*60+m }
+
+function slotsOverlap(a, b){
+  // Overlap khi: khoảng ngày giao nhau VÀ khoảng giờ giao nhau
+  if(!a.startDate||!a.endDate||!b.startDate||!b.endDate) return false
+  if(!a.fromTime||!a.toTime||!b.fromTime||!b.toTime) return false
+  const dateOverlap = a.startDate<=b.endDate && b.startDate<=a.endDate
+  if(!dateOverlap) return false
+  const aFrom=timeToMins(a.fromTime), aTo=timeToMins(a.toTime)
+  const bFrom=timeToMins(b.fromTime), bTo=timeToMins(b.toTime)
+  return aFrom<bTo && bFrom<aTo
+}
+
+function validateSlotOverlap(tvcId){
+  const slots=getSlotData(tvcId)
+  // Clear tất cả lỗi trước
+  slots.forEach(s=>{
+    const errEl=document.getElementById('ts-err-'+tvcId+'-'+s.idx)
+    if(errEl){ errEl.textContent=''; errEl.style.display='none' }
+    ;['ts-from-','ts-to-','ts-start-','ts-end-'].forEach(p=>{
+      const el=document.getElementById(p+tvcId+'-'+s.idx)
+      if(el) el.style.borderColor=''
+    })
+  })
+  // Check overlap từng cặp
+  for(let i=0;i<slots.length;i++){
+    for(let j=i+1;j<slots.length;j++){
+      if(slotsOverlap(slots[i],slots[j])){
+        ;[i,j].forEach(k=>{
+          const errEl=document.getElementById('ts-err-'+tvcId+'-'+k)
+          if(errEl){ errEl.textContent='Khung giờ bị trùng với khung khác'; errEl.style.display='block'; errEl.style.color='#E24B4A'; errEl.style.fontSize='11px' }
+          ;['ts-from-','ts-to-','ts-start-','ts-end-'].forEach(p=>{
+            const el=document.getElementById(p+tvcId+'-'+k)
+            if(el) el.style.borderColor='#E24B4A'
+          })
+        })
+      }
+    }
+  }
+}
+
+function makeTimeslotRow(tvcId, idx, gsv, gev, showNfc){
+  const mn=gsv||'', mx=gev||''
+  const nfcHtml=showNfc?`
+    <div style="border-top:1px solid #EEEEE9;">
+      <div id="urlarea-${tvcId}-s${idx}">
+        ${makeUrlNfcRow(tvcId, idx, 0)}
+      </div>
+      <div style="padding:5px 10px;">
+        <button onclick="addSlotUrl('${tvcId}',${idx})"
+          style="font-size:11px;color:#185FA5;cursor:pointer;padding:3px 8px;border-radius:6px;border:1px solid #B5D4F4;background:#fff;font-family:inherit;">
+          + Thêm URL NFC
+        </button>
+      </div>
+    </div>`:''
+  return `<div class="ts-slot" id="tsrow-${tvcId}-${idx}" style="background:#fff;border:1px solid #E5E4DE;border-radius:8px;margin-bottom:8px;overflow:hidden;">
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:9px 12px;">
+      <span class="ts-label">Khung giờ</span>
+      <input class="ts-time" type="time" value="00:00" id="ts-from-${tvcId}-${idx}" onchange="validateSlotOverlap('${tvcId}')">
+      <span class="ts-label">tới</span>
+      <input class="ts-time" type="time" value="23:59" id="ts-to-${tvcId}-${idx}" onchange="validateSlotOverlap('${tvcId}')">
+      <span class="ts-label">Từ ngày</span>
+      <div style="position:relative"><input class="ts-date" type="date" id="ts-start-${tvcId}-${idx}" min="${mn}" max="${mx}" onchange="validateSlotOverlap('${tvcId}')"></div>
+      <span class="ts-label">tới ngày</span>
+      <div style="position:relative"><input class="ts-date" type="date" id="ts-end-${tvcId}-${idx}" min="${mn}" max="${mx}" onchange="validateSlotOverlap('${tvcId}')"></div>
+      <span class="ts-del" onclick="removeTimeslot('${tvcId}',${idx})" style="margin-left:auto">×</span>
+    </div>
+    <div id="ts-err-${tvcId}-${idx}" style="display:none;padding:0 12px 6px;"></div>
+    ${nfcHtml}
   </div>`
+}
+
+function makeTimeslotRowNoNfc(tvcId, idx, gsv, gev){
+  return makeTimeslotRow(tvcId, idx, gsv, gev, false)
 }
 
 function addTimeslot(tvcId){
   const container=document.getElementById('tscontainer-'+tvcId)
-  const idx=container.querySelectorAll('.timeslot-row').length
-  container.insertAdjacentHTML('beforeend', makeTimeslotRow(tvcId, idx))
+  const idx=container.querySelectorAll('.ts-slot').length
+  const parts=tvcId.split('-')
+  const groupId=parts[0], ch=parts[1]
+  const gsv=document.getElementById('gstart-'+groupId)?.value||''
+  const gev=document.getElementById('gend-'+groupId)?.value||''
+  const nfcOn=nfcState[groupId+'-'+ch]||false
+  container.insertAdjacentHTML('beforeend', makeTimeslotRow(tvcId, idx, gsv, gev, nfcOn))
+  // Áp dụng min/max ngay sau khi thêm
+  const tsStart=document.getElementById('ts-start-'+tvcId+'-'+idx)
+  const tsEnd=document.getElementById('ts-end-'+tvcId+'-'+idx)
+  if(tsStart){ tsStart.min=gsv; tsStart.max=gev }
+  if(tsEnd){ tsEnd.min=gsv; tsEnd.max=gev }
 }
 
 function removeTimeslot(tvcId, idx){
   const row=document.getElementById('tsrow-'+tvcId+'-'+idx)
-  if(row) row.remove()
+  if(row){ row.remove(); validateSlotOverlap(tvcId) }
 }
 
 function addTvcBlock(groupId, ch, name){
@@ -467,25 +637,17 @@ function addTvcBlock(groupId, ch, name){
         <div class="${dotCls}"></div>
         <div class="tvc-block-name">${name}</div>
       </div>
-      <div class="tvc-dates">
-        <span class="tvc-date-label">Từ</span>
-        <div class="date-wrap"><input class="tvc-date-input" type="date" id="tvcstart-${tvcId}" min="${gsv}" max="${gev}"></div>
-        <span class="tvc-date-label">đến</span>
-        <div class="date-wrap"><input class="tvc-date-input" type="date" id="tvcend-${tvcId}" min="${gsv}" max="${gev}"></div>
-      </div>
       <div class="tvc-block-right">
-        <button class="add-url-btn" style="display:${nfcOn?'inline-block':'none'}" onclick="addUrlRow('${tvcId}')">+ Thêm URL NFC</button>
         <span class="tvc-del-btn" onclick="document.getElementById('tvcblock-${tvcId}').remove();checkEmpty('${groupId}','${ch}');updateMediaCount('${groupId}','${ch}');updateHeaderBadges('${groupId}')">Xóa</span>
       </div>
     </div>
-    <div class="url-list" id="urllist-${tvcId}"></div>
     <div class="timeslot-section">
       <div class="timeslot-header">
         <span class="timeslot-title">Khung giờ phát sóng</span>
         <button class="add-slot-btn" onclick="addTimeslot('${tvcId}')">+ Thêm khung giờ</button>
       </div>
       <div id="tscontainer-${tvcId}">
-        ${makeTimeslotRow(tvcId, 0)}
+        ${makeTimeslotRow(tvcId, 0, gsv, gev, nfcOn)}
       </div>
     </div>
     <div class="nfc-locked-notice" style="display:${nfcOn?'none':'flex'}">NFC chưa được kích hoạt cho gói tính năng này</div>`
