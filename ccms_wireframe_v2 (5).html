@@ -1,0 +1,2307 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>C-CMS Wireframe – Draft Approval Flow</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --blue:         #1A5FD4;
+  --blue-light:   #E6EFFF;
+  --blue-mid:     #4A85E8;
+  --green:        #0F7B5A;
+  --green-light:  #D4F3E8;
+  --green-mid:    #1BAF7E;
+  --amber:        #C96E00;
+  --amber-light:  #FEF3DC;
+  --red:          #C0392B;
+  --red-light:    #FDECEA;
+  --teal:         #0D9488;
+  --bg-event-main:#1E2D6B;
+  --bg-event-sub: #3D1A6B;
+  --border:       #D6DAE6;
+  --border-light: #ECEEF4;
+  --text-1:       #1A1D2B;
+  --text-2:       #4A5070;
+  --text-3:       #8890A8;
+  --text-4:       #A0A8C0;
+  --radius-sm:    5px;
+  --radius-md:    8px;
+  --radius-lg:    12px;
+  --radius-xl:    16px;
+  --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --shadow:     0 8px 40px rgba(0,0,0,0.13), 0 2px 8px rgba(0,0,0,0.07);
+  --shadow-otp: 0 20px 64px rgba(0,0,0,0.22), 0 4px 16px rgba(0,0,0,0.1);
+}
+
+body {
+  font-family: var(--font);
+  background: #CDD0DC;
+  min-height: 100vh;
+  padding: 0;
+}
+
+/* ══════════════════════════════════════
+   OUTER TAB BAR (top-level switcher)
+══════════════════════════════════════ */
+.outer-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.outer-topbar {
+  background: #12152A;
+  padding: 0 28px;
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+}
+
+.outer-brand {
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: .05em;
+  display: flex;
+  align-items: center;
+  padding-right: 24px;
+  border-right: 1px solid rgba(255,255,255,0.1);
+  margin-right: 8px;
+  white-space: nowrap;
+}
+.outer-brand span { color: #1BAF7E; }
+
+.outer-tab {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.5);
+  padding: 14px 20px 12px;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: color .15s, border-color .15s;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  white-space: nowrap;
+  user-select: none;
+}
+.outer-tab:hover { color: rgba(255,255,255,0.8); }
+.outer-tab.active {
+  color: #fff;
+  border-bottom-color: #1BAF7E;
+  font-weight: 600;
+}
+.outer-tab .tab-num {
+  background: rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.6);
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+.outer-tab.active .tab-num {
+  background: rgba(27,175,126,0.25);
+  color: #1BAF7E;
+}
+
+.outer-badge {
+  font-size: 10px;
+  font-weight: 700;
+  background: #C0392B;
+  color: #fff;
+  padding: 2px 6px;
+  border-radius: 8px;
+  letter-spacing: .03em;
+}
+
+/* Pages */
+.outer-page { display: none; }
+.outer-page.active { display: block; }
+
+/* Scroll area per page */
+.page-scroll {
+  padding: 28px 20px 48px;
+  display: flex;
+  justify-content: center;
+}
+
+/* ══════════════════════════════════════
+   SHARED: BROWSER CHROME
+══════════════════════════════════════ */
+.browser-chrome {
+  background: #1A1D2B;
+  padding: 9px 18px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+}
+.wdot { width: 11px; height: 11px; border-radius: 50%; }
+.wdot.r { background: #FF5F57; }
+.wdot.y { background: #FEBC2E; }
+.wdot.g { background: #28C840; }
+.w-url {
+  margin-left: 8px;
+  background: #2C3050;
+  border-radius: 5px;
+  padding: 4px 14px;
+  font-size: 11.5px;
+  color: #8890A8;
+  flex: 1;
+}
+
+/* ══════════════════════════════════════
+   SHARED: MODAL / DIALOG SHELL
+══════════════════════════════════════ */
+.cms-window {
+  background: #fff;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  position: relative;
+}
+.window-wrap {
+  padding: 24px;
+  position: relative;
+}
+
+/* ── Header ── */
+.win-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 13px 18px;
+  border-bottom: 1px solid var(--border-light);
+  background: #fff;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.win-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-1);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+.badge {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+.badge-blue  { background: var(--blue-light); color: var(--blue); }
+.badge-green { background: var(--green-light); color: #0A5E43; }
+
+.win-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* ── Unsaved chip ── */
+.unsaved-chip {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 500;
+  background: var(--amber-light);
+  color: var(--amber);
+  border: 1px solid #F7CB7A;
+  border-radius: var(--radius-sm);
+  padding: 4px 10px;
+  white-space: nowrap;
+}
+.unsaved-chip::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--amber);
+  animation: pulse-a 1.4s ease-in-out infinite;
+}
+@keyframes pulse-a {
+  0%,100% { opacity:1; transform:scale(1); }
+  50%      { opacity:.35; transform:scale(.65); }
+}
+
+/* ── Buttons ── */
+.btn {
+  font-family: var(--font);
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: filter .15s, transform .1s;
+  white-space: nowrap;
+  font-size: 12.5px;
+  padding: 7px 15px;
+}
+.btn:active { transform: scale(.97); }
+
+.btn-update {
+  background: linear-gradient(135deg, #0F7B5A 0%, #1BAF7E 100%);
+  color: #fff;
+  box-shadow: 0 2px 10px rgba(15,123,90,0.3);
+}
+.btn-update:hover { filter: brightness(1.07); }
+.btn-update .lock {
+  width: 13px; height: 13px;
+  background: rgba(255,255,255,0.25);
+  border-radius: 3px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+.btn-add   { background: var(--blue); color: #fff; box-shadow: 0 2px 8px rgba(26,95,212,0.22); }
+.btn-add:hover { filter: brightness(1.08); }
+
+.btn-outline {
+  background: #fff;
+  color: var(--text-2);
+  border: 1px solid var(--border);
+}
+.btn-outline:hover { background: #F2F4F8; }
+
+.btn-danger {
+  background: var(--red-light);
+  color: var(--red);
+  border: 1px solid #F5C6C2;
+}
+.btn-danger:hover { background: #fad6d3; }
+
+.btn-primary {
+  background: var(--blue);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(26,95,212,0.22);
+}
+.btn-primary:hover { filter: brightness(1.07); }
+
+.btn-close {
+  width: 30px; height: 30px;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-2);
+  font-size: 16px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: background .15s;
+}
+.btn-close:hover { background: #F2F4F8; }
+
+/* ══════════════════════════════════════
+   PAGE 1: PLAYLIST EDITOR
+══════════════════════════════════════ */
+#page-playlist .page-scroll { background: #CDD0DC; }
+
+.p1-outer {
+  width: 100%;
+  max-width: 1060px;
+}
+
+.p1-browser {
+  background: #1A1D2B;
+  padding: 9px 18px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+}
+
+.p1-shell {
+  background: #fff;
+  border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+  overflow: hidden;
+}
+
+/* Modal body: timeline + sidebar */
+.p1-body {
+  display: flex;
+  min-height: 360px;
+}
+
+/* Timeline */
+.timeline {
+  flex: 1;
+  padding: 16px 18px;
+  border-right: 1px solid var(--border-light);
+  overflow-x: auto;
+  min-width: 0;
+}
+.tl-col-heads {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+  padding-left: 52px;
+}
+.tl-col-head {
+  flex: 1;
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--text-3);
+}
+.tl-row {
+  display: flex;
+  align-items: stretch;
+  gap: 6px;
+  margin-bottom: 7px;
+}
+.tl-time {
+  font-size: 10.5px;
+  color: var(--text-3);
+  width: 34px;
+  padding-top: 10px;
+  text-align: right;
+  flex-shrink: 0;
+}
+.tl-num {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-2);
+  width: 18px;
+  padding-top: 10px;
+  flex-shrink: 0;
+}
+.tl-events { flex: 1; display: flex; gap: 8px; }
+.ev-card {
+  flex: 1;
+  border-radius: var(--radius-md);
+  padding: 9px 10px 26px;
+  position: relative;
+  min-width: 0;
+}
+.ev-main { background: var(--bg-event-main); }
+.ev-sub  { background: var(--bg-event-sub); }
+.ev-screen {
+  font-size: 9.5px;
+  color: rgba(255,255,255,0.5);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  margin-bottom: 3px;
+}
+.ev-name {
+  font-size: 11.5px;
+  color: rgba(255,255,255,0.9);
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 210px;
+}
+.ev-dur {
+  position: absolute;
+  bottom: 7px; left: 8px;
+  font-size: 10px;
+  color: rgba(255,255,255,0.8);
+  background: rgba(0,0,0,0.3);
+  border-radius: 3px;
+  padding: 1px 6px;
+}
+.ev-thumb {
+  position: absolute;
+  right: 7px; top: 8px;
+  width: 36px; height: 28px;
+  border-radius: 3px;
+  background: rgba(255,255,255,0.1);
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* Sidebar */
+.p1-sidebar {
+  width: 205px;
+  flex-shrink: 0;
+  padding: 14px;
+  background: #FAFAFA;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.sb-hint {
+  font-size: 11px;
+  color: var(--text-2);
+  line-height: 1.6;
+  background: #EEF3FF;
+  border-left: 3px solid var(--blue);
+  padding: 7px 9px;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+.sb-field-label {
+  font-size: 11px;
+  color: var(--text-3);
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+.sb-select {
+  font-family: var(--font);
+  font-size: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 5px 8px;
+  width: 100%;
+  background: #fff;
+  color: var(--text-1);
+}
+.sb-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  color: var(--text-1);
+}
+.preview-box {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+.preview-hdr {
+  font-size: 11px;
+  color: var(--text-2);
+  font-weight: 500;
+  padding: 5px 9px;
+  border-bottom: 1px solid var(--border-light);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.preview-play {
+  width: 20px; height: 20px;
+  background: var(--blue);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+}
+.preview-screen {
+  background: #151A30;
+  height: 76px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700;
+  color: #4DFFD2;
+  letter-spacing: .06em;
+}
+.preview-bot {
+  background: #0D0F1A;
+  height: 22px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9.5px;
+  color: rgba(255,255,255,0.45);
+  letter-spacing: .05em;
+}
+.sb-actions { display: flex; flex-direction: column; gap: 6px; margin-top: auto; }
+.sb-btn {
+  font-family: var(--font);
+  font-size: 12px; font-weight: 600;
+  padding: 8px; border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: filter .15s;
+}
+.sb-btn:hover { filter: brightness(1.07); }
+.sb-save    { background: var(--blue); color: #fff; }
+.sb-replace { background: #E67E00; color: #fff; }
+.sb-delete  { background: var(--red); color: #fff; }
+
+/* Footer p1 */
+.p1-footer {
+  padding: 8px 18px;
+  border-top: 1px solid var(--border-light);
+  background: #FAFBFD;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11.5px;
+  color: var(--text-3);
+  flex-wrap: wrap;
+}
+.footer-tag {
+  background: var(--blue); color: #fff;
+  font-size: 11px; font-weight: 600;
+  padding: 2px 9px; border-radius: 4px;
+}
+.p1-footer-status {
+  margin-left: auto;
+  display: flex; align-items: center; gap: 5px;
+  color: var(--amber);
+  font-weight: 500;
+  font-size: 11px;
+}
+.p1-footer-status::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--amber);
+}
+
+/* ══════════════════════════════════════
+   PAGE 2: SỬA SỰ KIỆN
+══════════════════════════════════════ */
+.p2-outer {
+  width: 100%;
+  max-width: 660px;
+}
+
+/* Inner tabs (Tổng quan / Định vị / Tiêu chí) */
+.inner-tabs {
+  display: flex;
+  padding: 0 20px;
+  border-bottom: 1px solid var(--border-light);
+  background: #fff;
+}
+.inner-tab {
+  font-size: 13px;
+  font-weight: 500;
+  padding: 10px 16px;
+  color: var(--text-3);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color .15s, border-color .15s;
+  user-select: none;
+}
+.inner-tab.active { color: var(--blue); border-bottom-color: var(--blue); font-weight: 600; }
+.inner-tab:hover:not(.active) { color: var(--text-2); }
+.inner-panel { display: none; }
+.inner-panel.active { display: block; }
+
+/* Form */
+.form-body {
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 17px;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+.form-row {
+  display: grid;
+  grid-template-columns: 135px 1fr;
+  gap: 8px 14px;
+  align-items: start;
+}
+.form-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-1);
+  padding-top: 8px;
+  line-height: 1.4;
+}
+.form-cw { display: flex; flex-direction: column; gap: 4px; }
+
+input[type=text].fi,
+input[type=number].fi,
+select.fi {
+  font-family: var(--font);
+  font-size: 13px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 7px 11px;
+  color: var(--text-1);
+  background: #FAFBFD;
+  outline: none;
+  width: 100%;
+  transition: border-color .15s, box-shadow .15s;
+}
+input[type=text].fi:focus,
+input[type=number].fi:focus,
+select.fi:focus {
+  border-color: var(--blue-mid);
+  box-shadow: 0 0 0 3px rgba(26,95,212,0.1);
+  background: #fff;
+}
+.hint {
+  font-size: 11.5px;
+  color: var(--text-4);
+  line-height: 1.5;
+}
+.tag-input {
+  font-family: var(--font);
+  font-size: 13px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 5px 10px;
+  background: #FAFBFD;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+  min-height: 36px;
+  cursor: text;
+}
+.tag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--blue-light);
+  color: var(--blue);
+  font-size: 12px; font-weight: 500;
+  border-radius: 4px;
+  padding: 2px 8px;
+}
+.playlist-row { display: flex; gap: 8px; align-items: stretch; }
+.playlist-row input.fi { flex: 1; background: #F2F4F8; color: var(--text-2); }
+.btn-change {
+  font-family: var(--font);
+  font-size: 12px; font-weight: 600;
+  padding: 7px 13px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--text-2);
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background .15s;
+}
+.btn-change:hover { background: #F2F4F8; }
+.btn-preview-tl {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--font);
+  font-size: 13px; font-weight: 600;
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
+  border: none;
+  background: var(--teal);
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(13,148,136,0.22);
+  transition: filter .15s;
+}
+.btn-preview-tl:hover { filter: brightness(1.07); }
+.cb-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-1);
+  line-height: 1.5;
+}
+.cb-row input[type=checkbox] { width:15px;height:15px;margin-top:2px;cursor:pointer;flex-shrink:0; }
+.divider-line { border: none; border-top: 1px solid var(--border-light); margin: 0 -22px; }
+
+/* p2 footer */
+.p2-footer {
+  padding: 12px 18px;
+  border-top: 1px solid var(--border-light);
+  background: #F5F6FA;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.p2-footer-actions { display: flex; align-items: center; gap: 8px; margin-left: auto; flex-wrap: wrap; }
+
+/* ══════════════════════════════════════
+   SHARED OTP OVERLAY
+══════════════════════════════════════ */
+.otp-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(15,20,40,0.56);
+  backdrop-filter: blur(3px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  border-radius: var(--radius-xl);
+}
+.otp-overlay.active { display: flex; }
+.otp-card {
+  background: #fff;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-otp);
+  padding: 26px 30px;
+  width: 336px;
+  animation: pop-in .2s ease;
+}
+@keyframes pop-in {
+  from { opacity:0; transform:translateY(14px) scale(.97); }
+  to   { opacity:1; transform:translateY(0) scale(1); }
+}
+.otp-icon-wrap {
+  width: 50px; height: 50px;
+  border-radius: 50%;
+  background: var(--green-light);
+  border: 2px solid rgba(15,123,90,0.16);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 13px;
+}
+.otp-icon-wrap svg { width: 24px; height: 24px; }
+.otp-title {
+  font-size: 15px; font-weight: 700;
+  color: var(--text-1);
+  text-align: center;
+  margin-bottom: 5px;
+}
+.otp-desc {
+  font-size: 12.5px;
+  color: var(--text-2);
+  text-align: center;
+  line-height: 1.6;
+  margin-bottom: 13px;
+}
+.otp-desc strong { color: var(--text-1); }
+.warn-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  font-size: 11.5px; font-weight: 500;
+  background: var(--amber-light);
+  color: var(--amber);
+  border: 1px solid #F7CB7A;
+  border-radius: var(--radius-md);
+  padding: 8px 11px;
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+.warn-banner svg { flex-shrink: 0; margin-top: 1px; }
+.otp-row {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 9px;
+}
+.otp-digit {
+  width: 42px; height: 50px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  font-size: 22px; font-weight: 700;
+  text-align: center;
+  color: var(--text-1);
+  background: #FAFBFD;
+  outline: none;
+  font-family: var(--font);
+  caret-color: var(--blue);
+  transition: border-color .15s, box-shadow .15s;
+}
+.otp-digit:focus { border-color: var(--blue-mid); box-shadow: 0 0 0 3px rgba(26,95,212,0.12); background: #fff; }
+.otp-digit.filled { border-color: var(--green-mid); background: var(--green-light); color: #0A5E43; }
+.otp-digit.oerr   { border-color: var(--red); background: var(--red-light); }
+.otp-resend {
+  font-size: 11.5px;
+  color: var(--text-3);
+  text-align: center;
+  margin-bottom: 16px;
+}
+.otp-resend a { color: var(--blue); font-weight: 600; cursor: pointer; text-decoration: none; }
+.otp-resend a:hover { text-decoration: underline; }
+.otp-actions { display: flex; gap: 8px; }
+.otp-btn-cancel {
+  flex: 1;
+  font-family: var(--font);
+  font-size: 13px; font-weight: 600;
+  padding: 10px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  background: none; color: var(--text-2);
+  cursor: pointer;
+  transition: background .15s;
+}
+.otp-btn-cancel:hover { background: #F2F4F8; }
+.otp-btn-confirm {
+  flex: 2;
+  font-family: var(--font);
+  font-size: 13px; font-weight: 700;
+  padding: 10px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, #0F7B5A 0%, #1BAF7E 100%);
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 3px 10px rgba(15,123,90,0.28);
+  transition: filter .15s, transform .1s;
+}
+.otp-btn-confirm:hover { filter: brightness(1.06); }
+.otp-btn-confirm:active { transform: scale(.97); }
+.otp-success { display: none; text-align: center; padding: 4px 0; animation: fade-in .3s ease; }
+.otp-success.show { display: block; }
+@keyframes fade-in { from { opacity:0; } to { opacity:1; } }
+.success-icon {
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  background: var(--green-light);
+  border: 2px solid rgba(15,123,90,0.2);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 12px;
+}
+.success-icon svg { width: 26px; height: 26px; }
+.success-title { font-size: 15px; font-weight: 700; color: var(--green); margin-bottom: 6px; }
+.success-desc  { font-size: 12px; color: var(--text-2); line-height: 1.6; }
+</style>
+</head>
+<body>
+
+<div class="outer-shell">
+
+  <!-- ══ OUTER TOP BAR ══ -->
+  <div class="outer-topbar">
+    <div class="outer-brand">C<span>-CMS</span></div>
+
+    <div class="outer-tab active" data-page="page-playlist">
+      <span>Màn hình 1</span>
+      <span class="tab-num">Chỉnh sửa Playlist</span>
+    </div>
+    <div class="outer-tab" data-page="page-event">
+      <span>Màn hình 2</span>
+      <span class="tab-num">Sửa Sự Kiện</span>
+    </div>
+
+    <div style="width:1px;background:rgba(255,255,255,0.1);margin:10px 8px;"></div>
+
+    <div class="outer-tab" data-page="page-edit-draft">
+      <span>Màn hình 3</span>
+      <span class="tab-num">Lưu Draft</span>
+    </div>
+    <div class="outer-tab" data-page="page-pending-list">
+      <span>Màn hình 4</span>
+      <span class="tab-num">Danh sách chờ duyệt</span>
+    </div>
+    <div class="outer-tab" data-page="page-review-detail">
+      <span>Màn hình 5</span>
+      <span class="tab-num">Review Draft</span>
+    </div>
+    <div class="outer-tab" data-page="page-event-draft">
+      <span>Màn hình 6</span>
+      <span class="tab-num">Sự kiện – Đổi Playlist</span>
+    </div>
+
+    <div style="margin-left:auto;display:flex;align-items:center;gap:8px;">
+      <span style="font-size:11px;color:rgba(255,255,255,0.35);">Wireframe prototype</span>
+      <span class="outer-badge">WF</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       PAGE 1 – CHỈNH SỬA PLAYLIST
+  ══════════════════════════════════ -->
+  <div class="outer-page active" id="page-playlist">
+    <div class="page-scroll" style="background:#CDD0DC;">
+      <div class="p1-outer">
+
+        <!-- Browser chrome -->
+        <div class="p1-browser">
+          <div class="wdot r"></div><div class="wdot y"></div><div class="wdot g"></div>
+          <div class="w-url">cms.chicilonmedia.vn/playlist/form/timeline/4674/dual?displayType=dual</div>
+        </div>
+
+        <!-- Window -->
+        <div class="p1-shell">
+
+          <!-- Header -->
+          <div class="win-header">
+            <div class="win-title">
+              Chỉnh sửa danh sách phát — test OTOSAN SANG 1304-1904
+              <span class="badge badge-blue">⊞ 2</span>
+              <span class="badge badge-green">⏱ 20</span>
+            </div>
+            <div class="win-right">
+              <span class="unsaved-chip" id="p1-unsaved">Có thay đổi chưa lưu</span>
+              <button class="btn btn-update" onclick="openOTP('p1')">
+                <span class="lock">
+                  <svg width="8" height="9" viewBox="0 0 8 9" fill="none">
+                    <rect x="1" y="4" width="6" height="5" rx="1" fill="white"/>
+                    <path d="M2.5 4V2.5a1.5 1.5 0 013 0V4" stroke="white" stroke-width="1.2" fill="none"/>
+                  </svg>
+                </span>
+                Update &amp; Đẩy lịch phát
+              </button>
+              <button class="btn btn-add">+ Thêm sự kiện</button>
+              <button class="btn-close">✕</button>
+            </div>
+          </div>
+
+          <!-- Body -->
+          <div class="p1-body">
+
+            <!-- Timeline -->
+            <div class="timeline">
+              <div class="tl-col-heads">
+                <div class="tl-col-head">Màn hình chính</div>
+                <div class="tl-col-head">Màn hình phụ</div>
+              </div>
+              <!-- row 1 -->
+              <div class="tl-row">
+                <div class="tl-time">00:00</div>
+                <div class="tl-num">1</div>
+                <div class="tl-events">
+                  <div class="ev-card ev-main">
+                    <div class="ev-screen">Màn hình chính</div>
+                    <div class="ev-name">PETROVIETNAM – CHUONG TRINH CONG NGHE XANH 15s 1304-1</div>
+                    <div class="ev-dur">00:10</div>
+                    <div class="ev-thumb">
+                      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                        <circle cx="7" cy="7" r="5.5" stroke="white" stroke-width=".9"/>
+                        <polygon points="5.5,4.5 10,7 5.5,9.5" fill="white"/>
+                      </svg>
+                    </div>
+                  </div>
+                  <div class="ev-card ev-sub">
+                    <div class="ev-screen">Màn hình phụ</div>
+                    <div class="ev-name">OTOSAN FORTUSS 360 1304.jpg</div>
+                    <div class="ev-dur">00:10</div>
+                    <div class="ev-thumb">
+                      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                        <rect x="2" y="3" width="10" height="8" rx="1" stroke="white" stroke-width=".9"/>
+                        <circle cx="4.5" cy="5.5" r="1" fill="white"/>
+                        <path d="M2 9l3-2.5 2.5 2 2-1.5 2.5 2" stroke="white" stroke-width=".7" fill="none"/>
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- row 2 -->
+              <div class="tl-row">
+                <div class="tl-time">00:10</div>
+                <div class="tl-num">2</div>
+                <div class="tl-events">
+                  <div class="ev-card ev-main">
+                    <div class="ev-screen">Màn hình chính</div>
+                    <div class="ev-name">CHICILON SLOGAN 1304.mp4</div>
+                    <div class="ev-dur">00:10</div>
+                  </div>
+                  <div class="ev-card ev-sub">
+                    <div class="ev-screen">Màn hình phụ</div>
+                    <div class="ev-name">CHICILON SLOGAN 1304 360.mp4</div>
+                    <div class="ev-dur">00:10</div>
+                  </div>
+                </div>
+              </div>
+              <div style="padding-left:52px;margin-top:6px;font-size:10.5px;color:var(--text-3);">00:20</div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="p1-sidebar">
+              <div class="sb-hint">Video sẽ phát trong 15 giây. Cắt ngắn bằng cách thiết lập thời lượng trong tab Nâng cao.</div>
+              <div>
+                <div class="sb-field-label">Kiểu tỉ lệ</div>
+                <select class="sb-select"><option>Tỷ Lệ Khung Hình</option><option>16:9</option><option>9:16</option></select>
+              </div>
+              <label class="sb-checkbox"><input type="checkbox" /> Tắt tiếng</label>
+              <label class="sb-checkbox"><input type="checkbox" /> Hiện thị toàn màn hình?</label>
+              <div class="preview-box">
+                <div class="preview-hdr">
+                  Xem trước nội dung
+                  <span class="preview-play">
+                    <svg width="8" height="9" viewBox="0 0 8 9" fill="white"><polygon points="1,1 7,4.5 1,8"/></svg>
+                  </span>
+                </div>
+                <div class="preview-screen">CÔNG NGHỆ XANH</div>
+                <div class="preview-bot">OTOSAN FORTUSS — ĐẠI HỒNG NHÂN</div>
+              </div>
+              <div class="sb-actions">
+                <button class="sb-btn sb-save">Lưu</button>
+                <button class="sb-btn sb-replace">Thay thế</button>
+                <button class="sb-btn sb-delete">Xóa</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Footer -->
+          <div class="p1-footer">
+            <span class="footer-tag">*test OTOSAN SA…</span>
+            <span style="color:var(--border);">|</span>
+            <span>⏱ 00:20</span>
+            <div class="p1-footer-status" id="p1-footer-status">
+              Có thay đổi chưa được lưu — nhấn "Update &amp; Đẩy lịch phát" để xác nhận
+            </div>
+          </div>
+
+          <!-- OTP overlay p1 -->
+          <div class="otp-overlay" id="otp-p1">
+            <div class="otp-card">
+              <div class="otp-form-inner" id="otp-p1-form">
+                <div class="otp-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none">
+                    <rect x="5" y="11" width="14" height="11" rx="2.5" stroke="#0F7B5A" stroke-width="1.8"/>
+                    <path d="M8 11V7.5a4 4 0 018 0V11" stroke="#0F7B5A" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+                    <circle cx="12" cy="16.5" r="1.5" fill="#0F7B5A"/>
+                    <line x1="12" y1="18" x2="12" y2="20" stroke="#0F7B5A" stroke-width="1.5" stroke-linecap="round"/>
+                  </svg>
+                </div>
+                <div class="otp-title">Xác nhận cập nhật lịch phát</div>
+                <div class="otp-desc">Nhập mã OTP đã gửi đến email / SĐT của bạn để xác nhận thay đổi cho playlist <strong>OTOSAN SANG 1304-1904</strong>.</div>
+                <div class="warn-banner">
+                  <svg width="15" height="15" viewBox="0 0 16 16" fill="#C96E00"><path d="M7.1 1.6L.8 13A1 1 0 001.7 14.5H14.3a1 1 0 00.9-1.5L9.1 1.6a1.2 1.2 0 00-2 0zm.9 3.4a.75.75 0 01.75.75v4a.75.75 0 01-1.5 0v-4A.75.75 0 018 5zm0 7a1 1 0 110-2 1 1 0 010 2z"/></svg>
+                  Thay đổi sẽ ảnh hưởng ngay đến lịch phát đang chạy.
+                </div>
+                <div class="otp-row">
+                  <input class="otp-digit" maxlength="1" type="text" inputmode="numeric" data-scope="p1"/>
+                  <input class="otp-digit" maxlength="1" type="text" inputmode="numeric" data-scope="p1"/>
+                  <input class="otp-digit" maxlength="1" type="text" inputmode="numeric" data-scope="p1"/>
+                  <input class="otp-digit" maxlength="1" type="text" inputmode="numeric" data-scope="p1"/>
+                  <input class="otp-digit" maxlength="1" type="text" inputmode="numeric" data-scope="p1"/>
+                  <input class="otp-digit" maxlength="1" type="text" inputmode="numeric" data-scope="p1"/>
+                </div>
+                <div class="otp-resend">Chưa nhận được mã? <a id="p1-resend-link">Gửi lại (<span id="p1-cd">60</span>s)</a></div>
+                <div class="otp-actions">
+                  <button class="otp-btn-cancel" onclick="closeOTP('p1')">Hủy</button>
+                  <button class="otp-btn-confirm" onclick="confirmOTP('p1')">Xác nhận cập nhật</button>
+                </div>
+              </div>
+              <div class="otp-success" id="otp-p1-success">
+                <div class="success-icon"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#D4F3E8"/><path d="M7 12.5l3.5 3.5 6.5-7" stroke="#0F7B5A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div class="success-title">Cập nhật thành công!</div>
+                <div class="success-desc">Playlist đã được lưu và đẩy ra lịch phát.<br>Màn hình sẽ cập nhật tại chu kỳ phát tiếp theo.</div>
+                <br>
+                <button class="otp-btn-confirm" style="width:100%;margin-top:4px;" onclick="closeOTP('p1')">Đóng</button>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- .p1-shell -->
+      </div><!-- .p1-outer -->
+    </div><!-- .page-scroll -->
+  </div><!-- #page-playlist -->
+
+
+  <!-- ══════════════════════════════════
+       PAGE 2 – SỬA SỰ KIỆN
+  ══════════════════════════════════ -->
+  <div class="outer-page" id="page-event">
+    <div class="page-scroll" style="background:#CDD0DC;">
+      <div class="p2-outer">
+
+        <!-- Browser chrome -->
+        <div class="browser-chrome">
+          <div class="wdot r"></div><div class="wdot y"></div><div class="wdot g"></div>
+          <div class="w-url">cms.chicilonmedia.vn/schedule/event/edit/8821</div>
+        </div>
+
+        <!-- Window -->
+        <div class="cms-window" style="border-radius:0 0 var(--radius-xl) var(--radius-xl);">
+
+          <!-- Header -->
+          <div class="win-header">
+            <div class="win-title">Sửa Sự Kiện</div>
+            <button class="btn-close">✕</button>
+          </div>
+
+          <!-- Inner tabs -->
+          <div class="inner-tabs" id="p2-inner-tabs">
+            <div class="inner-tab active" data-inner="tong-quan">Tổng quan</div>
+            <div class="inner-tab" data-inner="dinh-vi">Định vị địa lý</div>
+            <div class="inner-tab" data-inner="tieu-chi">Tiêu chí</div>
+          </div>
+
+          <!-- Panel: Tổng quan -->
+          <div class="inner-panel active" id="inner-tong-quan">
+            <div class="form-body">
+
+              <div class="form-row">
+                <label class="form-label">Tên</label>
+                <div class="form-cw">
+                  <input type="text" class="fi" value="test chương trình" />
+                  <span class="hint">(Tùy chọn) Tên cho sự kiện này (1–50 ký tự)</span>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <label class="form-label">Loại sự kiện</label>
+                <div class="form-cw">
+                  <select class="fi"><option>Danh sách phát</option><option>Overlay</option><option>Sự kiện đặc biệt</option></select>
+                  <span class="hint">Chọn loại sự kiện để đặt lịch</span>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <label class="form-label">Màn hình</label>
+                <div class="form-cw">
+                  <div class="tag-input">
+                    <span class="tag-chip">KHO_TV_HN <span style="opacity:.6;cursor:pointer;margin-left:3px;">×</span></span>
+                  </div>
+                  <span class="hint">Vui lòng chọn một hoặc nhiều màn hình/nhóm để hiển thị sự kiện này.</span>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <label class="form-label">Khung giờ phát</label>
+                <div class="form-cw">
+                  <select class="fi"><option>Always</option><option>Custom</option><option>08:00 – 12:00</option></select>
+                  <span class="hint">Để thiết lập thời gian chạy chọn "Custom", để sự kiện chạy liên tục chọn "Always".</span>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <label class="form-label">Danh sách phát</label>
+                <div class="form-cw">
+                  <div class="playlist-row">
+                    <input type="text" class="fi" value="HN AP FULL A 1304" readonly />
+                    <button class="btn-change">Thay đổi</button>
+                  </div>
+                  <span class="hint">Chọn một Danh sách phát để sử dụng. Danh sách đã chọn sẽ hiện thị toàn màn hình.</span>
+                  <div style="margin-top:7px;">
+                    <button class="btn-preview-tl">
+                      <svg width="13" height="13" viewBox="0 0 16 16" fill="white"><path d="M8 2C4.134 2 1 4.686 1 8s3.134 6 7 6 7-2.686 7-6-3.134-6-7-6zm-1 2.5v7l5-3.5-5-3.5z"/></svg>
+                      Xem trước ⬡
+                    </button>
+                    <div class="hint" style="margin-top:5px;">Xem trước các lựa chọn trong một tab mới</div>
+                  </div>
+                </div>
+              </div>
+
+              <hr class="divider-line" />
+
+              <div class="form-row">
+                <label class="form-label">Thứ tự hiển thị</label>
+                <div class="form-cw">
+                  <input type="number" class="fi" value="0" min="0" style="max-width:110px;" />
+                  <span class="hint">Thứ tự hiển thị so với các sự kiện khác khi có nhiều sự kiện được lên lịch.</span>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <label class="form-label">Ưu tiên</label>
+                <div class="form-cw">
+                  <input type="number" class="fi" value="0" min="0" style="max-width:110px;" />
+                  <span class="hint">Sự kiện có mức ưu tiên cao hơn sẽ phát trước.</span>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <label class="form-label">Số lần phát tối đa mỗi giờ</label>
+                <div class="form-cw">
+                  <input type="number" class="fi" value="0" min="0" style="max-width:110px;" />
+                  <span class="hint">Giới hạn số lần phát mỗi giờ trên mỗi màn hình. Không giới hạn hãy để 0. ⓘ</span>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div></div>
+                <div class="form-cw">
+                  <label class="cb-row">
+                    <input type="checkbox" />
+                    <div>Chạy theo giờ CMS?
+                      <div class="hint">Khi được chọn, sự kiện sẽ chạy theo múi giờ cấu hình trong CMS. Nếu không, sẽ chạy theo giờ địa phương của màn hình hiển thị.</div>
+                    </div>
+                  </label>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Panel: Định vị địa lý -->
+          <div class="inner-panel" id="inner-dinh-vi">
+            <div class="form-body" style="align-items:center;justify-content:center;min-height:240px;">
+              <div style="text-align:center;color:var(--text-3);font-size:13px;line-height:2;">
+                <div style="font-size:28px;margin-bottom:6px;">📍</div>
+                Cấu hình định vị địa lý<br>
+                <span style="font-size:12px;">Thiết lập khu vực địa lý hiển thị sự kiện</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel: Tiêu chí -->
+          <div class="inner-panel" id="inner-tieu-chi">
+            <div class="form-body" style="align-items:center;justify-content:center;min-height:240px;">
+              <div style="text-align:center;color:var(--text-3);font-size:13px;line-height:2;">
+                <div style="font-size:28px;margin-bottom:6px;">🎯</div>
+                Cấu hình tiêu chí phát<br>
+                <span style="font-size:12px;">Điều kiện để sự kiện được kích hoạt</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Footer -->
+          <div class="p2-footer">
+            <span class="unsaved-chip" id="p2-unsaved">Có thay đổi chưa lưu</span>
+            <div class="p2-footer-actions">
+              <button class="btn btn-update" onclick="openOTP('p2')">
+                <span class="lock">
+                  <svg width="8" height="9" viewBox="0 0 8 9" fill="none">
+                    <rect x="1" y="4" width="6" height="5" rx="1" fill="white"/>
+                    <path d="M2.5 4V2.5a1.5 1.5 0 013 0V4" stroke="white" stroke-width="1.2" fill="none"/>
+                  </svg>
+                </span>
+                Update &amp; Đẩy lịch phát
+              </button>
+              <button class="btn btn-outline">Nhân bản</button>
+              <button class="btn btn-outline">Hủy</button>
+              <button class="btn btn-danger">Xóa</button>
+              <button class="btn btn-primary">Lưu</button>
+            </div>
+          </div>
+
+          <!-- OTP overlay p2 -->
+          <div class="otp-overlay" id="otp-p2">
+            <div class="otp-card">
+              <div class="otp-form-inner" id="otp-p2-form">
+                <div class="otp-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none">
+                    <rect x="5" y="11" width="14" height="11" rx="2.5" stroke="#0F7B5A" stroke-width="1.8"/>
+                    <path d="M8 11V7.5a4 4 0 018 0V11" stroke="#0F7B5A" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+                    <circle cx="12" cy="16.5" r="1.5" fill="#0F7B5A"/>
+                    <line x1="12" y1="18" x2="12" y2="20" stroke="#0F7B5A" stroke-width="1.5" stroke-linecap="round"/>
+                  </svg>
+                </div>
+                <div class="otp-title">Xác nhận cập nhật lịch phát</div>
+                <div class="otp-desc">Nhập mã OTP đã gửi đến email / SĐT của bạn để xác nhận thay đổi cho sự kiện <strong>test chương trình</strong>.</div>
+                <div class="warn-banner">
+                  <svg width="15" height="15" viewBox="0 0 16 16" fill="#C96E00"><path d="M7.1 1.6L.8 13A1 1 0 001.7 14.5H14.3a1 1 0 00.9-1.5L9.1 1.6a1.2 1.2 0 00-2 0zm.9 3.4a.75.75 0 01.75.75v4a.75.75 0 01-1.5 0v-4A.75.75 0 018 5zm0 7a1 1 0 110-2 1 1 0 010 2z"/></svg>
+                  Thay đổi sẽ ảnh hưởng ngay đến lịch phát đang chạy trên tất cả màn hình đã chọn.
+                </div>
+                <div class="otp-row">
+                  <input class="otp-digit" maxlength="1" type="text" inputmode="numeric" data-scope="p2"/>
+                  <input class="otp-digit" maxlength="1" type="text" inputmode="numeric" data-scope="p2"/>
+                  <input class="otp-digit" maxlength="1" type="text" inputmode="numeric" data-scope="p2"/>
+                  <input class="otp-digit" maxlength="1" type="text" inputmode="numeric" data-scope="p2"/>
+                  <input class="otp-digit" maxlength="1" type="text" inputmode="numeric" data-scope="p2"/>
+                  <input class="otp-digit" maxlength="1" type="text" inputmode="numeric" data-scope="p2"/>
+                </div>
+                <div class="otp-resend">Chưa nhận được mã? <a id="p2-resend-link">Gửi lại (<span id="p2-cd">60</span>s)</a></div>
+                <div class="otp-actions">
+                  <button class="otp-btn-cancel" onclick="closeOTP('p2')">Hủy</button>
+                  <button class="otp-btn-confirm" onclick="confirmOTP('p2')">Xác nhận cập nhật</button>
+                </div>
+              </div>
+              <div class="otp-success" id="otp-p2-success">
+                <div class="success-icon"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#D4F3E8"/><path d="M7 12.5l3.5 3.5 6.5-7" stroke="#0F7B5A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div class="success-title">Cập nhật thành công!</div>
+                <div class="success-desc">Sự kiện đã được lưu và đẩy ra lịch phát.<br>Màn hình sẽ cập nhật tại chu kỳ phát tiếp theo.</div>
+                <br>
+                <button class="otp-btn-confirm" style="width:100%;margin-top:4px;" onclick="closeOTP('p2')">Đóng</button>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- .cms-window -->
+      </div><!-- .p2-outer -->
+    </div><!-- .page-scroll -->
+  </div><!-- #page-event -->
+
+  <!-- ══════════════════════════════════
+       PAGE 3 – USER LƯU DRAFT (Playlist editor)
+  ══════════════════════════════════ -->
+  <div class="outer-page" id="page-edit-draft">
+    <div class="page-scroll" style="background:#CDD0DC;">
+      <div class="p1-outer">
+        <div class="p1-browser">
+          <div class="wdot r"></div><div class="wdot y"></div><div class="wdot g"></div>
+          <div class="w-url">cms.chicilonmedia.vn/playlist/form/timeline/4674/dual?displayType=dual</div>
+        </div>
+        <div class="p1-shell">
+
+          <!-- Header — giống hệt màn hình 1, chỉ thay nút -->
+          <div class="win-header">
+            <div class="win-title">
+              Chỉnh sửa danh sách phát — test OTOSAN SANG 1304-1904
+              <span class="badge badge-blue">⊞ 2</span>
+              <span class="badge badge-green">⏱ 20</span>
+              <span style="font-size:11px;font-weight:600;background:#FEF3DC;color:#854F0B;border:1px solid #EF9F27;border-radius:4px;padding:2px 8px;">DRAFT</span>
+            </div>
+            <div class="win-right">
+              <!-- Banner nhỏ nhắc bản live đang chạy -->
+              <span style="font-size:11px;color:var(--text-3);display:flex;align-items:center;gap:5px;">
+                <span style="width:7px;height:7px;border-radius:50%;background:#1BAF7E;display:inline-block;flex-shrink:0;"></span>
+                Bản live đang chạy bình thường
+              </span>
+              <button class="btn btn-add">+ Thêm sự kiện</button>
+              <button class="btn-close">✕</button>
+            </div>
+          </div>
+
+          <!-- Live vs Draft banner -->
+          <div style="display:flex;align-items:stretch;background:#F8F9FB;border-bottom:1px solid var(--border-light);">
+            <div style="flex:1;padding:8px 18px;min-width:0;">
+              <div style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#3B6D11;margin-bottom:2px;display:flex;align-items:center;gap:5px;">
+                <span style="width:6px;height:6px;border-radius:50%;background:#3B6D11;display:inline-block;"></span>
+                Bản live đang phát
+              </div>
+              <div style="font-size:12px;color:var(--text-1);font-weight:500;">HN AP FULL A 1304 — 4 sự kiện — cập nhật 12/04/2025</div>
+            </div>
+            <div style="display:flex;align-items:center;padding:0 14px;color:var(--text-3);font-size:18px;">→</div>
+            <div style="flex:1;padding:8px 18px;min-width:0;background:#FFFBF4;border-left:2px solid #EF9F27;">
+              <div style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#854F0B;margin-bottom:2px;display:flex;align-items:center;gap:5px;">
+                <span style="width:6px;height:6px;border-radius:2px;background:#BA7517;display:inline-block;"></span>
+                Bản draft (chưa áp dụng)
+              </div>
+              <div style="font-size:12px;color:#412402;font-weight:500;">HN AP FULL A 1304 — 5 sự kiện — đang chỉnh sửa</div>
+            </div>
+          </div>
+
+          <!-- Body giống màn hình 1 -->
+          <div class="p1-body">
+            <div class="timeline">
+              <div class="tl-col-heads">
+                <div class="tl-col-head">Màn hình chính</div>
+                <div class="tl-col-head">Màn hình phụ</div>
+              </div>
+              <div class="tl-row">
+                <div class="tl-time">00:00</div><div class="tl-num">1</div>
+                <div class="tl-events">
+                  <div class="ev-card ev-main">
+                    <div class="ev-screen">Màn hình chính</div>
+                    <div class="ev-name">PETROVIETNAM – CHUONG TRINH CONG NGHE XANH 15s 1304-1</div>
+                    <div class="ev-dur">00:10</div>
+                    <div class="ev-thumb"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="white" stroke-width=".9"/><polygon points="5.5,4.5 10,7 5.5,9.5" fill="white"/></svg></div>
+                  </div>
+                  <div class="ev-card ev-sub">
+                    <div class="ev-screen">Màn hình phụ</div>
+                    <div class="ev-name">OTOSAN FORTUSS 360 1304.jpg</div>
+                    <div class="ev-dur">00:10</div>
+                  </div>
+                </div>
+              </div>
+              <div class="tl-row">
+                <div class="tl-time">00:10</div><div class="tl-num">2</div>
+                <div class="tl-events">
+                  <div class="ev-card ev-main">
+                    <div class="ev-screen">Màn hình chính</div>
+                    <div class="ev-name">CHICILON SLOGAN 1304.mp4</div>
+                    <div class="ev-dur">00:10</div>
+                  </div>
+                  <div class="ev-card ev-sub">
+                    <div class="ev-screen">Màn hình phụ</div>
+                    <div class="ev-name">CHICILON SLOGAN 1304 360.mp4</div>
+                    <div class="ev-dur">00:10</div>
+                  </div>
+                </div>
+              </div>
+              <!-- Sự kiện mới thêm — highlight amber -->
+              <div class="tl-row">
+                <div class="tl-time">00:20</div><div class="tl-num">3</div>
+                <div class="tl-events">
+                  <div class="ev-card" style="background:#3A2800;border:1.5px dashed #BA7517;">
+                    <div class="ev-screen" style="color:#EF9F27;">Mới thêm · Màn hình chính</div>
+                    <div class="ev-name">TVC OTOSAN FORTUSS 15s.mp4</div>
+                    <div class="ev-dur">00:15</div>
+                    <div class="ev-thumb" style="background:rgba(186,117,23,0.2);"><svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="#EF9F27" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+                  </div>
+                  <div class="ev-card" style="background:#3A2800;border:1.5px dashed #BA7517;">
+                    <div class="ev-screen" style="color:#EF9F27;">Mới thêm · Màn hình phụ</div>
+                    <div class="ev-name">TVC OTOSAN FORTUSS 15s 360.mp4</div>
+                    <div class="ev-dur">00:15</div>
+                  </div>
+                </div>
+              </div>
+              <div style="padding-left:52px;margin-top:6px;font-size:10.5px;color:var(--text-3);">00:35</div>
+            </div>
+            <div class="p1-sidebar">
+              <div class="sb-hint">Lưu draft sẽ không ảnh hưởng bản live. Cần leader approve mới áp dụng.</div>
+              <div><div class="sb-field-label">Kiểu tỉ lệ</div><select class="sb-select"><option>Tỷ Lệ Khung Hình</option></select></div>
+              <label class="sb-checkbox"><input type="checkbox" /> Tắt tiếng</label>
+              <label class="sb-checkbox"><input type="checkbox" /> Hiện thị toàn màn hình?</label>
+              <div class="preview-box">
+                <div class="preview-hdr">Xem trước nội dung<span class="preview-play"><svg width="8" height="9" viewBox="0 0 8 9" fill="white"><polygon points="1,1 7,4.5 1,8"/></svg></span></div>
+                <div class="preview-screen">CÔNG NGHỆ XANH</div>
+                <div class="preview-bot">OTOSAN FORTUSS</div>
+              </div>
+              <div class="sb-actions">
+                <button class="sb-btn sb-replace">Thay thế</button>
+                <button class="sb-btn sb-delete">Xóa</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Footer — nút "Lưu draft" thay cho Update -->
+          <div class="p1-footer">
+            <span class="footer-tag">*test OTOSAN SA…</span>
+            <span style="color:var(--border);">|</span>
+            <span>⏱ 00:35</span>
+            <div style="margin-left:auto;display:flex;align-items:center;gap:8px;">
+              <span style="font-size:11px;color:#854F0B;background:#FEF3DC;border:1px solid #F7CB7A;border-radius:4px;padding:3px 10px;font-weight:500;">
+                Bản live không bị ảnh hưởng khi lưu draft
+              </span>
+              <button class="btn btn-outline">Hủy</button>
+              <button class="btn" style="background:#BA7517;color:#fff;box-shadow:0 2px 8px rgba(186,117,23,0.3);" onclick="showDraftSaved()">
+                <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2 7.5l3.5 3.5 6.5-6.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Lưu draft
+              </button>
+            </div>
+          </div>
+
+          <!-- Draft saved toast overlay -->
+          <div id="draft-saved-overlay" style="display:none;position:absolute;inset:0;background:rgba(15,20,40,0.5);border-radius:0 0 var(--radius-xl) var(--radius-xl);align-items:center;justify-content:center;">
+            <div style="background:#fff;border-radius:var(--radius-xl);padding:28px 32px;width:320px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.2);">
+              <div style="width:50px;height:50px;border-radius:50%;background:#FAEEDA;border:2px solid rgba(186,117,23,0.2);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4L19 7" stroke="#BA7517" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <div style="font-size:15px;font-weight:700;color:var(--text-1);margin-bottom:6px;">Draft đã được lưu</div>
+              <div style="font-size:12.5px;color:var(--text-2);line-height:1.6;margin-bottom:18px;">Bản draft đang chờ leader phê duyệt.<br>Bản live vẫn tiếp tục phát bình thường.</div>
+              <button onclick="document.getElementById('draft-saved-overlay').style.display='none'" style="font-family:var(--font);font-size:13px;font-weight:600;padding:9px 24px;border:none;border-radius:var(--radius-md);background:#BA7517;color:#fff;cursor:pointer;width:100%;">Đóng</button>
+            </div>
+          </div>
+
+        </div><!-- .p1-shell -->
+      </div><!-- .p1-outer -->
+    </div>
+  </div><!-- #page-edit-draft -->
+
+  <!-- ══════════════════════════════════
+       PAGE 4 – DANH SÁCH CHỜ DUYỆT (Leader)
+  ══════════════════════════════════ -->
+  <div class="outer-page" id="page-pending-list">
+    <div class="page-scroll" style="background:#CDD0DC;">
+      <div style="width:100%;max-width:960px;">
+        <div class="browser-chrome">
+          <div class="wdot r"></div><div class="wdot y"></div><div class="wdot g"></div>
+          <div class="w-url">cms.chicilonmedia.vn/approvals</div>
+        </div>
+        <div class="cms-window" style="border-radius:0 0 var(--radius-xl) var(--radius-xl);">
+
+          <!-- Header -->
+          <div class="win-header">
+            <div class="win-title">
+              Phê duyệt thay đổi
+              <span style="background:#E24B4A;color:#fff;font-size:11px;font-weight:600;padding:2px 9px;border-radius:20px;">5 chờ duyệt</span>
+            </div>
+            <div style="font-size:12px;color:var(--text-3);">Chỉ hiển thị các bản draft đang chờ xác nhận</div>
+          </div>
+
+          <!-- Filter chips -->
+          <div style="display:flex;gap:7px;padding:10px 18px;border-bottom:1px solid var(--border-light);background:#FAFBFD;overflow-x:auto;">
+            <span style="font-size:12px;font-weight:600;padding:4px 14px;border-radius:20px;background:var(--blue);color:#fff;white-space:nowrap;">Tất cả (5)</span>
+            <span style="font-size:12px;font-weight:500;padding:4px 14px;border-radius:20px;border:1px solid var(--border);color:var(--text-2);white-space:nowrap;">Nội dung Playlist (3)</span>
+            <span style="font-size:12px;font-weight:500;padding:4px 14px;border-radius:20px;border:1px solid var(--border);color:var(--text-2);white-space:nowrap;">Đổi Playlist (1)</span>
+            <span style="font-size:12px;font-weight:500;padding:4px 14px;border-radius:20px;border:1px solid var(--border);color:var(--text-2);white-space:nowrap;">Cấu hình Sự kiện (1)</span>
+            <span style="font-size:12px;font-weight:500;padding:4px 14px;border-radius:20px;border:1px solid var(--border);color:var(--text-2);white-space:nowrap;">Đã duyệt</span>
+            <span style="font-size:12px;font-weight:500;padding:4px 14px;border-radius:20px;border:1px solid var(--border);color:var(--text-2);white-space:nowrap;">Đã bỏ</span>
+          </div>
+
+          <!-- Table -->
+          <table style="width:100%;border-collapse:collapse;font-size:12.5px;">
+            <thead>
+              <tr style="background:#F5F6FA;">
+                <th style="text-align:left;padding:9px 18px;font-size:10.5px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--border-light);">Tên / Mô tả thay đổi</th>
+                <th style="text-align:left;padding:9px 14px;font-size:10.5px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--border-light);">Loại</th>
+                <th style="text-align:left;padding:9px 14px;font-size:10.5px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--border-light);">Người sửa</th>
+                <th style="text-align:left;padding:9px 14px;font-size:10.5px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--border-light);">Thời gian</th>
+                <th style="text-align:left;padding:9px 14px;font-size:10.5px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--border-light);">Trạng thái</th>
+                <th style="padding:9px 14px;border-bottom:1px solid var(--border-light);"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Row 1 — highlighted (mới nhất) -->
+              <tr style="background:#FFFBF4;" onmouseenter="this.style.background='#FFF5E6'" onmouseleave="this.style.background='#FFFBF4'">
+                <td style="padding:11px 18px;border-bottom:1px solid var(--border-light);">
+                  <div style="font-weight:600;color:var(--text-1);margin-bottom:3px;">test OTOSAN SANG 1304-1904</div>
+                  <div style="font-size:11px;color:var(--text-3);">Thêm 1 sự kiện TVC OTOSAN, mở rộng khung giờ slot 3</div>
+                </td>
+                <td style="padding:11px 14px;border-bottom:1px solid var(--border-light);">
+                  <span style="font-size:11px;font-weight:600;background:#FEF3DC;color:#633806;border:1px solid #EF9F27;border-radius:4px;padding:2px 8px;">Playlist</span>
+                </td>
+                <td style="padding:11px 14px;border-bottom:1px solid var(--border-light);">
+                  <div style="display:flex;align-items:center;gap:7px;">
+                    <div style="width:26px;height:26px;border-radius:50%;background:#E6EFFF;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:#0C447C;flex-shrink:0;">TN</div>
+                    <span style="color:var(--text-2);">Thảo Nguyên</span>
+                  </div>
+                </td>
+                <td style="padding:11px 14px;border-bottom:1px solid var(--border-light);color:var(--text-3);white-space:nowrap;">16/04 09:42</td>
+                <td style="padding:11px 14px;border-bottom:1px solid var(--border-light);">
+                  <span style="font-size:11px;font-weight:600;background:#E6EFFF;color:#0C447C;border:1px solid #B5D4F4;border-radius:4px;padding:2px 8px;">Chờ duyệt</span>
+                </td>
+                <td style="padding:11px 14px;border-bottom:1px solid var(--border-light);">
+                  <button onclick="goPage('page-review-detail')" style="font-family:var(--font);font-size:12px;font-weight:600;padding:5px 14px;border-radius:var(--radius-md);border:1px solid #B5D4F4;background:#E6EFFF;color:#0C447C;cursor:pointer;white-space:nowrap;">Review →</button>
+                </td>
+              </tr>
+              <tr onmouseenter="this.style.background='#F8F9FB'" onmouseleave="this.style.background=''">
+                <td style="padding:11px 18px;border-bottom:1px solid var(--border-light);">
+                  <div style="font-weight:600;color:var(--text-1);margin-bottom:3px;">Sự kiện: test OTOSAN SANG 1304-1904</div>
+                  <div style="font-size:11px;color:var(--text-3);">
+                    Đổi playlist: <span style="text-decoration:line-through;color:var(--text-4);">HN AP FULL A 1304</span>
+                    &nbsp;→&nbsp;
+                    <span style="color:#0C447C;font-weight:500;">HN AP FULL B 1304</span>
+                  </div>
+                </td>
+                <td style="padding:11px 14px;border-bottom:1px solid var(--border-light);">
+                  <span style="font-size:11px;font-weight:600;background:#E1F5EE;color:#085041;border:1px solid #5DCAA5;border-radius:4px;padding:2px 8px;">Đổi Playlist</span>
+                </td>
+                <td style="padding:11px 14px;border-bottom:1px solid var(--border-light);">
+                  <div style="display:flex;align-items:center;gap:7px;">
+                    <div style="width:26px;height:26px;border-radius:50%;background:#E6EFFF;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:#0C447C;flex-shrink:0;">MH</div>
+                    <span style="color:var(--text-2);">Minh Hiếu</span>
+                  </div>
+                </td>
+                <td style="padding:11px 14px;border-bottom:1px solid var(--border-light);color:var(--text-3);white-space:nowrap;">16/04 10:15</td>
+                <td style="padding:11px 14px;border-bottom:1px solid var(--border-light);">
+                  <span style="font-size:11px;font-weight:600;background:#E6EFFF;color:#0C447C;border:1px solid #B5D4F4;border-radius:4px;padding:2px 8px;">Chờ duyệt</span>
+                </td>
+                <td style="padding:11px 14px;border-bottom:1px solid var(--border-light);">
+                  <button onclick="goPage('page-review-event-draft')" style="font-family:var(--font);font-size:12px;font-weight:600;padding:5px 14px;border-radius:var(--radius-md);border:1px solid #B5D4F4;background:#E6EFFF;color:#0C447C;cursor:pointer;white-space:nowrap;">Review →</button>
+                </td>
+              </tr>
+              <tr onmouseenter="this.style.background='#F8F9FB'" onmouseleave="this.style.background=''">
+                <td style="padding:11px 18px;border-bottom:1px solid var(--border-light);">
+                  <div style="font-weight:600;color:var(--text-1);margin-bottom:3px;">HN AP FULL A 1304</div>
+                  <div style="font-size:11px;color:var(--text-3);">Thêm 1 sự kiện, đổi khung giờ slot 3</div>
+                </td>
+                <td style="padding:11px 14px;border-bottom:1px solid var(--border-light);">
+                  <span style="font-size:11px;font-weight:600;background:#FEF3DC;color:#633806;border:1px solid #EF9F27;border-radius:4px;padding:2px 8px;">Playlist</span>
+                </td>
+                <td style="padding:11px 14px;border-bottom:1px solid var(--border-light);">
+                  <div style="display:flex;align-items:center;gap:7px;">
+                    <div style="width:26px;height:26px;border-radius:50%;background:#E6EFFF;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:#0C447C;flex-shrink:0;">MH</div>
+                    <span style="color:var(--text-2);">Minh Hiếu</span>
+                  </div>
+                </td>
+                <td style="padding:11px 14px;border-bottom:1px solid var(--border-light);color:var(--text-3);white-space:nowrap;">15/04 16:10</td>
+                <td style="padding:11px 14px;border-bottom:1px solid var(--border-light);">
+                  <span style="font-size:11px;font-weight:600;background:#E6EFFF;color:#0C447C;border:1px solid #B5D4F4;border-radius:4px;padding:2px 8px;">Chờ duyệt</span>
+                </td>
+                <td style="padding:11px 14px;border-bottom:1px solid var(--border-light);">
+                  <button style="font-family:var(--font);font-size:12px;font-weight:600;padding:5px 14px;border-radius:var(--radius-md);border:1px solid #B5D4F4;background:#E6EFFF;color:#0C447C;cursor:pointer;white-space:nowrap;">Review →</button>
+                </td>
+              </tr>
+              <tr onmouseenter="this.style.background='#F8F9FB'" onmouseleave="this.style.background=''">
+                <td style="padding:11px 18px;border-bottom:1px solid var(--border-light);">
+                  <div style="font-weight:600;color:var(--text-1);margin-bottom:3px;">POSTER ĐẸP Ở ĐÂY</div>
+                  <div style="font-size:11px;color:var(--text-3);">Xóa 2 media slot, thêm 1 TVC mới</div>
+                </td>
+                <td style="padding:11px 14px;border-bottom:1px solid var(--border-light);">
+                  <span style="font-size:11px;font-weight:600;background:#FEF3DC;color:#633806;border:1px solid #EF9F27;border-radius:4px;padding:2px 8px;">Playlist</span>
+                </td>
+                <td style="padding:11px 14px;border-bottom:1px solid var(--border-light);">
+                  <div style="display:flex;align-items:center;gap:7px;">
+                    <div style="width:26px;height:26px;border-radius:50%;background:#E6EFFF;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:#0C447C;flex-shrink:0;">TN</div>
+                    <span style="color:var(--text-2);">Thảo Nguyên</span>
+                  </div>
+                </td>
+                <td style="padding:11px 14px;border-bottom:1px solid var(--border-light);color:var(--text-3);white-space:nowrap;">14/04 11:05</td>
+                <td style="padding:11px 14px;border-bottom:1px solid var(--border-light);">
+                  <span style="font-size:11px;font-weight:600;background:#E6EFFF;color:#0C447C;border:1px solid #B5D4F4;border-radius:4px;padding:2px 8px;">Chờ duyệt</span>
+                </td>
+                <td style="padding:11px 14px;border-bottom:1px solid var(--border-light);">
+                  <button style="font-family:var(--font);font-size:12px;font-weight:600;padding:5px 14px;border-radius:var(--radius-md);border:1px solid #B5D4F4;background:#E6EFFF;color:#0C447C;cursor:pointer;white-space:nowrap;">Review →</button>
+                </td>
+              </tr>
+              <tr onmouseenter="this.style.background='#F8F9FB'" onmouseleave="this.style.background=''">
+                <td style="padding:11px 18px;">
+                  <div style="font-weight:600;color:var(--text-1);margin-bottom:3px;">KHO_TV_HN – Lịch tuần 17</div>
+                  <div style="font-size:11px;color:var(--text-3);">Cập nhật toàn bộ khung giờ cuối tuần</div>
+                </td>
+                <td style="padding:11px 14px;">
+                  <span style="font-size:11px;font-weight:600;background:#E1F5EE;color:#085041;border:1px solid #5DCAA5;border-radius:4px;padding:2px 8px;">Sự kiện</span>
+                </td>
+                <td style="padding:11px 14px;">
+                  <div style="display:flex;align-items:center;gap:7px;">
+                    <div style="width:26px;height:26px;border-radius:50%;background:#E6EFFF;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:#0C447C;flex-shrink:0;">DL</div>
+                    <span style="color:var(--text-2);">Đức Long</span>
+                  </div>
+                </td>
+                <td style="padding:11px 14px;color:var(--text-3);white-space:nowrap;">13/04 08:30</td>
+                <td style="padding:11px 14px;">
+                  <span style="font-size:11px;font-weight:600;background:#E6EFFF;color:#0C447C;border:1px solid #B5D4F4;border-radius:4px;padding:2px 8px;">Chờ duyệt</span>
+                </td>
+                <td style="padding:11px 14px;">
+                  <button style="font-family:var(--font);font-size:12px;font-weight:600;padding:5px 14px;border-radius:var(--radius-md);border:1px solid #B5D4F4;background:#E6EFFF;color:#0C447C;cursor:pointer;white-space:nowrap;">Review →</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+    </div>
+  </div><!-- #page-pending-list -->
+
+  <!-- ══════════════════════════════════
+       PAGE 5 – REVIEW CHI TIẾT DRAFT (Leader)
+  ══════════════════════════════════ -->
+  <div class="outer-page" id="page-review-detail">
+    <div class="page-scroll" style="background:#CDD0DC;">
+      <div class="p1-outer">
+        <div class="p1-browser">
+          <div class="wdot r"></div><div class="wdot y"></div><div class="wdot g"></div>
+          <div class="w-url">cms.chicilonmedia.vn/approvals/draft/1042</div>
+        </div>
+        <div class="p1-shell">
+
+          <!-- Header -->
+          <div class="win-header">
+            <div class="win-title">
+              test OTOSAN SANG 1304-1904
+              <span style="font-size:11px;font-weight:600;background:#E6EFFF;color:#0C447C;border:1px solid #B5D4F4;border-radius:4px;padding:2px 8px;">Chờ duyệt</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-3);">
+              Người sửa: <strong style="color:var(--text-2);">Thảo Nguyên</strong>
+              <span style="color:var(--border);">·</span>
+              16/04/2025 09:42
+              <button onclick="goPage('page-pending-list')" style="margin-left:8px;font-family:var(--font);font-size:11.5px;font-weight:500;padding:4px 12px;border-radius:var(--radius-sm);border:1px solid var(--border);background:#fff;color:var(--text-2);cursor:pointer;">← Danh sách</button>
+            </div>
+          </div>
+
+          <!-- Diff: Live vs Draft side by side -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--border-light);">
+
+            <!-- Cột LIVE -->
+            <div style="padding:14px 18px;border-right:1px solid var(--border-light);">
+              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#3B6D11;margin-bottom:12px;display:flex;align-items:center;gap:6px;">
+                <span style="width:8px;height:8px;border-radius:50%;background:#3B6D11;display:inline-block;"></span>
+                Bản live đang phát
+              </div>
+
+              <!-- Timeline live -->
+              <div style="font-size:11px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px;padding-left:44px;">Màn hình chính &nbsp;·&nbsp; Màn hình phụ</div>
+              <div class="tl-row" style="margin-bottom:6px;">
+                <div class="tl-time">00:00</div><div class="tl-num">1</div>
+                <div class="tl-events">
+                  <div class="ev-card ev-main" style="flex:1;"><div class="ev-screen">Chính</div><div class="ev-name">PETROVIETNAM CONG NGHE XANH</div><div class="ev-dur">00:10</div></div>
+                  <div class="ev-card ev-sub" style="flex:1;"><div class="ev-screen">Phụ</div><div class="ev-name">OTOSAN FORTUSS 360 1304.jpg</div><div class="ev-dur">00:10</div></div>
+                </div>
+              </div>
+              <div class="tl-row" style="margin-bottom:6px;">
+                <div class="tl-time">00:10</div><div class="tl-num">2</div>
+                <div class="tl-events">
+                  <div class="ev-card ev-main" style="flex:1;"><div class="ev-screen">Chính</div><div class="ev-name">CHICILON SLOGAN 1304.mp4</div><div class="ev-dur">00:10</div></div>
+                  <div class="ev-card ev-sub" style="flex:1;"><div class="ev-screen">Phụ</div><div class="ev-name">CHICILON SLOGAN 1304 360.mp4</div><div class="ev-dur">00:10</div></div>
+                </div>
+              </div>
+              <div style="padding-left:52px;font-size:10.5px;color:var(--text-3);margin-bottom:4px;">00:20 · Kết thúc (2 sự kiện)</div>
+            </div>
+
+            <!-- Cột DRAFT -->
+            <div style="padding:14px 18px;background:#FFFCF5;">
+              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#854F0B;margin-bottom:12px;display:flex;align-items:center;gap:6px;">
+                <span style="width:8px;height:8px;border-radius:2px;background:#BA7517;display:inline-block;"></span>
+                Bản draft (đề xuất)
+              </div>
+
+              <div style="font-size:11px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px;padding-left:44px;">Màn hình chính &nbsp;·&nbsp; Màn hình phụ</div>
+              <div class="tl-row" style="margin-bottom:6px;">
+                <div class="tl-time">00:00</div><div class="tl-num">1</div>
+                <div class="tl-events">
+                  <div class="ev-card ev-main" style="flex:1;"><div class="ev-screen">Chính</div><div class="ev-name">PETROVIETNAM CONG NGHE XANH</div><div class="ev-dur">00:10</div></div>
+                  <div class="ev-card ev-sub" style="flex:1;"><div class="ev-screen">Phụ</div><div class="ev-name">OTOSAN FORTUSS 360 1304.jpg</div><div class="ev-dur">00:10</div></div>
+                </div>
+              </div>
+              <div class="tl-row" style="margin-bottom:6px;">
+                <div class="tl-time">00:10</div><div class="tl-num">2</div>
+                <div class="tl-events">
+                  <div class="ev-card ev-main" style="flex:1;"><div class="ev-screen">Chính</div><div class="ev-name">CHICILON SLOGAN 1304.mp4</div><div class="ev-dur">00:10</div></div>
+                  <div class="ev-card ev-sub" style="flex:1;"><div class="ev-screen">Phụ</div><div class="ev-name">CHICILON SLOGAN 1304 360.mp4</div><div class="ev-dur">00:10</div></div>
+                </div>
+              </div>
+              <!-- Sự kiện mới — dashed amber -->
+              <div class="tl-row" style="margin-bottom:6px;">
+                <div class="tl-time">00:20</div><div class="tl-num">3</div>
+                <div class="tl-events">
+                  <div class="ev-card" style="flex:1;background:#3A2800;border:1.5px dashed #BA7517;">
+                    <div class="ev-screen" style="color:#EF9F27;">+ Mới · Chính</div>
+                    <div class="ev-name">TVC OTOSAN FORTUSS 15s.mp4</div>
+                    <div class="ev-dur">00:15</div>
+                  </div>
+                  <div class="ev-card" style="flex:1;background:#3A2800;border:1.5px dashed #BA7517;">
+                    <div class="ev-screen" style="color:#EF9F27;">+ Mới · Phụ</div>
+                    <div class="ev-name">TVC OTOSAN FORTUSS 15s 360.mp4</div>
+                    <div class="ev-dur">00:15</div>
+                  </div>
+                </div>
+              </div>
+              <div style="padding-left:52px;font-size:10.5px;color:#854F0B;margin-bottom:4px;font-weight:500;">00:35 · Kết thúc (3 sự kiện — thêm 1)</div>
+            </div>
+          </div>
+
+          <!-- Changelog summary -->
+          <div style="padding:10px 18px;background:#F8F9FB;border-bottom:1px solid var(--border-light);">
+            <div style="font-size:10.5px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:7px;">Tóm tắt thay đổi</div>
+            <div style="display:flex;flex-direction:column;gap:5px;">
+              <div style="display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--text-2);">
+                <span style="width:6px;height:6px;border-radius:50%;background:#BA7517;flex-shrink:0;margin-top:4px;"></span>
+                Thêm sự kiện mới: <strong style="color:var(--text-1);">TVC OTOSAN FORTUSS 15s</strong> vào slot 3 (cả màn hình chính và phụ)
+              </div>
+              <div style="display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--text-2);">
+                <span style="width:6px;height:6px;border-radius:50%;background:#BA7517;flex-shrink:0;margin-top:4px;"></span>
+                Tổng thời lượng tăng từ <strong style="color:var(--text-1);">00:20</strong> lên <strong style="color:var(--text-1);">00:35</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Footer actions -->
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 18px;background:#FAFBFD;flex-wrap:wrap;gap:8px;">
+            <div style="font-size:11.5px;color:var(--text-3);display:flex;align-items:center;gap:6px;">
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor" style="color:var(--text-3);"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zm.75 10.5h-1.5v-5h1.5v5zm0-6.5h-1.5V3.5h1.5V5z"/></svg>
+              Approve sẽ áp dụng theo lịch đã set — bản live không thay đổi ngay lập tức
+            </div>
+            <div style="display:flex;gap:9px;">
+              <button onclick="doDiscard('discard-r1-overlay','Bản draft đã bị xóa. Bản live không bị ảnh hưởng.')" style="font-family:var(--font);font-size:13px;font-weight:600;padding:8px 20px;border-radius:var(--radius-md);border:1px solid #F5C6C2;background:var(--red-light);color:var(--red);cursor:pointer;">Bỏ draft</button>
+              <button onclick="openApproveOTP('r1','Draft playlist đã được approve. Sẽ áp dụng theo lịch đã set, bản live vẫn phát bình thường.')" style="font-family:var(--font);font-size:13px;font-weight:700;padding:8px 24px;border-radius:var(--radius-md);border:none;background:var(--green-mid);color:#fff;cursor:pointer;box-shadow:0 2px 10px rgba(27,175,126,0.3);">Approve</button>
+            </div>
+          </div>
+
+
+          <!-- Approve OTP overlay -->
+          <div class="approve-otp-overlay" id="approve-otp-r1" style="display:none;position:absolute;inset:0;background:rgba(15,20,40,0.56);border-radius:0 0 16px 16px;align-items:center;justify-content:center;z-index:50;">
+            <div class="approve-otp-card" style="background:#fff;border-radius:16px;box-shadow:0 20px 64px rgba(0,0,0,0.22);padding:26px 30px;width:336px;">
+              <div style="text-align:center;">
+                <div style="width:50px;height:50px;border-radius:50%;background:#D4F3E8;border:2px solid rgba(15,123,90,0.16);display:flex;align-items:center;justify-content:center;margin:0 auto 13px;">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="5" y="11" width="14" height="11" rx="2.5" stroke="#0F7B5A" stroke-width="1.8"/><path d="M8 11V7.5a4 4 0 018 0V11" stroke="#0F7B5A" stroke-width="1.8" fill="none" stroke-linecap="round"/><circle cx="12" cy="16.5" r="1.5" fill="#0F7B5A"/></svg>
+                </div>
+                <div style="font-size:15px;font-weight:700;color:#1A1D2B;margin-bottom:5px;">Xác nhận Approve</div>
+                <div style="font-size:12.5px;color:#4A5070;line-height:1.6;margin-bottom:13px;">Nhập mã OTP để xác nhận approve draft playlist <strong>test OTOSAN SANG 1304-1904</strong>.</div>
+                <div style="display:flex;align-items:flex-start;gap:7px;font-size:11.5px;font-weight:500;background:#FEF3DC;color:#C96E00;border:1px solid #F7CB7A;border-radius:8px;padding:8px 11px;margin-bottom:16px;text-align:left;">
+                  <svg width="15" height="15" viewBox="0 0 16 16" fill="#C96E00" style="flex-shrink:0;margin-top:1px;"><path d="M7.1 1.6L.8 13A1 1 0 001.7 14.5H14.3a1 1 0 00.9-1.5L9.1 1.6a1.2 1.2 0 00-2 0zm.9 3.4a.75.75 0 01.75.75v4a.75.75 0 01-1.5 0v-4A.75.75 0 018 5zm0 7a1 1 0 110-2 1 1 0 010 2z"/></svg>
+                  Draft sẽ được áp dụng theo lịch — hành động này không thể hoàn tác
+                </div>
+                <div style="display:flex;justify-content:center;gap:8px;margin-bottom:9px;">
+                  <input class="approve-otp-digit otp-digit" maxlength="1" type="text" inputmode="numeric" style="width:42px;height:50px;border:1.5px solid #D6DAE6;border-radius:8px;font-size:22px;font-weight:700;text-align:center;color:#1A1D2B;background:#FAFBFD;outline:none;font-family:inherit;"/>
+                  <input class="approve-otp-digit otp-digit" maxlength="1" type="text" inputmode="numeric" style="width:42px;height:50px;border:1.5px solid #D6DAE6;border-radius:8px;font-size:22px;font-weight:700;text-align:center;color:#1A1D2B;background:#FAFBFD;outline:none;font-family:inherit;"/>
+                  <input class="approve-otp-digit otp-digit" maxlength="1" type="text" inputmode="numeric" style="width:42px;height:50px;border:1.5px solid #D6DAE6;border-radius:8px;font-size:22px;font-weight:700;text-align:center;color:#1A1D2B;background:#FAFBFD;outline:none;font-family:inherit;"/>
+                  <input class="approve-otp-digit otp-digit" maxlength="1" type="text" inputmode="numeric" style="width:42px;height:50px;border:1.5px solid #D6DAE6;border-radius:8px;font-size:22px;font-weight:700;text-align:center;color:#1A1D2B;background:#FAFBFD;outline:none;font-family:inherit;"/>
+                  <input class="approve-otp-digit otp-digit" maxlength="1" type="text" inputmode="numeric" style="width:42px;height:50px;border:1.5px solid #D6DAE6;border-radius:8px;font-size:22px;font-weight:700;text-align:center;color:#1A1D2B;background:#FAFBFD;outline:none;font-family:inherit;"/>
+                  <input class="approve-otp-digit otp-digit" maxlength="1" type="text" inputmode="numeric" style="width:42px;height:50px;border:1.5px solid #D6DAE6;border-radius:8px;font-size:22px;font-weight:700;text-align:center;color:#1A1D2B;background:#FAFBFD;outline:none;font-family:inherit;"/>
+                </div>
+                <div style="font-size:11.5px;color:#8890A8;margin-bottom:16px;">Chưa nhận được mã? <a style="color:#1A5FD4;font-weight:600;cursor:pointer;">Gửi lại (<span class="approve-cd">60</span>s)</a></div>
+                <div style="display:flex;gap:8px;">
+                  <button onclick="closeApproveOTP('r1')" style="flex:1;font-family:inherit;font-size:13px;font-weight:600;padding:10px;border:1.5px solid #D6DAE6;border-radius:8px;background:none;color:#4A5070;cursor:pointer;">Hủy</button>
+                  <button onclick="confirmApproveOTP('r1')" style="flex:2;font-family:inherit;font-size:13px;font-weight:700;padding:10px;border:none;border-radius:8px;background:linear-gradient(135deg,#0F7B5A,#1BAF7E);color:#fff;cursor:pointer;">Xác nhận Approve</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="discard-r1-overlay" style="display:none;position:absolute;inset:0;background:rgba(15,20,40,0.5);border-radius:0 0 16px 16px;align-items:center;justify-content:center;z-index:50;"></div>
+
+        </div><!-- .p1-shell -->
+      </div>
+    </div>
+  </div><!-- #page-review-detail -->
+
+  <!-- ══════════════════════════════════
+       PAGE 6 – SỬA SỰ KIỆN: ĐỔI PLAYLIST (Draft)
+  ══════════════════════════════════ -->
+  <div class="outer-page" id="page-event-draft">
+    <div class="page-scroll" style="background:#CDD0DC;">
+      <div class="p2-outer">
+        <div class="browser-chrome">
+          <div class="wdot r"></div><div class="wdot y"></div><div class="wdot g"></div>
+          <div class="w-url">cms.chicilonmedia.vn/schedule/event/edit/8821</div>
+        </div>
+        <div class="cms-window" style="border-radius:0 0 var(--radius-xl) var(--radius-xl);">
+
+          <!-- Header -->
+          <div class="win-header">
+            <div class="win-title">
+              Sửa Sự Kiện
+              <span style="font-size:11px;font-weight:600;background:#FEF3DC;color:#854F0B;border:1px solid #EF9F27;border-radius:4px;padding:2px 8px;">DRAFT</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:7px;">
+              <span style="font-size:11px;color:var(--green);display:flex;align-items:center;gap:5px;background:var(--green-light);border:1px solid #5DCAA5;border-radius:4px;padding:3px 10px;font-weight:500;">
+                <span style="width:7px;height:7px;border-radius:50%;background:var(--green-mid);display:inline-block;"></span>
+                Bản live đang chạy bình thường
+              </span>
+              <button class="btn-close">✕</button>
+            </div>
+          </div>
+
+          <!-- Inner tabs giống màn hình 2 -->
+          <div class="inner-tabs" id="p6-inner-tabs">
+            <div class="inner-tab active" data-inner6="tong-quan">Tổng quan</div>
+            <div class="inner-tab" data-inner6="dinh-vi">Định vị địa lý</div>
+            <div class="inner-tab" data-inner6="tieu-chi">Tiêu chí</div>
+          </div>
+
+          <!-- Panel Tổng quan -->
+          <div id="p6-tong-quan" style="display:block;">
+            <div class="form-body">
+
+              <!-- Live vs Draft banner — chỉ field Danh sách phát bị thay đổi -->
+              <div style="background:#FFFBF4;border:1px solid #F7CB7A;border-radius:var(--radius-md);padding:10px 14px;display:flex;align-items:stretch;gap:0;">
+                <div style="flex:1;min-width:0;padding-right:14px;border-right:1px dashed #F7CB7A;">
+                  <div style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#3B6D11;margin-bottom:4px;display:flex;align-items:center;gap:5px;">
+                    <span style="width:6px;height:6px;border-radius:50%;background:#3B6D11;display:inline-block;"></span>
+                    Bản live — Danh sách phát hiện tại
+                  </div>
+                  <div style="font-size:13px;font-weight:600;color:#2C2C2A;">HN AP FULL A 1304</div>
+                  <div style="font-size:11px;color:#5F5E5A;margin-top:2px;">Đang chạy trên màn hình KHO_TV_HN</div>
+                </div>
+                <div style="display:flex;align-items:center;padding:0 14px;color:var(--text-3);font-size:18px;">→</div>
+                <div style="flex:1;min-width:0;padding-left:2px;">
+                  <div style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#854F0B;margin-bottom:4px;display:flex;align-items:center;gap:5px;">
+                    <span style="width:6px;height:6px;border-radius:2px;background:#BA7517;display:inline-block;"></span>
+                    Draft — Danh sách phát mới đề xuất
+                  </div>
+                  <div style="font-size:13px;font-weight:600;color:#412402;">HN AP FULL B 1304</div>
+                  <div style="font-size:11px;color:#854F0B;margin-top:2px;">Chờ leader approve mới áp dụng</div>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <label class="form-label">Tên</label>
+                <div class="form-cw">
+                  <input type="text" class="fi" value="test chương trình" />
+                  <span class="hint">(Tùy chọn) Tên cho sự kiện này (1–50 ký tự)</span>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <label class="form-label">Loại sự kiện</label>
+                <div class="form-cw">
+                  <select class="fi"><option>Danh sách phát</option></select>
+                  <span class="hint">Chọn loại sự kiện để đặt lịch</span>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <label class="form-label">Màn hình</label>
+                <div class="form-cw">
+                  <div class="tag-input">
+                    <span class="tag-chip">KHO_TV_HN <span style="opacity:.6;cursor:pointer;margin-left:3px;">×</span></span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <label class="form-label">Khung giờ phát</label>
+                <div class="form-cw">
+                  <select class="fi"><option>Always</option></select>
+                </div>
+              </div>
+
+              <!-- Danh sách phát — field đang thay đổi, highlight -->
+              <div class="form-row">
+                <label class="form-label" style="color:#854F0B;font-weight:600;">Danh sách phát</label>
+                <div class="form-cw">
+                  <div class="playlist-row">
+                    <input type="text" class="fi" value="HN AP FULL B 1304" style="border-color:#EF9F27;background:#FFFBF4;color:#412402;font-weight:600;" readonly />
+                    <button class="btn-change">Thay đổi</button>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:6px;margin-top:4px;">
+                    <span style="font-size:11px;color:var(--text-3);">Trước:</span>
+                    <span style="font-size:11px;color:var(--text-3);text-decoration:line-through;">HN AP FULL A 1304</span>
+                    <span style="font-size:11px;color:#854F0B;font-weight:500;">→ HN AP FULL B 1304</span>
+                  </div>
+                  <span class="hint">Thay đổi này sẽ được lưu thành draft — cần leader approve trước khi áp dụng.</span>
+                </div>
+              </div>
+
+              <hr class="divider-line" />
+
+              <div class="form-row">
+                <label class="form-label">Thứ tự hiển thị</label>
+                <div class="form-cw">
+                  <input type="number" class="fi" value="0" min="0" style="max-width:110px;" />
+                </div>
+              </div>
+              <div class="form-row">
+                <label class="form-label">Ưu tiên</label>
+                <div class="form-cw">
+                  <input type="number" class="fi" value="0" min="0" style="max-width:110px;" />
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <div id="p6-dinh-vi" style="display:none;">
+            <div class="form-body" style="align-items:center;justify-content:center;min-height:200px;">
+              <div style="text-align:center;color:var(--text-3);font-size:13px;"><div style="font-size:26px;margin-bottom:6px;">📍</div>Định vị địa lý</div>
+            </div>
+          </div>
+          <div id="p6-tieu-chi" style="display:none;">
+            <div class="form-body" style="align-items:center;justify-content:center;min-height:200px;">
+              <div style="text-align:center;color:var(--text-3);font-size:13px;"><div style="font-size:26px;margin-bottom:6px;">🎯</div>Tiêu chí phát</div>
+            </div>
+          </div>
+
+          <!-- Footer -->
+          <div class="p2-footer">
+            <span style="font-size:11px;color:#854F0B;background:#FEF3DC;border:1px solid #F7CB7A;border-radius:4px;padding:3px 10px;font-weight:500;">
+              Bản live không bị ảnh hưởng khi lưu draft
+            </span>
+            <div class="p2-footer-actions">
+              <button class="btn" style="background:#BA7517;color:#fff;box-shadow:0 2px 8px rgba(186,117,23,0.3);" onclick="showEventDraftSaved()">
+                <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2 7.5l3.5 3.5 6.5-6.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Lưu draft
+              </button>
+              <button class="btn btn-outline">Nhân bản</button>
+              <button class="btn btn-outline">Hủy</button>
+              <button class="btn btn-danger">Xóa</button>
+              <button class="btn btn-primary">Lưu</button>
+            </div>
+          </div>
+
+          <!-- Draft saved overlay -->
+          <div id="event-draft-saved-overlay" style="display:none;position:absolute;inset:0;background:rgba(15,20,40,0.5);border-radius:0 0 var(--radius-xl) var(--radius-xl);align-items:center;justify-content:center;">
+            <div style="background:#fff;border-radius:var(--radius-xl);padding:28px 32px;width:320px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.2);">
+              <div style="width:50px;height:50px;border-radius:50%;background:#FAEEDA;border:2px solid rgba(186,117,23,0.2);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4L19 7" stroke="#BA7517" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <div style="font-size:15px;font-weight:700;color:var(--text-1);margin-bottom:6px;">Draft đã được lưu</div>
+              <div style="font-size:12.5px;color:var(--text-2);line-height:1.6;margin-bottom:4px;">Việc đổi playlist từ <strong>HN AP FULL A 1304</strong> sang <strong>HN AP FULL B 1304</strong> đang chờ leader phê duyệt.</div>
+              <div style="font-size:12px;color:var(--text-3);margin-bottom:18px;">Bản live vẫn tiếp tục phát bình thường.</div>
+              <button onclick="document.getElementById('event-draft-saved-overlay').style.display='none'" style="font-family:var(--font);font-size:13px;font-weight:600;padding:9px 24px;border:none;border-radius:var(--radius-md);background:#BA7517;color:#fff;cursor:pointer;width:100%;">Đóng</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div><!-- #page-event-draft -->
+
+  <!-- ══════════════════════════════════
+       PAGE 7 – REVIEW: ĐỔI PLAYLIST SỰ KIỆN (Leader)
+  ══════════════════════════════════ -->
+  <div class="outer-page" id="page-review-event-draft">
+    <div class="page-scroll" style="background:#CDD0DC;">
+      <div class="p2-outer" style="max-width:720px;">
+        <div class="browser-chrome">
+          <div class="wdot r"></div><div class="wdot y"></div><div class="wdot g"></div>
+          <div class="w-url">cms.chicilonmedia.vn/approvals/draft/1043</div>
+        </div>
+        <div class="cms-window" style="border-radius:0 0 var(--radius-xl) var(--radius-xl);">
+
+          <!-- Header -->
+          <div class="win-header">
+            <div class="win-title">
+              Sự kiện: test OTOSAN SANG 1304-1904
+              <span style="font-size:11px;font-weight:600;background:#E1F5EE;color:#085041;border:1px solid #5DCAA5;border-radius:4px;padding:2px 8px;">Đổi Playlist</span>
+              <span style="font-size:11px;font-weight:600;background:#E6EFFF;color:#0C447C;border:1px solid #B5D4F4;border-radius:4px;padding:2px 8px;">Chờ duyệt</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-3);">
+              Người sửa: <strong style="color:var(--text-2);">Minh Hiếu</strong>
+              <span style="color:var(--border);">·</span>
+              16/04/2025 10:15
+              <button onclick="goPage('page-pending-list')" style="margin-left:8px;font-family:var(--font);font-size:11.5px;font-weight:500;padding:4px 12px;border-radius:var(--radius-sm);border:1px solid var(--border);background:#fff;color:var(--text-2);cursor:pointer;">← Danh sách</button>
+            </div>
+          </div>
+
+          <!-- Diff dạng form — chỉ 1 field thay đổi nên không cần split timeline -->
+          <div style="padding:16px 20px;border-bottom:1px solid var(--border-light);">
+
+            <!-- Thông tin sự kiện — không đổi -->
+            <div style="font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text-3);margin-bottom:10px;">Thông tin sự kiện (không thay đổi)</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px;">
+              <div style="background:#F5F6FA;border-radius:var(--radius-md);padding:9px 12px;">
+                <div style="font-size:10.5px;color:var(--text-3);margin-bottom:3px;">Màn hình</div>
+                <div style="font-size:13px;font-weight:500;color:var(--text-1);">KHO_TV_HN</div>
+              </div>
+              <div style="background:#F5F6FA;border-radius:var(--radius-md);padding:9px 12px;">
+                <div style="font-size:10.5px;color:var(--text-3);margin-bottom:3px;">Khung giờ</div>
+                <div style="font-size:13px;font-weight:500;color:var(--text-1);">Always</div>
+              </div>
+              <div style="background:#F5F6FA;border-radius:var(--radius-md);padding:9px 12px;">
+                <div style="font-size:10.5px;color:var(--text-3);margin-bottom:3px;">Ưu tiên</div>
+                <div style="font-size:13px;font-weight:500;color:var(--text-1);">0</div>
+              </div>
+            </div>
+
+            <!-- Thay đổi chính: Danh sách phát -->
+            <div style="font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#854F0B;margin-bottom:10px;display:flex;align-items:center;gap:6px;">
+              <span style="width:6px;height:6px;border-radius:50%;background:#BA7517;display:inline-block;"></span>
+              Thay đổi đề xuất — Danh sách phát
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 40px 1fr;gap:0;align-items:stretch;">
+              <!-- Live -->
+              <div style="border:1px solid #C0DD97;border-radius:var(--radius-md) 0 0 var(--radius-md);padding:14px 16px;background:#EAF3DE;">
+                <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#3B6D11;margin-bottom:8px;display:flex;align-items:center;gap:5px;">
+                  <span style="width:7px;height:7px;border-radius:50%;background:#3B6D11;"></span>
+                  Đang phát (Live)
+                </div>
+                <div style="font-size:14px;font-weight:600;color:#173404;margin-bottom:4px;">HN AP FULL A 1304</div>
+                <div style="font-size:11px;color:#3B6D11;">Playlist hiện tại đang chạy</div>
+                <div style="margin-top:10px;background:#fff;border-radius:var(--radius-sm);padding:8px 10px;border:1px solid #C0DD97;">
+                  <div style="font-size:10px;color:#3B6D11;margin-bottom:4px;font-weight:500;">Nội dung playlist</div>
+                  <div style="display:flex;flex-direction:column;gap:3px;">
+                    <div style="font-size:11px;color:#27500A;">• PETROVIETNAM CONG NGHE XANH 15s</div>
+                    <div style="font-size:11px;color:#27500A;">• CHICILON SLOGAN 1304.mp4</div>
+                    <div style="font-size:11px;color:#5F5E5A;">2 sự kiện · 00:20</div>
+                  </div>
+                </div>
+              </div>
+              <!-- Arrow -->
+              <div style="display:flex;align-items:center;justify-content:center;background:#F5F6FA;font-size:20px;color:var(--text-3);">→</div>
+              <!-- Draft -->
+              <div style="border:1.5px solid #EF9F27;border-radius:0 var(--radius-md) var(--radius-md) 0;padding:14px 16px;background:#FFFBF4;">
+                <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#854F0B;margin-bottom:8px;display:flex;align-items:center;gap:5px;">
+                  <span style="width:7px;height:7px;border-radius:2px;background:#BA7517;"></span>
+                  Đề xuất thay bằng (Draft)
+                </div>
+                <div style="font-size:14px;font-weight:600;color:#412402;margin-bottom:4px;">HN AP FULL B 1304</div>
+                <div style="font-size:11px;color:#854F0B;">Playlist mới đề xuất thay thế</div>
+                <div style="margin-top:10px;background:#fff;border-radius:var(--radius-sm);padding:8px 10px;border:1px solid #EF9F27;">
+                  <div style="font-size:10px;color:#854F0B;margin-bottom:4px;font-weight:500;">Nội dung playlist</div>
+                  <div style="display:flex;flex-direction:column;gap:3px;">
+                    <div style="font-size:11px;color:#412402;">• PETROVIETNAM CONG NGHE XANH 15s</div>
+                    <div style="font-size:11px;color:#412402;">• OTOSAN FORTUSS 360 1304.jpg</div>
+                    <div style="font-size:11px;color:#412402;font-weight:500;">• TVC OTOSAN FORTUSS 15s.mp4 <span style="background:#FAEEDA;color:#633806;font-size:10px;padding:1px 5px;border-radius:3px;margin-left:3px;">Mới</span></div>
+                    <div style="font-size:11px;color:#5F5E5A;">3 sự kiện · 00:35</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Changelog -->
+          <div style="padding:10px 20px;background:#F8F9FB;border-bottom:1px solid var(--border-light);">
+            <div style="font-size:10.5px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;">Tóm tắt thay đổi</div>
+            <div style="display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--text-2);">
+              <span style="width:6px;height:6px;border-radius:50%;background:#BA7517;flex-shrink:0;margin-top:4px;"></span>
+              Đổi toàn bộ playlist phát từ <strong style="color:var(--text-1);">HN AP FULL A 1304</strong> sang <strong style="color:var(--text-1);">HN AP FULL B 1304</strong> — playlist mới có thêm 1 TVC OTOSAN FORTUSS 15s, tổng thời lượng tăng từ 00:20 lên 00:35
+            </div>
+          </div>
+
+          <!-- Footer -->
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:#FAFBFD;flex-wrap:wrap;gap:8px;">
+            <div style="font-size:11.5px;color:var(--text-3);display:flex;align-items:center;gap:6px;">
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor" style="color:var(--text-3);"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zm.75 10.5h-1.5v-5h1.5v5zm0-6.5h-1.5V3.5h1.5V5z"/></svg>
+              Approve sẽ áp dụng theo lịch đã set — bản live không thay đổi ngay lập tức
+            </div>
+            <div style="display:flex;gap:9px;">
+              <button onclick="doDiscard('discard-r2-overlay','Đề xuất đổi playlist bị hủy. Sự kiện tiếp tục dùng HN AP FULL A 1304.')" style="font-family:var(--font);font-size:13px;font-weight:600;padding:8px 20px;border-radius:var(--radius-md);border:1px solid #F5C6C2;background:var(--red-light);color:var(--red);cursor:pointer;">Bỏ draft</button>
+              <button onclick="openApproveOTP('r2','Sự kiện sẽ chạy với playlist HN AP FULL B 1304 theo lịch đã set. Bản live vẫn phát bình thường.')" style="font-family:var(--font);font-size:13px;font-weight:700;padding:8px 24px;border-radius:var(--radius-md);border:none;background:var(--green-mid);color:#fff;cursor:pointer;box-shadow:0 2px 10px rgba(27,175,126,0.3);">Approve</button>
+            </div>
+          </div>
+
+
+          <!-- Approve OTP overlay -->
+          <div class="approve-otp-overlay" id="approve-otp-r2" style="display:none;position:absolute;inset:0;background:rgba(15,20,40,0.56);border-radius:0 0 16px 16px;align-items:center;justify-content:center;z-index:50;">
+            <div class="approve-otp-card" style="background:#fff;border-radius:16px;box-shadow:0 20px 64px rgba(0,0,0,0.22);padding:26px 30px;width:336px;">
+              <div style="text-align:center;">
+                <div style="width:50px;height:50px;border-radius:50%;background:#D4F3E8;border:2px solid rgba(15,123,90,0.16);display:flex;align-items:center;justify-content:center;margin:0 auto 13px;">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="5" y="11" width="14" height="11" rx="2.5" stroke="#0F7B5A" stroke-width="1.8"/><path d="M8 11V7.5a4 4 0 018 0V11" stroke="#0F7B5A" stroke-width="1.8" fill="none" stroke-linecap="round"/><circle cx="12" cy="16.5" r="1.5" fill="#0F7B5A"/></svg>
+                </div>
+                <div style="font-size:15px;font-weight:700;color:#1A1D2B;margin-bottom:5px;">Xác nhận Approve</div>
+                <div style="font-size:12.5px;color:#4A5070;line-height:1.6;margin-bottom:13px;">Nhập mã OTP để xác nhận approve đổi playlist cho sự kiện <strong>test OTOSAN SANG 1304-1904</strong>.</div>
+                <div style="display:flex;align-items:flex-start;gap:7px;font-size:11.5px;font-weight:500;background:#FEF3DC;color:#C96E00;border:1px solid #F7CB7A;border-radius:8px;padding:8px 11px;margin-bottom:16px;text-align:left;">
+                  <svg width="15" height="15" viewBox="0 0 16 16" fill="#C96E00" style="flex-shrink:0;margin-top:1px;"><path d="M7.1 1.6L.8 13A1 1 0 001.7 14.5H14.3a1 1 0 00.9-1.5L9.1 1.6a1.2 1.2 0 00-2 0zm.9 3.4a.75.75 0 01.75.75v4a.75.75 0 01-1.5 0v-4A.75.75 0 018 5zm0 7a1 1 0 110-2 1 1 0 010 2z"/></svg>
+                  Draft sẽ được áp dụng theo lịch — hành động này không thể hoàn tác
+                </div>
+                <div style="display:flex;justify-content:center;gap:8px;margin-bottom:9px;">
+                  <input class="approve-otp-digit otp-digit" maxlength="1" type="text" inputmode="numeric" style="width:42px;height:50px;border:1.5px solid #D6DAE6;border-radius:8px;font-size:22px;font-weight:700;text-align:center;color:#1A1D2B;background:#FAFBFD;outline:none;font-family:inherit;"/>
+                  <input class="approve-otp-digit otp-digit" maxlength="1" type="text" inputmode="numeric" style="width:42px;height:50px;border:1.5px solid #D6DAE6;border-radius:8px;font-size:22px;font-weight:700;text-align:center;color:#1A1D2B;background:#FAFBFD;outline:none;font-family:inherit;"/>
+                  <input class="approve-otp-digit otp-digit" maxlength="1" type="text" inputmode="numeric" style="width:42px;height:50px;border:1.5px solid #D6DAE6;border-radius:8px;font-size:22px;font-weight:700;text-align:center;color:#1A1D2B;background:#FAFBFD;outline:none;font-family:inherit;"/>
+                  <input class="approve-otp-digit otp-digit" maxlength="1" type="text" inputmode="numeric" style="width:42px;height:50px;border:1.5px solid #D6DAE6;border-radius:8px;font-size:22px;font-weight:700;text-align:center;color:#1A1D2B;background:#FAFBFD;outline:none;font-family:inherit;"/>
+                  <input class="approve-otp-digit otp-digit" maxlength="1" type="text" inputmode="numeric" style="width:42px;height:50px;border:1.5px solid #D6DAE6;border-radius:8px;font-size:22px;font-weight:700;text-align:center;color:#1A1D2B;background:#FAFBFD;outline:none;font-family:inherit;"/>
+                  <input class="approve-otp-digit otp-digit" maxlength="1" type="text" inputmode="numeric" style="width:42px;height:50px;border:1.5px solid #D6DAE6;border-radius:8px;font-size:22px;font-weight:700;text-align:center;color:#1A1D2B;background:#FAFBFD;outline:none;font-family:inherit;"/>
+                </div>
+                <div style="font-size:11.5px;color:#8890A8;margin-bottom:16px;">Chưa nhận được mã? <a style="color:#1A5FD4;font-weight:600;cursor:pointer;">Gửi lại (<span class="approve-cd">60</span>s)</a></div>
+                <div style="display:flex;gap:8px;">
+                  <button onclick="closeApproveOTP('r2')" style="flex:1;font-family:inherit;font-size:13px;font-weight:600;padding:10px;border:1.5px solid #D6DAE6;border-radius:8px;background:none;color:#4A5070;cursor:pointer;">Hủy</button>
+                  <button onclick="confirmApproveOTP('r2')" style="flex:2;font-family:inherit;font-size:13px;font-weight:700;padding:10px;border:none;border-radius:8px;background:linear-gradient(135deg,#0F7B5A,#1BAF7E);color:#fff;cursor:pointer;">Xác nhận Approve</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="discard-r2-overlay" style="display:none;position:absolute;inset:0;background:rgba(15,20,40,0.5);border-radius:0 0 16px 16px;align-items:center;justify-content:center;z-index:50;"></div>
+
+        </div>
+      </div>
+    </div>
+  </div><!-- #page-review-event-draft -->
+
+</div><!-- .outer-shell -->
+
+<script>
+/* ═══════ NAVIGATION ═══════ */
+function goPage(pageId) {
+  document.querySelectorAll('.outer-tab').forEach(function(t){t.classList.remove('active');});
+  document.querySelectorAll('.outer-page').forEach(function(p){p.classList.remove('active');});
+  var tab = document.querySelector('[data-page="'+pageId+'"]');
+  if(tab) tab.classList.add('active');
+  var page = document.getElementById(pageId);
+  if(page) page.classList.add('active');
+}
+
+document.querySelector('.outer-topbar').addEventListener('click', function(e){
+  var tab = e.target.closest('.outer-tab');
+  if(!tab || !tab.dataset.page) return;
+  goPage(tab.dataset.page);
+});
+
+/* ═══════ INNER TABS page 2 ═══════ */
+document.getElementById('p2-inner-tabs').addEventListener('click', function(e){
+  var tab = e.target.closest('.inner-tab');
+  if(!tab) return;
+  document.querySelectorAll('.inner-tab').forEach(function(t){t.classList.remove('active');});
+  document.querySelectorAll('.inner-panel').forEach(function(p){p.classList.remove('active');});
+  tab.classList.add('active');
+  document.getElementById('inner-'+tab.dataset.inner).classList.add('active');
+});
+
+/* ═══════ INNER TABS page 6 ═══════ */
+document.getElementById('p6-inner-tabs').addEventListener('click', function(e){
+  var tab = e.target.closest('.inner-tab');
+  if(!tab) return;
+  document.querySelectorAll('#p6-inner-tabs .inner-tab').forEach(function(t){t.classList.remove('active');});
+  tab.classList.add('active');
+  ['tong-quan','dinh-vi','tieu-chi'].forEach(function(k){
+    document.getElementById('p6-'+k).style.display = (tab.dataset.inner6===k)?'block':'none';
+  });
+});
+
+/* ═══════ DRAFT SAVED MODALS ═══════ */
+function showDraftSaved(){
+  document.getElementById('draft-saved-overlay').style.display='flex';
+}
+function showEventDraftSaved(){
+  document.getElementById('event-draft-saved-overlay').style.display='flex';
+}
+
+/* ═══════ DISCARD (no OTP needed) ═══════ */
+function doDiscard(overlayId, msg){
+  var overlay = document.getElementById(overlayId);
+  overlay.style.display='flex';
+  overlay.innerHTML = '<div style="background:#fff;border-radius:16px;padding:28px 32px;width:320px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.2);">'
+    +'<div style="width:50px;height:50px;border-radius:50%;background:#FDECEA;border:2px solid rgba(192,57,43,0.2);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;">'
+    +'<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="#C0392B" stroke-width="2" stroke-linecap="round"/></svg></div>'
+    +'<div style="font-size:15px;font-weight:700;color:#1A1D2B;margin-bottom:6px;">Đã bỏ draft</div>'
+    +'<div style="font-size:12.5px;color:#4A5070;line-height:1.6;margin-bottom:18px;">'+msg+'</div>'
+    +'<button onclick="document.getElementById(\''+overlayId+'\').style.display=\'none\'" style="font-family:inherit;font-size:13px;font-weight:600;padding:9px 24px;border:none;border-radius:8px;background:#C0392B;color:#fff;cursor:pointer;width:100%;">Đóng</button>'
+    +'</div>';
+}
+
+/* ═══════ APPROVE OTP ═══════ */
+var cdTimers = {};
+
+function openApproveOTP(scope, successMsg){
+  var overlay = document.getElementById('approve-otp-'+scope);
+  if(!overlay) return;
+  overlay.style.display='flex';
+  overlay._successMsg = successMsg;
+  var digits = overlay.querySelectorAll('.approve-otp-digit');
+  digits.forEach(function(d){d.value='';d.classList.remove('filled','oerr');});
+  var cd = overlay.querySelector('.approve-cd');
+  if(cd) cd.textContent='60';
+  startApproveCD(scope, overlay);
+  setTimeout(function(){ if(digits[0]) digits[0].focus(); }, 60);
+}
+
+function closeApproveOTP(scope){
+  var overlay = document.getElementById('approve-otp-'+scope);
+  if(overlay) overlay.style.display='none';
+  clearInterval(cdTimers['a'+scope]);
+}
+
+function confirmApproveOTP(scope){
+  var overlay = document.getElementById('approve-otp-'+scope);
+  var digits = Array.from(overlay.querySelectorAll('.approve-otp-digit'));
+  if(digits.some(function(d){return !d.value;})){
+    digits.forEach(function(d){if(!d.value)d.classList.add('oerr');});
+    return;
+  }
+  clearInterval(cdTimers['a'+scope]);
+  var msg = overlay._successMsg || 'Draft đã được approve thành công.';
+  var card = overlay.querySelector('.approve-otp-card');
+  card.innerHTML = '<div style="text-align:center;padding:4px 0;">'
+    +'<div style="width:52px;height:52px;border-radius:50%;background:#D4F3E8;border:2px solid rgba(15,123,90,0.2);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;">'
+    +'<svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M7 12.5l3.5 3.5 6.5-7" stroke="#0F7B5A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>'
+    +'<div style="font-size:15px;font-weight:700;color:#1A1D2B;margin-bottom:6px;">Approve thành công!</div>'
+    +'<div style="font-size:12.5px;color:#4A5070;line-height:1.6;margin-bottom:18px;">'+msg+'</div>'
+    +'<button onclick="closeApproveOTP(\''+scope+'\')" style="font-family:inherit;font-size:13px;font-weight:600;padding:9px 24px;border:none;border-radius:8px;background:#1BAF7E;color:#fff;cursor:pointer;width:100%;">Đóng</button>'
+    +'</div>';
+}
+
+function startApproveCD(scope, overlay){
+  var s=60;
+  clearInterval(cdTimers['a'+scope]);
+  cdTimers['a'+scope] = setInterval(function(){
+    s--;
+    var cd = overlay.querySelector('.approve-cd');
+    if(cd) cd.textContent=s;
+    if(s<=0) clearInterval(cdTimers['a'+scope]);
+  },1000);
+}
+
+/* Approve OTP keyboard nav */
+document.addEventListener('input', function(e){
+  if(!e.target.classList.contains('approve-otp-digit')) return;
+  var box = e.target.closest('.approve-otp-overlay');
+  if(!box) return;
+  var all = Array.from(box.querySelectorAll('.approve-otp-digit'));
+  var idx = all.indexOf(e.target);
+  e.target.value = e.target.value.replace(/\D/g,'');
+  e.target.classList.toggle('filled',!!e.target.value);
+  e.target.classList.remove('oerr');
+  if(e.target.value && idx<all.length-1) all[idx+1].focus();
+});
+document.addEventListener('keydown', function(e){
+  if(!e.target.classList.contains('approve-otp-digit')) return;
+  var box = e.target.closest('.approve-otp-overlay');
+  if(!box) return;
+  var all = Array.from(box.querySelectorAll('.approve-otp-digit'));
+  var idx = all.indexOf(e.target);
+  if(e.key==='Backspace' && !e.target.value && idx>0){
+    all[idx-1].focus(); all[idx-1].value=''; all[idx-1].classList.remove('filled');
+  }
+});
+
+/* ═══════ USER-SIDE OTP (màn hình 1&2) ═══════ */
+function openOTP(scope){
+  document.getElementById('otp-'+scope).classList.add('active');
+  document.getElementById('otp-'+scope+'-form').style.display='block';
+  document.getElementById('otp-'+scope+'-success').classList.remove('show');
+  resetOTP(scope); startCD(scope);
+  setTimeout(function(){
+    var f=document.querySelector('[data-scope="'+scope+'"].otp-digit');
+    if(f) f.focus();
+  },60);
+}
+function closeOTP(scope){
+  document.getElementById('otp-'+scope).classList.remove('active');
+  clearInterval(cdTimers[scope]);
+}
+function confirmOTP(scope){
+  var digits=Array.from(document.querySelectorAll('[data-scope="'+scope+'"].otp-digit'));
+  if(digits.some(function(d){return !d.value;})){
+    digits.forEach(function(d){if(!d.value)d.classList.add('oerr');}); return;
+  }
+  document.getElementById('otp-'+scope+'-form').style.display='none';
+  document.getElementById('otp-'+scope+'-success').classList.add('show');
+  clearInterval(cdTimers[scope]);
+  if(scope==='p1'){
+    var chip=document.getElementById('p1-unsaved');
+    if(chip) chip.style.opacity='.3';
+    var st=document.getElementById('p1-footer-status');
+    if(st){st.textContent='✓ Đã đẩy lịch phát thành công';st.style.color='var(--green)';}
+  } else {
+    var c=document.getElementById('p2-unsaved');
+    if(c) c.style.opacity='.3';
+  }
+}
+function resetOTP(scope){
+  document.querySelectorAll('[data-scope="'+scope+'"].otp-digit').forEach(function(d){
+    d.value='';d.classList.remove('filled','oerr');
+  });
+}
+function startCD(scope){
+  var s=60, link=document.getElementById(scope+'-resend-link'), cdEl=document.getElementById(scope+'-cd');
+  if(cdEl) cdEl.textContent=s;
+  if(link){link.style.pointerEvents='none';link.style.opacity='.5';}
+  clearInterval(cdTimers[scope]);
+  cdTimers[scope]=setInterval(function(){
+    s--;
+    var el=document.getElementById(scope+'-cd');
+    if(el) el.textContent=s;
+    if(s<=0){
+      clearInterval(cdTimers[scope]);
+      if(link){link.style.pointerEvents='auto';link.style.opacity='1';link.textContent='Gửi lại mã OTP';}
+    }
+  },1000);
+}
+document.addEventListener('input',function(e){
+  if(!e.target.classList.contains('otp-digit')) return;
+  var scope=e.target.dataset.scope;
+  var all=Array.from(document.querySelectorAll('[data-scope="'+scope+'"].otp-digit'));
+  var idx=all.indexOf(e.target);
+  e.target.value=e.target.value.replace(/\D/g,'');
+  e.target.classList.toggle('filled',!!e.target.value);
+  e.target.classList.remove('oerr');
+  if(e.target.value && idx<all.length-1) all[idx+1].focus();
+});
+document.addEventListener('keydown',function(e){
+  if(!e.target.classList.contains('otp-digit')) return;
+  var scope=e.target.dataset.scope;
+  var all=Array.from(document.querySelectorAll('[data-scope="'+scope+'"].otp-digit'));
+  var idx=all.indexOf(e.target);
+  if(e.key==='Backspace' && !e.target.value && idx>0){
+    all[idx-1].focus();all[idx-1].value='';all[idx-1].classList.remove('filled');
+  }
+});
+</script>
+
+</body>
+</html>
