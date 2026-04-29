@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Import NFC Trigger</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', -apple-system, sans-serif;
+    background: #f0f2f5;
+    min-height: 100vh;
+  }
+
+  /* ── Top bar ── */
+  .topbar {
+    background: #fff;
+    border-bottom: 1px solid #e8e8e8;
+    padding: 0 1.5rem;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .campaign-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1a2332;
+  }
+
+  .badge-active {
+    font-size: 11px;
+    font-weight: 600;
+    background: #e1f5ee;
+    color: #0F6E56;
+    padding: 3px 8px;
+    border-radius: 99px;
+  }
+
+  .topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .date-range {
+    font-size: 12px;
+    color: #888;
+  }
+
+  /* ── Import button ── */
+  .btn-import-trigger {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    background: #1D9E75;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .btn-import-trigger:hover { background: #0F6E56; }
+
+  /* ── Tabs ── */
+  .tabs {
+    background: #fff;
+    border-bottom: 1px solid #e8e8e8;
+    padding: 0 1.5rem;
+    display: flex;
+    gap: 0;
+  }
+  .tab {
+    padding: 12px 16px;
+    font-size: 13px;
+    color: #888;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: color 0.15s;
+  }
+  .tab.active {
+    color: #1D9E75;
+    border-bottom-color: #1D9E75;
+    font-weight: 600;
+  }
+
+  /* ── Overlay ── */
+  .overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+  }
+  .overlay.open { display: flex; }
+
+  /* ── Modal ── */
+  @keyframes scaleIn {
+    from { transform: scale(0.5); opacity: 0; }
+    to   { transform: scale(1);   opacity: 1; }
+  }
+
+  .modal {
+    background: #fff;
+    border-radius: 12px;
+    width: 480px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    overflow: hidden;
+    animation: scaleIn 0.22s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+
+  .modal-header {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid #e8e8e8;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .modal-header h2 { font-size: 15px; font-weight: 600; color: #1a2332; }
+  .close-btn {
+    width: 28px; height: 28px; border-radius: 6px;
+    border: none; background: transparent; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: #888; font-size: 20px; transition: background 0.15s;
+  }
+  .close-btn:hover { background: #f0f0f0; }
+
+  .modal-body { padding: 1.5rem; }
+
+  /* Template banner */
+  .template-banner {
+    background: #f0fdf8;
+    border: 1px solid #9fe1cb;
+    border-radius: 8px;
+    padding: 0.875rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+  }
+  .template-banner .banner-text p:first-child {
+    font-size: 13px; font-weight: 600; color: #085041; margin-bottom: 2px;
+  }
+  .template-banner .banner-text p:last-child { font-size: 12px; color: #0F6E56; }
+  .download-btn {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 13px; font-weight: 600; color: #0F6E56;
+    text-decoration: none; white-space: nowrap;
+    padding: 6px 12px; border-radius: 6px;
+    border: 1px solid #5DCAA5; background: #fff;
+    cursor: pointer; transition: background 0.15s;
+  }
+  .download-btn:hover { background: #e1f5ee; }
+
+  /* Upload zone */
+  .upload-zone {
+    border: 1.5px dashed #c8c8c8;
+    border-radius: 8px;
+    padding: 2.5rem 1rem;
+    display: flex; flex-direction: column;
+    align-items: center; gap: 8px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    margin-bottom: 1.25rem;
+  }
+  .upload-zone:hover, .upload-zone.drag-over {
+    border-color: #1D9E75; background: #f9fffe;
+  }
+  .upload-icon {
+    width: 44px; height: 44px; background: #f4f4f4;
+    border-radius: 10px; display: flex;
+    align-items: center; justify-content: center; margin-bottom: 4px;
+  }
+  .upload-zone .main-text { font-size: 14px; font-weight: 600; color: #1a2332; }
+  .upload-zone .sub-text { font-size: 13px; color: #666; }
+  .upload-zone .sub-text span { color: #0F6E56; text-decoration: underline; cursor: pointer; }
+  .upload-zone .hint-text { font-size: 11px; color: #aaa; margin-top: 4px; }
+
+  /* File preview */
+  .file-preview {
+    display: none; align-items: center; gap: 10px;
+    background: #f8f8f8; border: 1px solid #e0e0e0;
+    border-radius: 8px; padding: 0.75rem 1rem;
+    margin-bottom: 1.25rem;
+  }
+  .file-icon {
+    width: 36px; height: 36px; background: #e1f5ee;
+    border-radius: 6px; display: flex;
+    align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .file-info { flex: 1; min-width: 0; }
+  .file-name { font-size: 13px; font-weight: 600; color: #1a2332; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .file-size { font-size: 12px; color: #888; }
+  .remove-file { background: none; border: none; cursor: pointer; color: #aaa; font-size: 18px; padding: 4px; }
+  .remove-file:hover { color: #e24b4a; }
+
+  /* Loading */
+  .loading-body {
+    padding: 2.5rem 1.5rem;
+    display: none; flex-direction: column;
+    align-items: center; gap: 1rem;
+  }
+  .spinner {
+    width: 44px; height: 44px;
+    border: 3px solid #e0e0e0;
+    border-top-color: #1D9E75;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-title { font-size: 15px; font-weight: 600; color: #1a2332; }
+  .loading-sub { font-size: 13px; color: #888; }
+  .progress-bar-wrap { width: 100%; height: 4px; background: #eee; border-radius: 99px; overflow: hidden; }
+  .progress-bar-fill {
+    height: 100%; width: 20%;
+    background: #1D9E75; border-radius: 99px;
+    transition: width 0.3s ease;
+  }
+
+  /* Success */
+  .success-body {
+    padding: 2rem 1.5rem;
+    display: none; flex-direction: column;
+    align-items: center; gap: 0.75rem; text-align: center;
+  }
+  .success-icon {
+    width: 52px; height: 52px; border-radius: 50%;
+    background: #e1f5ee;
+    display: flex; align-items: center; justify-content: center; margin-bottom: 4px;
+  }
+  .success-title { font-size: 15px; font-weight: 600; color: #085041; }
+  .success-sub { font-size: 13px; color: #666; line-height: 1.6; }
+  .success-stats { display: flex; gap: 12px; margin-top: 0.5rem; width: 100%; }
+  .stat-card {
+    flex: 1; background: #f0fdf8; border: 1px solid #9fe1cb;
+    border-radius: 8px; padding: 0.75rem; text-align: center;
+  }
+  .stat-num { font-size: 20px; font-weight: 700; color: #0F6E56; }
+  .stat-label { font-size: 11px; color: #0F6E56; margin-top: 2px; }
+
+  /* Footer */
+  .modal-footer { display: flex; justify-content: flex-end; gap: 8px; }
+  .btn-cancel {
+    padding: 8px 18px; font-size: 13px; border-radius: 7px;
+    border: 1px solid #ddd; background: transparent;
+    color: #555; cursor: pointer; font-weight: 500; transition: background 0.15s;
+  }
+  .btn-cancel:hover { background: #f5f5f5; }
+  .btn-import {
+    padding: 8px 22px; font-size: 13px; border-radius: 7px;
+    border: none; background: #1D9E75; color: #fff;
+    font-weight: 600; cursor: pointer; transition: background 0.15s;
+  }
+  .btn-import:hover:not(:disabled) { background: #0F6E56; }
+  .btn-import:disabled { background: #c8c8c8; cursor: not-allowed; }
+
+  input[type="file"] { display: none; }
+</style>
+</head>
+<body>
+
+<!-- Top bar -->
+<div class="topbar">
+  <div class="topbar-left">
+    <span class="campaign-name">Marketing Chicilon Digital Media</span>
+    <span class="badge-active">Đang hoạt động</span>
+  </div>
+  <div class="topbar-right">
+    <span class="date-range">01/12/2025 – 26/12/2025</span>
+    <button class="btn-import-trigger" id="openModal">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <path d="M7 10V2M4 7l3 3 3-3M2 12h10" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Import chuyển đổi NFC
+    </button>
+  </div>
+</div>
+
+<!-- Tabs -->
+<div class="tabs">
+  <div class="tab">Tổng quan</div>
+  <div class="tab">Địa điểm</div>
+  <div class="tab">Nghiệm thu</div>
+  <div class="tab active">NFC</div>
+</div>
+
+<!-- Overlay + Modal -->
+<div class="overlay" id="overlay">
+  <div class="modal" id="modal">
+
+    <div class="modal-header">
+      <h2>Import chuyển đổi NFC</h2>
+      <button class="close-btn" id="closeModal">×</button>
+    </div>
+
+    <!-- Upload state -->
+    <div class="modal-body" id="uploadState">
+      <div class="template-banner">
+        <div class="banner-text">
+          <p>Chưa có file template?</p>
+          <p>Tải về để điền đúng định dạng yêu cầu</p>
+        </div>
+        <a href="#" class="download-btn">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v8M4 6l3 3 3-3M2 11h10" stroke="#0F6E56" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Tải template mẫu
+        </a>
+      </div>
+
+      <div class="upload-zone" id="uploadZone">
+        <div class="upload-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 3v12M6 9l5-5 5 5M3 18h16" stroke="#888" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <p class="main-text">Kéo thả file vào đây</p>
+        <p class="sub-text">hoặc <span id="browseLink">chọn file từ máy tính</span></p>
+        <p class="hint-text">Chỉ chấp nhận file .xlsx, .xls · Tối đa 10MB</p>
+      </div>
+
+      <div class="file-preview" id="filePreview">
+        <div class="file-icon">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="1" width="14" height="16" rx="2" fill="#1D9E75" opacity="0.15"/><path d="M5 7h8M5 10h8M5 13h5" stroke="#0F6E56" stroke-width="1.2" stroke-linecap="round"/></svg>
+        </div>
+        <div class="file-info">
+          <p class="file-name" id="fileName">file.xlsx</p>
+          <p class="file-size" id="fileSize">—</p>
+        </div>
+        <button class="remove-file" id="removeFile">×</button>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-cancel" id="cancelBtn">Hủy</button>
+        <button class="btn-import" id="importBtn" disabled>Import</button>
+      </div>
+    </div>
+
+    <!-- Loading state -->
+    <div class="loading-body" id="loadingState">
+      <div class="spinner"></div>
+      <p class="loading-title">Đang xử lý file...</p>
+      <p class="loading-sub">Vui lòng không đóng cửa sổ này</p>
+      <div class="progress-bar-wrap" style="width:100%">
+        <div class="progress-bar-fill" id="progressBar"></div>
+      </div>
+    </div>
+
+    <!-- Success state -->
+    <div class="success-body" id="successState">
+      <div class="success-icon">
+        <svg width="26" height="26" viewBox="0 0 26 26" fill="none"><path d="M5 13l6 6L21 7" stroke="#1D9E75" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <p class="success-title">Import thành công!</p>
+      <p class="success-sub">Dữ liệu chuyển đổi đã được cập nhật<br>vào báo cáo chiến dịch.</p>
+      <div class="success-stats">
+        <div class="stat-card"><p class="stat-num" id="statRows">—</p><p class="stat-label">Dòng đã import</p></div>
+        <div class="stat-card"><p class="stat-num" id="statTypes">—</p><p class="stat-label">Loại chuyển đổi</p></div>
+        <div class="stat-card"><p class="stat-num">0</p><p class="stat-label">Dòng lỗi</p></div>
+      </div>
+      <div style="width:100%;display:flex;justify-content:flex-end;margin-top:0.5rem;">
+        <button class="btn-import" id="doneBtn">Xong</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<input type="file" id="fileInput" accept=".xlsx,.xls">
+
+<script>
+  const overlay    = document.getElementById('overlay');
+  const openModal  = document.getElementById('openModal');
+  const closeModal = document.getElementById('closeModal');
+  const cancelBtn  = document.getElementById('cancelBtn');
+  const fileInput  = document.getElementById('fileInput');
+  const uploadZone = document.getElementById('uploadZone');
+  const filePreview= document.getElementById('filePreview');
+  const fileName   = document.getElementById('fileName');
+  const fileSize   = document.getElementById('fileSize');
+  const removeFile = document.getElementById('removeFile');
+  const importBtn  = document.getElementById('importBtn');
+  const browseLink = document.getElementById('browseLink');
+  const uploadState= document.getElementById('uploadState');
+  const loadingState=document.getElementById('loadingState');
+  const successState=document.getElementById('successState');
+  const progressBar= document.getElementById('progressBar');
+  const doneBtn    = document.getElementById('doneBtn');
+
+  function resetModal() {
+    uploadState.style.display = 'block';
+    loadingState.style.display = 'none';
+    successState.style.display = 'none';
+    uploadZone.style.display = 'flex';
+    filePreview.style.display = 'none';
+    importBtn.disabled = true;
+    fileInput.value = '';
+    progressBar.style.width = '20%';
+  }
+
+  openModal.addEventListener('click', () => {
+    resetModal();
+    overlay.classList.add('open');
+  });
+
+  function closeOverlay() { overlay.classList.remove('open'); }
+  closeModal.addEventListener('click', closeOverlay);
+  cancelBtn.addEventListener('click', closeOverlay);
+  overlay.addEventListener('click', e => { if (e.target === overlay) closeOverlay(); });
+  doneBtn.addEventListener('click', closeOverlay);
+
+  function showFile(file) {
+    fileName.textContent = file.name;
+    fileSize.textContent = (file.size / 1024).toFixed(1) + ' KB';
+    uploadZone.style.display = 'none';
+    filePreview.style.display = 'flex';
+    importBtn.disabled = false;
+  }
+
+  browseLink.addEventListener('click', () => fileInput.click());
+  fileInput.addEventListener('change', e => { if (e.target.files[0]) showFile(e.target.files[0]); });
+
+  uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('drag-over'); });
+  uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('drag-over'));
+  uploadZone.addEventListener('drop', e => {
+    e.preventDefault(); uploadZone.classList.remove('drag-over');
+    if (e.dataTransfer.files[0]) showFile(e.dataTransfer.files[0]);
+  });
+
+  removeFile.addEventListener('click', () => {
+    filePreview.style.display = 'none';
+    uploadZone.style.display = 'flex';
+    importBtn.disabled = true;
+    fileInput.value = '';
+  });
+
+  importBtn.addEventListener('click', () => {
+    uploadState.style.display = 'none';
+    loadingState.style.display = 'flex';
+    let w = 20;
+    const interval = setInterval(() => {
+      w = Math.min(w + Math.random() * 15, 95);
+      progressBar.style.width = w + '%';
+    }, 300);
+    setTimeout(() => {
+      clearInterval(interval);
+      progressBar.style.width = '100%';
+      setTimeout(() => {
+        loadingState.style.display = 'none';
+        successState.style.display = 'flex';
+        document.getElementById('statRows').textContent = '1,000';
+        document.getElementById('statTypes').textContent = '5';
+      }, 400);
+    }, 2200);
+  });
+</script>
+</body>
+</html>
