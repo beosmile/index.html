@@ -27,6 +27,7 @@
   .field-error.show { display: block; }
   .divider { height: 1px; background: #F0EFE9; margin: 24px 0; }
 
+  /* Customer search */
   .search-select-wrap { position: relative; }
   .search-select-input { height: 38px; border: 1px solid #D8D7D0; border-radius: 8px; padding: 0 12px; font-size: 13px; color: #1a1a1a; background: #fff; width: 100%; outline: none; transition: border 0.15s; }
   .search-select-input:focus { border-color: #378ADD; }
@@ -38,6 +39,7 @@
   .ss-item.selected { background: #E6F1FB; color: #185FA5; font-weight: 500; }
   .ss-empty { padding: 10px 14px; font-size: 12px; color: #bbb; font-style: italic; }
 
+  /* Addon / NFC TV */
   .addon-row { margin-bottom: 16px; }
   .addon-box { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-radius: 10px; border: 1px solid #E5E4DE; background: #F9F9F6; transition: all 0.2s; }
   .addon-box.active { background: #F0FAF5; border-color: #1D9E75; }
@@ -55,13 +57,26 @@
   .switch-knob { width: 18px; height: 18px; border-radius: 50%; background: #fff; position: absolute; top: 3px; left: 3px; transition: left 0.18s; box-shadow: 0 1px 4px rgba(0,0,0,0.18); }
   .switch.on .switch-knob { left: 21px; }
 
+  /* NFC always-on (Poster) */
+  .nfc-always-on { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-radius: 10px; border: 1px solid #1D9E75; background: #F0FAF5; margin-bottom: 16px; }
+  .nfc-always-label { font-size: 13px; font-weight: 500; color: #1a1a1a; }
+  .nfc-always-desc { font-size: 11px; color: #0F6E56; margin-top: 2px; }
+  .nfc-always-badge { font-size: 10px; padding: 2px 9px; border-radius: 20px; background: #D1F5E5; color: #0F6E56; font-weight: 500; }
+
+  /* Group card */
   .group-card { border: 1px solid #E5E4DE; border-radius: 10px; margin-bottom: 10px; overflow: hidden; }
-  .group-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; cursor: pointer; background: #F9F9F6; user-select: none; }
+  .group-header { display: flex; align-items: flex-start; justify-content: space-between; padding: 12px 16px; cursor: pointer; background: #F9F9F6; user-select: none; }
   .group-header:hover { background: #F3F2EC; }
-  .group-header-left { display: flex; align-items: center; gap: 10px; }
-  .group-index { width: 24px; height: 24px; border-radius: 50%; background: #E6F1FB; color: #185FA5; font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .group-header-left { display: flex; align-items: flex-start; gap: 10px; }
+  .group-index { width: 24px; height: 24px; border-radius: 50%; background: #E6F1FB; color: #185FA5; font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .group-title-block { display: flex; flex-direction: column; gap: 3px; }
+  .group-name-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
   .group-name-preview { font-size: 13px; font-weight: 600; color: #1a1a1a; }
-  .group-header-right { display: flex; align-items: center; gap: 8px; }
+  .ch-ind { font-size: 11px; font-weight: 600; padding: 2px 10px; border-radius: 20px; }
+  .ch-ind-tv { background: #E6F1FB; color: #185FA5; border: 1px solid #B5D4F4; }
+  .ch-ind-poster { background: #E1F5EE; color: #0F6E56; border: 1px solid #9FE0C8; }
+  .group-time-row { font-size: 11px; color: #888; display: flex; align-items: center; gap: 4px; }
+  .group-header-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
   .arrow { font-size: 11px; color: #999; transition: transform 0.2s; display: inline-block; }
   .arrow.open { transform: rotate(180deg); }
   .del-group { font-size: 12px; color: #E24B4A; padding: 3px 10px; border-radius: 6px; cursor: pointer; border: 1px solid transparent; }
@@ -69,27 +84,25 @@
   .group-body { padding: 16px; border-top: 1px solid #F0EFE9; display: none; }
   .group-body.open { display: block; }
 
-  /* Header channel badges */
-  .ch-badge-tv { font-size: 10px; padding: 2px 8px; border-radius: 20px; background: #E6F1FB; color: #185FA5; font-weight: 500; margin-left: 4px; }
-  .ch-badge-poster { font-size: 10px; padding: 2px 8px; border-radius: 20px; background: #E1F5EE; color: #0F6E56; font-weight: 500; margin-left: 4px; }
+  /* Channel toggle */
+  .ch-select-label { font-size: 12px; color: #666; font-weight: 500; margin-bottom: 8px; }
+  .ch-toggle-row { display: flex; gap: 8px; margin-bottom: 16px; }
+  .ch-toggle-btn { display: flex; align-items: center; gap: 7px; padding: 8px 18px; border-radius: 8px; border: 1.5px solid #D8D7D0; background: #F9F9F6; cursor: pointer; font-size: 13px; color: #999; font-family: inherit; font-weight: 500; transition: all 0.15s; user-select: none; }
+  .ch-toggle-btn:hover { border-color: #aaa; color: #555; }
+  .ch-toggle-btn.active-tv { border-color: #378ADD; background: #E6F1FB; color: #185FA5; }
+  .ch-toggle-btn.active-poster { border-color: #1D9E75; background: #E1F5EE; color: #0F6E56; }
+  .ch-toggle-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
 
-  /* Inner channel tabs */
-  .ch-label { font-size: 12px; color: #666; font-weight: 500; margin-bottom: 8px; }
-  .ch-tabs { display: flex; gap: 0; border: 1px solid #D8D7D0; border-radius: 8px; overflow: hidden; margin-bottom: 16px; width: fit-content; }
-  .ch-tab-btn { padding: 8px 28px; font-size: 13px; cursor: pointer; border: none; background: #F5F5F0; color: #888; border-right: 1px solid #D8D7D0; font-family: inherit; transition: background 0.15s; }
-  .ch-tab-btn:last-child { border-right: none; }
-  .ch-tab-btn.active-tv { background: #E6F1FB; color: #185FA5; font-weight: 600; }
-  .ch-tab-btn.active-poster { background: #E1F5EE; color: #0F6E56; font-weight: 600; }
-  /* KEY: dùng display none/block để giữ dữ liệu khi chuyển tab */
-  .ch-panel { display: none; }
-  .ch-panel.active { display: block; }
+  /* Channel panels */
+  .ch-panel-wrap { display: none; }
+  .ch-panel-wrap.visible { display: block; }
+  .ch-panel-divider { height: 1px; background: #F0EFE9; margin: 20px 0; }
+  .ch-panel-title { font-size: 11px; font-weight: 600; color: #999; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+  .ch-panel-title-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .ch-panel-title-dot.tv { background: #378ADD; }
+  .ch-panel-title-dot.poster { background: #1D9E75; }
 
-  /* Number input */
-  .num-input-wrap { position: relative; }
-  .num-display { height: 38px; border: 1px solid #D8D7D0; border-radius: 8px; padding: 0 12px; font-size: 13px; color: #1a1a1a; background: #fff; width: 100%; outline: none; transition: border 0.15s; cursor: text; display: flex; align-items: center; }
-  .num-display:focus-within { border-color: #378ADD; }
-  .num-real { position: absolute; opacity: 0; pointer-events: none; width: 1px; }
-
+  /* Media */
   .media-label-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap; }
   .media-label { font-size: 12px; color: #666; font-weight: 500; }
   .media-count-badge { font-size: 11px; color: #999; background: #F0EFE9; padding: 2px 10px; border-radius: 20px; }
@@ -105,55 +118,95 @@
   .dropdown-item:hover { background: #F5F5F0; }
   .di-dot { width: 6px; height: 6px; border-radius: 50%; background: #D8D7D0; flex-shrink: 0; }
 
+  /* TVC block */
   .tvc-block { background: #F9F9F6; border: 1px solid #E5E4DE; border-radius: 8px; margin-bottom: 8px; overflow: hidden; }
-  .tvc-block-header { display: flex; align-items: center; gap: 10px; padding: 9px 14px; flex-wrap: wrap; }
+  .tvc-block-header { display: flex; align-items: center; gap: 10px; padding: 9px 14px; }
   .tvc-block-left { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
   .tvc-dot-tv { width: 8px; height: 8px; border-radius: 50%; background: #378ADD; flex-shrink: 0; }
   .tvc-dot-poster { width: 8px; height: 8px; border-radius: 50%; background: #1D9E75; flex-shrink: 0; }
-  .tvc-block-name { font-size: 13px; font-weight: 600; color: #1a1a1a; white-space: nowrap; }
-  .tvc-dates { display: flex; align-items: center; gap: 6px; flex: 1; }
-  .tvc-date-label { font-size: 11px; color: #999; white-space: nowrap; flex-shrink: 0; }
-  .tvc-date-input { height: 28px; border: 1px solid #D8D7D0; border-radius: 6px; padding: 0 8px; font-size: 12px; background: #fff; color: #1a1a1a; font-family: inherit; outline: none; width: 130px; cursor: pointer; }
-  .tvc-date-input:focus { border-color: #378ADD; }
-  .tvc-block-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; margin-left: auto; }
-  .add-url-btn { font-size: 11px; color: #185FA5; cursor: pointer; padding: 4px 10px; border-radius: 6px; border: 1px solid #B5D4F4; background: #fff; font-family: inherit; }
-  .add-url-btn:hover { background: #E6F1FB; }
-  .tvc-del-btn { font-size: 12px; color: #E24B4A; cursor: pointer; padding: 3px 8px; border-radius: 6px; }
+  .tvc-block-name { font-size: 13px; font-weight: 600; color: #1a1a1a; }
+  .tvc-del-btn { font-size: 12px; color: #E24B4A; cursor: pointer; padding: 3px 8px; border-radius: 6px; margin-left: auto; }
   .tvc-del-btn:hover { background: #FEE8E8; }
 
-  /* Time slots */
-  .timeslot-section { border-top: 1px solid #EEEEE9; padding: 10px 14px; background: #F9F9F6; }
+  /* Timeslot section */
+  .timeslot-section { border-top: 1px solid #EEEEE9; padding: 10px 14px; }
   .timeslot-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
   .timeslot-title { font-size: 11px; font-weight: 500; color: #666; }
   .add-slot-btn { font-size: 11px; color: #185FA5; cursor: pointer; padding: 3px 10px; border-radius: 6px; border: 1px solid #B5D4F4; background: #fff; font-family: inherit; }
   .add-slot-btn:hover { background: #E6F1FB; }
-  .timeslot-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
-  .timeslot-row:last-child { margin-bottom: 0; }
+
+  /* Timeslot card (new) */
+  .ts-card { background: #fff; border: 1px solid #E5E4DE; border-radius: 8px; margin-bottom: 8px; overflow: hidden; }
+  .ts-row-main { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 9px 12px; }
   .ts-label { font-size: 11px; color: #999; white-space: nowrap; flex-shrink: 0; }
-  .ts-time { height: 28px; border: 1px solid #D8D7D0; border-radius: 6px; padding: 0 8px; font-size: 12px; background: #fff; color: #1a1a1a; font-family: inherit; outline: none; width: 90px; cursor: pointer; }
+  .ts-time { height: 28px; border: 1px solid #D8D7D0; border-radius: 6px; padding: 0 8px; font-size: 12px; background: #fff; color: #1a1a1a; font-family: inherit; outline: none; width: 88px; cursor: pointer; }
   .ts-time:focus { border-color: #378ADD; }
-  .ts-date { height: 28px; border: 1px solid #D8D7D0; border-radius: 6px; padding: 0 8px; font-size: 12px; background: #fff; color: #1a1a1a; font-family: inherit; outline: none; width: 130px; cursor: pointer; }
+  .ts-date { height: 28px; border: 1px solid #D8D7D0; border-radius: 6px; padding: 0 8px; font-size: 12px; background: #fff; color: #1a1a1a; font-family: inherit; outline: none; width: 128px; cursor: pointer; }
   .ts-date:focus { border-color: #378ADD; }
-  .ts-del { font-size: 13px; color: #ccc; cursor: pointer; padding: 2px 4px; border-radius: 4px; flex-shrink: 0; }
+  .ts-del { font-size: 14px; color: #ccc; cursor: pointer; padding: 2px 4px; border-radius: 4px; margin-left: auto; flex-shrink: 0; }
   .ts-del:hover { color: #E24B4A; }
-  .url-list { border-top: 1px solid #EEEEE9; display: none; }
-  .url-row { display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-bottom: 1px solid #EEEEE9; }
-  .url-row:last-child { border-bottom: none; }
-  .url-input { flex: 1; height: 30px; border: 1px solid #D8D7D0; border-radius: 6px; padding: 0 10px; font-size: 12px; background: #fff; color: #888; font-family: inherit; outline: none; }
-  .url-input::placeholder { color: #ccc; }
-  .url-input.active-input { border-color: #1D9E75; background: #F0FAF5; color: #1a1a1a; }
-  .tog-wrap { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
-  .tog-label { font-size: 11px; color: #999; min-width: 22px; white-space: nowrap; }
-  .tog-label.on { color: #0F6E56; font-weight: 600; }
+
+  /* Broadcast summary */
+  .ts-broadcast-row { display: flex; align-items: center; gap: 5px; padding: 0 12px 8px; flex-wrap: wrap; }
+  .broadcast-label { font-size: 11px; color: #aaa; white-space: nowrap; flex-shrink: 0; }
+  .broadcast-text { font-size: 11px; color: #555; font-weight: 500; }
+
+  /* Advanced toggle */
+  .ts-adv-toggle { display: flex; align-items: center; gap: 5px; padding: 6px 12px; cursor: pointer; user-select: none; border-top: 1px solid #F0EFE9; background: #F9F9F6; transition: background 0.12s; }
+  .ts-adv-toggle:hover { background: #F3F2EC; }
+  .adv-arrow { font-size: 9px; color: #aaa; transition: transform 0.18s; display: inline-block; line-height: 1; }
+  .adv-arrow.open { transform: rotate(90deg); }
+  .adv-toggle-label { font-size: 11px; color: #aaa; font-weight: 500; }
+  .adv-indicator { display: flex; gap: 3px; margin-left: 2px; flex-wrap: wrap; }
+  .adv-chip { padding: 1px 6px; border-radius: 20px; font-size: 10px; font-weight: 500; }
+  .adv-chip.green  { background: #E1F5EE; color: #0F6E56; }
+  .adv-chip.orange { background: #FFF4E6; color: #92600A; }
+
+  /* Advanced panel */
+  .ts-adv-panel { display: none; border-top: 1px solid #F0EFE9; }
+  .ts-adv-panel.open { display: block; }
+  .ts-row-dow { padding: 9px 12px; display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+  .ts-row-label { font-size: 11px; color: #666; font-weight: 500; white-space: nowrap; flex-shrink: 0; min-width: 96px; }
+  .dow-shortcuts { display: flex; gap: 3px; }
+  .sc-btn { height: 26px; padding: 0 9px; border-radius: 6px; border: 1px solid #D8D7D0; background: #fff; font-size: 11px; color: #666; cursor: pointer; font-family: inherit; white-space: nowrap; transition: all 0.12s; }
+  .sc-btn:hover { background: #F5F5F0; border-color: #aaa; }
+  .sc-btn.applied { background: #F0FAF5; border-color: #1D9E75; color: #0F6E56; font-weight: 500; }
+  .dow-group { display: flex; gap: 3px; flex-wrap: wrap; }
+  .dow-btn { width: 30px; height: 26px; border-radius: 6px; border: 1px solid #D8D7D0; background: #F9F9F6; font-size: 11px; font-weight: 500; color: #888; cursor: pointer; font-family: inherit; transition: all 0.12s; display: flex; align-items: center; justify-content: center; }
+  .dow-btn:hover { border-color: #aaa; }
+  .dow-btn.active { background: #E6F1FB; border-color: #378ADD; color: #185FA5; font-weight: 600; }
+  .dow-btn.active-we { background: #E1F5EE; border-color: #1D9E75; color: #0F6E56; font-weight: 600; }
+  .ts-adv-divider { height: 1px; background: #F0EFE9; margin: 0 12px; }
+  .ts-row-extra { padding: 9px 12px 11px; display: flex; align-items: flex-start; gap: 7px; flex-wrap: wrap; }
+  .extra-group { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+  .radio-pill { display: flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 20px; border: 1px solid #D8D7D0; background: #F9F9F6; cursor: pointer; font-size: 11px; color: #888; transition: all 0.12s; user-select: none; }
+  .radio-pill:hover { border-color: #aaa; color: #444; }
+  .radio-pill.active { background: #FFF4E6; border-color: #E8A020; color: #92600A; font-weight: 500; }
+  .radio-pill input[type=radio] { display: none; }
+  .week-pills { display: flex; gap: 3px; flex-wrap: wrap; }
+  .week-pill { padding: 3px 9px; border-radius: 20px; border: 1px solid #D8D7D0; background: #F9F9F6; font-size: 11px; color: #888; cursor: pointer; transition: all 0.12s; user-select: none; }
+  .week-pill:hover { border-color: #aaa; }
+  .week-pill.active { background: #FFF4E6; border-color: #E8A020; color: #92600A; font-weight: 500; }
+
+  /* NFC URL (cấp TVC block) */
   .tog { width: 32px; height: 18px; border-radius: 9px; background: #D8D7D0; cursor: pointer; position: relative; flex-shrink: 0; border: none; outline: none; }
   .tog.on { background: #1D9E75; }
   .tog-knob { width: 14px; height: 14px; border-radius: 50%; background: #fff; position: absolute; top: 2px; left: 2px; transition: left 0.15s; box-shadow: 0 1px 3px rgba(0,0,0,0.15); }
   .tog.on .tog-knob { left: 16px; }
+  .tog-label { font-size: 11px; color: #999; min-width: 22px; white-space: nowrap; }
+  .tog-label.on { color: #0F6E56; font-weight: 600; }
+  .url-input { flex: 1; height: 28px; border: 1px solid #D8D7D0; border-radius: 6px; padding: 0 10px; font-size: 12px; background: #fff; color: #888; font-family: inherit; outline: none; }
+  .url-input::placeholder { color: #ccc; }
   .url-del { font-size: 14px; color: #ccc; cursor: pointer; padding: 2px 4px; border-radius: 4px; }
   .url-del:hover { color: #E24B4A; }
   .nfc-locked-notice { display: flex; align-items: center; gap: 8px; padding: 8px 14px; background: #F9F9F6; border-top: 1px solid #EEEEE9; font-size: 12px; color: #bbb; }
+  .nfc-url-section { border-top: 1px solid #EEEEE9; }
 
   .empty-hint { font-size: 12px; color: #bbb; padding: 6px 0; font-style: italic; }
+  .num-input-wrap { position: relative; }
+  .num-display { height: 38px; border: 1px solid #D8D7D0; border-radius: 8px; padding: 0 12px; font-size: 13px; color: #1a1a1a; background: #fff; width: 100%; outline: none; transition: border 0.15s; cursor: text; display: flex; align-items: center; }
+  .num-display:focus-within { border-color: #378ADD; }
+  .num-real { position: absolute; opacity: 0; pointer-events: none; width: 1px; }
   .add-group-btn { display: flex; align-items: center; gap: 10px; padding: 11px 16px; border: 1px dashed #D8D7D0; border-radius: 10px; cursor: pointer; font-size: 13px; color: #999; width: 100%; background: transparent; margin-top: 6px; font-family: inherit; transition: all 0.15s; }
   .add-group-btn:hover { background: #F5F5F0; color: #1a1a1a; border-color: #999; }
   .plus-circle { width: 22px; height: 22px; border-radius: 50%; background: #E6F1FB; color: #185FA5; display: flex; align-items: center; justify-content: center; font-size: 16px; line-height: 1; flex-shrink: 0; }
@@ -167,6 +220,16 @@
   .logo-dot { width: 28px; height: 28px; border-radius: 6px; background: #E8A020; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #fff; }
   .topbar-right { font-size: 12px; color: #999; }
   .tag { font-size: 10px; padding: 2px 8px; border-radius: 20px; background: #E6F1FB; color: #185FA5; font-weight: 500; margin-left: 6px; }
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 1000; display: none; align-items: center; justify-content: center; }
+  .modal-overlay.show { display: flex; }
+  .modal-box { background: #fff; border-radius: 12px; padding: 24px; max-width: 380px; width: 90%; box-shadow: 0 8px 32px rgba(0,0,0,0.15); }
+  .modal-title { font-size: 15px; font-weight: 600; color: #1a1a1a; margin-bottom: 8px; }
+  .modal-desc { font-size: 13px; color: #666; line-height: 1.6; margin-bottom: 20px; }
+  .modal-actions { display: flex; justify-content: flex-end; gap: 8px; }
+  .modal-cancel { height: 36px; padding: 0 16px; border: 1px solid #D8D7D0; border-radius: 8px; font-size: 13px; color: #666; background: transparent; cursor: pointer; font-family: inherit; }
+  .modal-cancel:hover { background: #F5F5F0; }
+  .modal-confirm { height: 36px; padding: 0 16px; border: none; border-radius: 8px; font-size: 13px; color: #fff; background: #E24B4A; cursor: pointer; font-family: inherit; font-weight: 600; }
+  .modal-confirm:hover { background: #c73837; }
 </style>
 </head>
 <body>
@@ -227,19 +290,39 @@
 </div>
 </div>
 
-<script>
-let groupCounter = 0
-// key = groupId+'-'+ch (vd: 'g1-tv', 'g1-poster')
-const nfcState = {}
-const pkgState = {}
+<div class="modal-overlay" id="confirm-modal">
+  <div class="modal-box">
+    <div class="modal-title" id="modal-title">Bỏ chọn kênh?</div>
+    <div class="modal-desc" id="modal-desc"></div>
+    <div class="modal-actions">
+      <button class="modal-cancel" onclick="closeModal()">Hủy</button>
+      <button class="modal-confirm" id="modal-confirm-btn">Xác nhận</button>
+    </div>
+  </div>
+</div>
 
+<script>
+// ── Constants ──
+const DOW_LABELS = ['T2','T3','T4','T5','T6','T7','CN']
+const DOW_KEYS   = ['mon','tue','wed','thu','fri','sat','sun']
+
+// ── State ──
+let groupCounter = 0
+const nfcState  = {}  // groupId-ch → bool
+const pkgState  = {}  // groupId-ch → string
+const chState   = {}  // groupId → {tv, poster}
+const tsState   = {}  // tvcId-slotIdx → {advOpen, dow, dayFilter, weeks}
+let pendingModalAction = null
+
+// ── Mock data ──
 const mockMedia = {
-  tv: ['TVC_Summer_15s','TVC_Summer_30s','TVC_Brand_15s','TVC_Promo_10s','TVC_Awareness_30s'],
+  tv:     ['TVC_Summer_15s','TVC_Summer_30s','TVC_Brand_15s','TVC_Promo_10s','TVC_Awareness_30s'],
   poster: ['Poster_Summer_A','Poster_Summer_B','Poster_Promo_01','Poster_Brand_02','Poster_Event_05']
 }
 const customers = ['Coca-Cola Vietnam','Vinamilk','Masan Group','TH True Milk','Unilever Vietnam','P&G Vietnam','Nestlé Vietnam','Heineken Vietnam','Grab Vietnam','Samsung Vietnam']
 let selectedCustomer = ''
 
+// ── Customer search ──
 function openCustomerDd(){ renderCustomers(document.getElementById('customer-input').value) }
 function closeCustomerDd(){
   document.getElementById('customer-dd').classList.remove('show')
@@ -260,112 +343,153 @@ function pickCustomer(name){
   document.getElementById('customer-dd').classList.remove('show')
 }
 
-function fmt(d){ if(!d) return ''; const p=d.split('-'); return p[2]+'/'+p[1]+'/'+p[0] }
+// ── Utils ──
+function fmtDate(d){
+  if(!d) return ''
+  const p=d.split('-'); return p[2]+'/'+p[1]+'/'+p[0]
+}
 function setErr(id,msg){ const el=document.getElementById(id); if(!el) return; el.textContent=msg; el.className='field-error'+(msg?' show':'') }
 function clearErr(id){ setErr(id,'') }
 
+// ── Modal ──
+function openModal(title,desc,onConfirm){
+  document.getElementById('modal-title').textContent=title
+  document.getElementById('modal-desc').textContent=desc
+  pendingModalAction=onConfirm
+  document.getElementById('confirm-modal').classList.add('show')
+}
+function closeModal(){
+  document.getElementById('confirm-modal').classList.remove('show')
+  pendingModalAction=null
+}
+document.getElementById('modal-confirm-btn').onclick=function(){ if(pendingModalAction) pendingModalAction(); closeModal() }
+
+// ── Campaign dates ──
 function onCampDateChange(){
   const cs=document.getElementById('camp-start').value
   const ce=document.getElementById('camp-end').value
   clearErr('err-camp-start'); clearErr('err-camp-end')
-  if(cs && ce && cs>ce){ setErr('err-camp-end','Ngày kết thúc phải sau ngày bắt đầu'); return }
-  document.querySelectorAll('.group-card').forEach(g=>{ applyGroupDateRange(g.id.replace('group-','')) })
+  if(cs&&ce&&cs>ce){ setErr('err-camp-end','Ngày kết thúc phải sau ngày bắt đầu'); return }
+  document.querySelectorAll('.group-card').forEach(g=>applyTimeslotConstraints(g.id.replace('group-','')))
 }
 
-function applyGroupDateRange(groupId){
-  const cs=document.getElementById('camp-start').value
-  const ce=document.getElementById('camp-end').value
-  const gs=document.getElementById('gstart-'+groupId)
-  const ge=document.getElementById('gend-'+groupId)
-  if(gs){ gs.min=cs||''; gs.max=ce||'' }
-  if(ge){ ge.min=cs||''; ge.max=ce||'' }
-  // Xóa giá trị nếu out of range
-  if(gs&&gs.value&&cs&&gs.value<cs){ gs.value=''; if(ge) ge.value='' }
-  if(gs&&gs.value&&ce&&gs.value>ce){ gs.value=''; if(ge) ge.value='' }
-  if(ge&&ge.value&&cs&&ge.value<cs){ ge.value='' }
-  if(ge&&ge.value&&ce&&ge.value>ce){ ge.value='' }
-  onGroupDateChange(groupId)
-}
-
-function onGroupDateChange(groupId){
-  const gs=document.getElementById('gstart-'+groupId)
-  const ge=document.getElementById('gend-'+groupId)
-  const sv=gs?.value||''
-  const ev=ge?.value||''
+function applyTimeslotConstraints(groupId){
+  const cs=document.getElementById('camp-start')?.value||''
+  const ce=document.getElementById('camp-end')?.value||''
   ;['tv','poster'].forEach(ch=>{
     document.querySelectorAll('#tvcarea-'+ch+'-'+groupId+' .tvc-block').forEach(block=>{
       const tvcId=block.id.replace('tvcblock-','')
       const container=document.getElementById('tscontainer-'+tvcId)
       if(!container) return
-      container.querySelectorAll('.ts-slot').forEach((slot,i)=>{
+      container.querySelectorAll('.ts-card').forEach((_,i)=>{
         const tsStart=document.getElementById('ts-start-'+tvcId+'-'+i)
         const tsEnd=document.getElementById('ts-end-'+tvcId+'-'+i)
-        if(tsStart){ tsStart.min=sv||''; tsStart.max=ev||'' }
-        if(tsEnd){ tsEnd.min=sv||''; tsEnd.max=ev||'' }
-        // Xóa nếu out of range
-        if(tsStart&&tsStart.value&&sv&&tsStart.value<sv) tsStart.value=''
-        if(tsStart&&tsStart.value&&ev&&tsStart.value>ev) tsStart.value=''
-        if(tsEnd&&tsEnd.value&&sv&&tsEnd.value<sv) tsEnd.value=''
-        if(tsEnd&&tsEnd.value&&ev&&tsEnd.value>ev) tsEnd.value=''
+        if(tsStart){ tsStart.min=cs; tsStart.max=ce; if(tsStart.value&&((cs&&tsStart.value<cs)||(ce&&tsStart.value>ce))) tsStart.value='' }
+        if(tsEnd)  { tsEnd.min=cs;   tsEnd.max=ce;   if(tsEnd.value&&((cs&&tsEnd.value<cs)||(ce&&tsEnd.value>ce))) tsEnd.value='' }
       })
     })
   })
+  updateGroupTime(groupId)
 }
 
-// ── Tab bên trong nhóm: dùng display none/block → dữ liệu KHÔNG mất ──
-function switchChTab(groupId, ch, el){
-  el.closest('.ch-tabs').querySelectorAll('.ch-tab-btn').forEach(b=>b.classList.remove('active-tv','active-poster'))
-  el.classList.add('active-'+ch)
-  document.getElementById('ch-panel-tv-'+groupId).classList.remove('active')
-  document.getElementById('ch-panel-poster-'+groupId).classList.remove('active')
-  document.getElementById('ch-panel-'+ch+'-'+groupId).classList.add('active')
+// ── Group time (derived from timeslots) ──
+function updateGroupTime(groupId){
+  let allDates=[]
+  ;['tv','poster'].forEach(ch=>{
+    document.querySelectorAll('#tvcarea-'+ch+'-'+groupId+' .tvc-block').forEach(block=>{
+      const tvcId=block.id.replace('tvcblock-','')
+      const container=document.getElementById('tscontainer-'+tvcId)
+      if(!container) return
+      container.querySelectorAll('.ts-card').forEach((_,i)=>{
+        const s=document.getElementById('ts-start-'+tvcId+'-'+i)?.value
+        const e=document.getElementById('ts-end-'+tvcId+'-'+i)?.value
+        if(s) allDates.push(s)
+        if(e) allDates.push(e)
+      })
+    })
+  })
+  const el=document.getElementById('gtime-'+groupId)
+  if(!el) return
+  if(!allDates.length){ el.textContent='Chưa có thời gian'; el.style.color='#bbb' }
+  else {
+    const min=allDates.reduce((a,b)=>a<b?a:b)
+    const max=allDates.reduce((a,b)=>a>b?a:b)
+    el.textContent=fmtDate(min)+' – '+fmtDate(max); el.style.color='#888'
+  }
 }
 
-function onPackageChange(groupId, ch, val){
+// ── Channel toggle ──
+function toggleChannel(groupId, ch){
+  const state=chState[groupId]
+  const currentlyOn=state[ch]
+  const hasData=document.querySelectorAll('#tvcarea-'+ch+'-'+groupId+' .tvc-block').length>0
+  if(currentlyOn){
+    if(hasData) openModal('Bỏ chọn kênh '+ch.toUpperCase()+'?','Bỏ chọn kênh này sẽ xóa toàn bộ cấu hình media đã nhập. Bạn có chắc muốn tiếp tục?',()=>doDeactivateChannel(groupId,ch))
+    else doDeactivateChannel(groupId,ch)
+  } else {
+    state[ch]=true
+    document.getElementById('ch-btn-'+ch+'-'+groupId).classList.add('active-'+ch)
+    document.getElementById('ch-panel-wrap-'+ch+'-'+groupId).classList.add('visible')
+    updatePanelDivider(groupId); updateHeaderBadges(groupId)
+  }
+}
+function doDeactivateChannel(groupId,ch){
+  chState[groupId][ch]=false
+  document.getElementById('ch-btn-'+ch+'-'+groupId).classList.remove('active-'+ch)
+  document.getElementById('ch-panel-wrap-'+ch+'-'+groupId).classList.remove('visible')
+  const area=document.getElementById('tvcarea-'+ch+'-'+groupId)
+  if(area) area.innerHTML='<div class="empty-hint">Chưa có media nào được chọn</div>'
+  pkgState[groupId+'-'+ch]=''; nfcState[groupId+'-'+ch]=ch==='poster'
+  updateHeaderBadges(groupId); updateGroupTime(groupId); updatePanelDivider(groupId)
+}
+function updatePanelDivider(groupId){
+  const d=document.getElementById('ch-divider-'+groupId)
+  if(d) d.style.display=(chState[groupId]?.tv&&chState[groupId]?.poster)?'block':'none'
+}
+function updateHeaderBadges(groupId){
+  const tv=document.getElementById('hbadge-tv-'+groupId)
+  const po=document.getElementById('hbadge-poster-'+groupId)
+  if(tv) tv.style.display=chState[groupId]?.tv?'inline-block':'none'
+  if(po) po.style.display=chState[groupId]?.poster?'inline-block':'none'
+}
+
+// ── Package / NFC (TV) ──
+function onPackageChange(groupId,ch,val){
   const key=groupId+'-'+ch
   pkgState[key]=val
+  nfcState[key]=false
   const row=document.getElementById('addon-'+key)
+  const searchEl=document.getElementById('search-'+key)
+  if(searchEl){
+    searchEl.disabled=!val
+    searchEl.placeholder=val?'Tìm kiếm và chọn Media cho báo cáo TV':'Chọn gói tính năng trước...'
+  }
+  if(!val){ if(row) row.style.display='none'; return }
+  if(row) row.style.display='block'
   const box=document.getElementById('addonbox-'+key)
   const badge=document.getElementById('addonbadge-'+key)
   const desc=document.getElementById('addondesc-'+key)
   const sw=document.getElementById('switch-'+key)
   const swt=document.getElementById('switchtext-'+key)
-  const searchEl=document.getElementById('search-'+key)
-
-  nfcState[key]=false
-  document.querySelectorAll('#tvcarea-'+ch+'-'+groupId+' .url-list').forEach(l=>{ l.innerHTML=''; l.style.display='none' })
-  document.querySelectorAll('#tvcarea-'+ch+'-'+groupId+' .add-url-btn').forEach(b=>b.style.display='none')
-  document.querySelectorAll('#tvcarea-'+ch+'-'+groupId+' .nfc-locked-notice').forEach(n=>n.style.display='flex')
-
-  if(searchEl){
-    if(val){ searchEl.disabled=false; searchEl.placeholder=ch==='tv'?'Tìm kiếm và chọn Media cho báo cáo TV':'Tìm kiếm và chọn Media cho báo cáo Poster' }
-    else { searchEl.disabled=true; searchEl.placeholder='Chọn gói tính năng trước...' }
-  }
-
-  if(!val){ if(row) row.style.display='none'; return }
-  if(row) row.style.display='block'
-
   if(val==='premium'){
     nfcState[key]=true
-    box.className='addon-box active'
-    badge.className='addon-badge included'; badge.textContent='Đã bao gồm'
+    box.className='addon-box active'; badge.className='addon-badge included'; badge.textContent='Đã bao gồm'
     desc.className='addon-desc active'; desc.textContent='Đã kích hoạt — gói Cao cấp'
     sw.className='switch on'; swt.className='switch-text on'; swt.textContent='Bật'
   } else {
-    box.className='addon-box'
-    badge.className='addon-badge'; badge.textContent='Add-on'
+    box.className='addon-box'; badge.className='addon-badge'; badge.textContent='Add-on'
     desc.className='addon-desc'; desc.textContent='Chưa kích hoạt'
     sw.className='switch'; swt.className='switch-text'; swt.textContent='Tắt'
   }
-  refreshNfc(groupId, ch)
+  refreshNfcSection(groupId,ch)
 }
 
-function toggleNfc(groupId, ch){
+function toggleNfc(groupId,ch){
   const key=groupId+'-'+ch
   if(pkgState[key]==='premium') return
   nfcState[key]=!nfcState[key]
-  const box=document.getElementById('addonbox-'+key), desc=document.getElementById('addondesc-'+key)
-  const sw=document.getElementById('switch-'+key), swt=document.getElementById('switchtext-'+key)
+  const box=document.getElementById('addonbox-'+key),desc=document.getElementById('addondesc-'+key)
+  const sw=document.getElementById('switch-'+key),swt=document.getElementById('switchtext-'+key)
   if(nfcState[key]){
     box.className='addon-box active'; desc.className='addon-desc active'; desc.textContent='Đã kích hoạt — Add-on'
     sw.className='switch on'; swt.className='switch-text on'; swt.textContent='Bật'
@@ -373,71 +497,248 @@ function toggleNfc(groupId, ch){
     box.className='addon-box'; desc.className='addon-desc'; desc.textContent='Chưa kích hoạt'
     sw.className='switch'; swt.className='switch-text'; swt.textContent='Tắt'
   }
-  refreshNfc(groupId, ch)
+  refreshNfcSection(groupId,ch)
 }
 
-function refreshNfc(groupId, ch){
+function refreshNfcSection(groupId,ch){
   const on=nfcState[groupId+'-'+ch]
   document.querySelectorAll('#tvcarea-'+ch+'-'+groupId+' .tvc-block').forEach(block=>{
     const tvcId=block.id.replace('tvcblock-','')
-    const container=document.getElementById('tscontainer-'+tvcId)
-    if(!container) return
-    // Rebuild mỗi slot để thêm/bỏ phần URL NFC
-    const slots=container.querySelectorAll('.ts-slot')
-    const gsv=document.getElementById('gstart-'+groupId)?.value||''
-    const gev=document.getElementById('gend-'+groupId)?.value||''
-    slots.forEach((slot,i)=>{
-      const urlSection=slot.querySelector('[id^="urlarea-"]')?.closest('div[style*="border-top"]')
-      if(on && !urlSection){
-        // Thêm phần URL NFC vào
-        const noticeDiv=slot.querySelector('.nfc-locked-inner')
-        slot.insertAdjacentHTML('beforeend',`
-          <div style="border-top:1px solid #EEEEE9;">
-            <div id="urlarea-${tvcId}-s${i}">
-              ${makeUrlNfcRow(tvcId, i, 0)}
-            </div>
-            <div style="padding:5px 10px;">
-              <button onclick="addSlotUrl('${tvcId}',${i})"
-                style="font-size:11px;color:#185FA5;cursor:pointer;padding:3px 8px;border-radius:6px;border:1px solid #B5D4F4;background:#fff;font-family:inherit;">
-                + Thêm URL NFC
-              </button>
-            </div>
-          </div>`)
-      } else if(!on && urlSection){
-        urlSection.remove()
-      }
-    })
-    const notice=block.querySelector('.nfc-locked-notice')
-    if(notice) notice.style.display=on?'none':'flex'
+    const nfcSection=document.getElementById('nfc-section-'+tvcId)
+    const nfcLocked=document.getElementById('nfc-locked-'+tvcId)
+    if(nfcSection) nfcSection.style.display=on?'block':'none'
+    if(nfcLocked)  nfcLocked.style.display=on?'none':'flex'
   })
 }
 
-function toggleGroup(id){
-  document.getElementById('body-'+id).classList.toggle('open')
-  document.getElementById('arrow-'+id).classList.toggle('open')
+// ── Timeslot state ──
+function initTsState(tvcId,idx){
+  const key=tvcId+'-'+idx
+  tsState[key]={ advOpen:false, dow:[true,true,true,true,true,true,true], dayFilter:'all', weeks:[false,false,false,false] }
 }
-function removeGroup(id){ document.getElementById('group-'+id).remove() }
 
-function showDropdown(groupId, ch, val){
+function getTsState(tvcId,idx){ return tsState[tvcId+'-'+idx]||{dow:[true,true,true,true,true,true,true],dayFilter:'all',weeks:[false,false,false,false]} }
+
+// ── Timeslot HTML ──
+function makeTimeslotRow(tvcId, idx){
+  const cs=document.getElementById('camp-start')?.value||''
+  const ce=document.getElementById('camp-end')?.value||''
+  initTsState(tvcId,idx)
+  return `<div class="ts-card" id="tscard-${tvcId}-${idx}">
+    <div class="ts-row-main">
+      <span class="ts-label">Khung giờ</span>
+      <input class="ts-time" type="time" value="00:00" id="ts-from-${tvcId}-${idx}" oninput="updateBroadcast('${tvcId}',${idx})">
+      <span class="ts-label">tới</span>
+      <input class="ts-time" type="time" value="23:59" id="ts-to-${tvcId}-${idx}" oninput="updateBroadcast('${tvcId}',${idx})">
+      <span class="ts-label">Từ ngày</span>
+      <input class="ts-date" type="date" id="ts-start-${tvcId}-${idx}" min="${cs}" max="${ce}" onchange="updateBroadcast('${tvcId}',${idx});updateGroupTime('${tvcId.split('-')[0]}')">
+      <span class="ts-label">tới ngày</span>
+      <input class="ts-date" type="date" id="ts-end-${tvcId}-${idx}" min="${cs}" max="${ce}" onchange="updateBroadcast('${tvcId}',${idx});updateGroupTime('${tvcId.split('-')[0]}')">
+      <span class="ts-del" onclick="removeTimeslot('${tvcId}',${idx})">×</span>
+    </div>
+    <div class="ts-broadcast-row">
+      <span class="broadcast-label">Quảng cáo được phát sóng:</span>
+      <span class="broadcast-text" id="ts-broadcast-${tvcId}-${idx}">00:00–23:59</span>
+    </div>
+    <div class="ts-adv-toggle" onclick="toggleTsAdv('${tvcId}',${idx})">
+      <span class="adv-arrow" id="ts-adv-arrow-${tvcId}-${idx}">▶</span>
+      <span class="adv-toggle-label">Nâng cao</span>
+      <div class="adv-indicator" id="ts-adv-ind-${tvcId}-${idx}"></div>
+    </div>
+    <div class="ts-adv-panel" id="ts-adv-panel-${tvcId}-${idx}">
+      <div class="ts-row-dow">
+        <span class="ts-row-label">Ngày trong tuần</span>
+        <div class="dow-shortcuts">
+          <button class="sc-btn applied" id="sc-all-${tvcId}-${idx}" onclick="applyDowShortcut('${tvcId}',${idx},'all')">Tất cả</button>
+          <button class="sc-btn" onclick="applyDowShortcut('${tvcId}',${idx},'weekday')">T2–T6</button>
+          <button class="sc-btn" onclick="applyDowShortcut('${tvcId}',${idx},'weekend')">T7–CN</button>
+        </div>
+        <div class="dow-group" id="ts-dow-${tvcId}-${idx}">
+          ${DOW_KEYS.map((_,i)=>`<div class="dow-btn ${i<5?'active':'active-we'}" id="ts-dow-${tvcId}-${idx}-${i}" onclick="toggleDow('${tvcId}',${idx},${i})">${DOW_LABELS[i]}</div>`).join('')}
+        </div>
+      </div>
+      <div class="ts-adv-divider"></div>
+      <div class="ts-row-extra">
+        <span class="ts-row-label" style="padding-top:3px">Ngày trong tháng</span>
+        <div class="extra-group">
+          <label class="radio-pill active" id="ts-rp-${tvcId}-${idx}-all"><input type="radio" name="ts-df-${tvcId}-${idx}" value="all" checked onchange="onDayFilter('${tvcId}',${idx},'all')"> Tất cả</label>
+          <label class="radio-pill" id="ts-rp-${tvcId}-${idx}-even"><input type="radio" name="ts-df-${tvcId}-${idx}" value="even" onchange="onDayFilter('${tvcId}',${idx},'even')"> Ngày chẵn</label>
+          <label class="radio-pill" id="ts-rp-${tvcId}-${idx}-odd"><input type="radio" name="ts-df-${tvcId}-${idx}" value="odd" onchange="onDayFilter('${tvcId}',${idx},'odd')"> Ngày lẻ</label>
+          <label class="radio-pill" id="ts-rp-${tvcId}-${idx}-week"><input type="radio" name="ts-df-${tvcId}-${idx}" value="week" onchange="onDayFilter('${tvcId}',${idx},'week')"> Theo tuần</label>
+          <div class="week-pills" id="ts-wkpills-${tvcId}-${idx}" style="display:none">
+            ${[1,2,3,4].map(w=>`<div class="week-pill" id="ts-wp-${tvcId}-${idx}-${w}" onclick="toggleWeek('${tvcId}',${idx},${w})">Tuần ${w}</div>`).join('')}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>`
+}
+
+function addTimeslot(tvcId){
+  const container=document.getElementById('tscontainer-'+tvcId)
+  const idx=container.querySelectorAll('.ts-card').length
+  container.insertAdjacentHTML('beforeend', makeTimeslotRow(tvcId, idx))
+}
+
+function removeTimeslot(tvcId, idx){
+  const card=document.getElementById('tscard-'+tvcId+'-'+idx)
+  if(card){ card.remove(); delete tsState[tvcId+'-'+idx]; updateGroupTime(tvcId.split('-')[0]) }
+}
+
+// ── Timeslot advanced panel ──
+function toggleTsAdv(tvcId, idx){
+  const state=getTsState(tvcId,idx)
+  state.advOpen=!state.advOpen
+  document.getElementById('ts-adv-panel-'+tvcId+'-'+idx).classList.toggle('open', state.advOpen)
+  document.getElementById('ts-adv-arrow-'+tvcId+'-'+idx).classList.toggle('open', state.advOpen)
+}
+
+function toggleDow(tvcId, idx, di){
+  const state=getTsState(tvcId,idx)
+  state.dow[di]=!state.dow[di]
+  const btn=document.getElementById('ts-dow-'+tvcId+'-'+idx+'-'+di)
+  btn.classList.remove('active','active-we')
+  if(state.dow[di]) btn.classList.add(di<5?'active':'active-we')
+  document.querySelectorAll('#tscard-'+tvcId+'-'+idx+' .sc-btn').forEach(b=>b.classList.remove('applied'))
+  updateTsIndicator(tvcId,idx); updateBroadcast(tvcId,idx)
+}
+
+function applyDowShortcut(tvcId, idx, type){
+  const state=getTsState(tvcId,idx)
+  if(type==='weekday')      state.dow=[true,true,true,true,true,false,false]
+  else if(type==='weekend') state.dow=[false,false,false,false,false,true,true]
+  else                      state.dow=[true,true,true,true,true,true,true]
+  DOW_KEYS.forEach((_,i)=>{
+    const btn=document.getElementById('ts-dow-'+tvcId+'-'+idx+'-'+i)
+    btn.classList.remove('active','active-we')
+    if(state.dow[i]) btn.classList.add(i<5?'active':'active-we')
+  })
+  document.querySelectorAll('#tscard-'+tvcId+'-'+idx+' .sc-btn').forEach(b=>b.classList.remove('applied'))
+  const scIdx=type==='all'?0:type==='weekday'?1:2
+  document.querySelectorAll('#tscard-'+tvcId+'-'+idx+' .sc-btn')[scIdx]?.classList.add('applied')
+  updateTsIndicator(tvcId,idx); updateBroadcast(tvcId,idx)
+}
+
+function onDayFilter(tvcId, idx, val){
+  getTsState(tvcId,idx).dayFilter=val
+  ;['all','even','odd','week'].forEach(v=>document.getElementById('ts-rp-'+tvcId+'-'+idx+'-'+v)?.classList.toggle('active',v===val))
+  document.getElementById('ts-wkpills-'+tvcId+'-'+idx).style.display=val==='week'?'flex':'none'
+  updateTsIndicator(tvcId,idx); updateBroadcast(tvcId,idx)
+}
+
+function toggleWeek(tvcId, idx, w){
+  const state=getTsState(tvcId,idx)
+  state.weeks[w-1]=!state.weeks[w-1]
+  document.getElementById('ts-wp-'+tvcId+'-'+idx+'-'+w).classList.toggle('active',state.weeks[w-1])
+  updateTsIndicator(tvcId,idx); updateBroadcast(tvcId,idx)
+}
+
+function updateTsIndicator(tvcId, idx){
+  const state=getTsState(tvcId,idx)
+  const el=document.getElementById('ts-adv-ind-'+tvcId+'-'+idx)
+  if(!el) return
+  const chips=[]
+  const allDow=state.dow.every(Boolean)
+  const wdOnly=state.dow.slice(0,5).every(Boolean)&&!state.dow[5]&&!state.dow[6]
+  const weOnly=!state.dow.slice(0,5).some(Boolean)&&state.dow[5]&&state.dow[6]
+  if(!allDow){
+    const lbl=wdOnly?'T2–T6':weOnly?'T7–CN':DOW_LABELS.filter((_,i)=>state.dow[i]).join(', ')
+    if(lbl) chips.push(`<span class="adv-chip green">${lbl}</span>`)
+  }
+  if(state.dayFilter==='even') chips.push(`<span class="adv-chip orange">Ngày chẵn</span>`)
+  else if(state.dayFilter==='odd') chips.push(`<span class="adv-chip orange">Ngày lẻ</span>`)
+  else if(state.dayFilter==='week'){
+    const wk=[1,2,3,4].filter(w=>state.weeks[w-1]).map(w=>'Tuần '+w)
+    if(wk.length) chips.push(`<span class="adv-chip orange">${wk.join(', ')}</span>`)
+  }
+  el.innerHTML=chips.join('')
+}
+
+function updateBroadcast(tvcId, idx){
+  const state=getTsState(tvcId,idx)
+  const el=document.getElementById('ts-broadcast-'+tvcId+'-'+idx)
+  if(!el) return
+  const from=document.getElementById('ts-from-'+tvcId+'-'+idx)?.value||''
+  const to=document.getElementById('ts-to-'+tvcId+'-'+idx)?.value||''
+  const start=document.getElementById('ts-start-'+tvcId+'-'+idx)?.value||''
+  const end=document.getElementById('ts-end-'+tvcId+'-'+idx)?.value||''
+  const parts=[]
+  if(from&&to) parts.push(from+'–'+to)
+  const allDow=state.dow.every(Boolean)
+  const wdOnly=state.dow.slice(0,5).every(Boolean)&&!state.dow[5]&&!state.dow[6]
+  const weOnly=!state.dow.slice(0,5).some(Boolean)&&state.dow[5]&&state.dow[6]
+  if(!allDow){
+    const lbl=wdOnly?'T2–T6':weOnly?'T7–CN':DOW_LABELS.filter((_,i)=>state.dow[i]).join(', ')
+    if(lbl) parts.push(lbl)
+  }
+  if(state.dayFilter==='even') parts.push('Ngày chẵn')
+  else if(state.dayFilter==='odd') parts.push('Ngày lẻ')
+  else if(state.dayFilter==='week'){
+    const wk=[1,2,3,4].filter(w=>state.weeks[w-1]).map(w=>'Tuần '+w)
+    if(wk.length) parts.push(wk.join(', '))
+  }
+  if(start&&end) parts.push(fmtDate(start)+'–'+fmtDate(end))
+  el.textContent=parts.length?parts.join(' · '):'—'
+}
+
+// ── NFC URL (cấp TVC block) ──
+function makeUrlNfcRow(tvcId, urlIdx){
+  const uid=tvcId+'-u'+urlIdx
+  return `<div style="display:flex;align-items:center;gap:8px;padding:6px 14px;border-bottom:1px solid #EEEEE9;" id="urlnfcrow-${uid}">
+    <input class="url-input" type="text" placeholder="Nhập URL NFC..." id="urlnfc-${uid}">
+    <div style="display:flex;align-items:center;gap:5px;flex-shrink:0;">
+      <span class="tog-label" id="urntog-lbl-${uid}">Tắt</span>
+      <div class="tog" id="urntog-${uid}" onclick="activateUrl('${tvcId}',${urlIdx})"><div class="tog-knob"></div></div>
+    </div>
+    <span class="url-del" onclick="removeUrl('${tvcId}',${urlIdx})">×</span>
+  </div>`
+}
+
+function activateUrl(tvcId, activeIdx){
+  const area=document.getElementById('nfc-urlarea-'+tvcId)
+  if(!area) return
+  area.querySelectorAll('[id^="urlnfcrow-"]').forEach((row,i)=>{
+    const inp=row.querySelector('.url-input'),tog=row.querySelector('.tog'),lbl=row.querySelector('.tog-label')
+    if(!inp||!tog||!lbl) return
+    if(i===activeIdx){
+      const on=tog.classList.contains('on')
+      if(on){ tog.classList.remove('on');lbl.classList.remove('on');lbl.textContent='Tắt';inp.style.cssText='' }
+      else{ tog.classList.add('on');lbl.classList.add('on');lbl.textContent='Bật';inp.style.borderColor='#1D9E75';inp.style.background='#F0FAF5';inp.style.color='#1a1a1a' }
+    } else { tog.classList.remove('on');lbl.classList.remove('on');lbl.textContent='Tắt';inp.style.cssText='' }
+  })
+}
+
+function addUrl(tvcId){
+  const area=document.getElementById('nfc-urlarea-'+tvcId)
+  if(!area) return
+  const idx=area.querySelectorAll('[id^="urlnfcrow-"]').length
+  area.insertAdjacentHTML('beforeend', makeUrlNfcRow(tvcId,idx))
+}
+
+function removeUrl(tvcId, idx){
+  document.getElementById('urlnfcrow-'+tvcId+'-u'+idx)?.remove()
+}
+
+// ── Media / TVC block ──
+function showDropdown(groupId,ch,val){
   const key=groupId+'-'+ch
   const dd=document.getElementById('dd-'+key)
   const existing=Array.from(document.querySelectorAll('#tvcarea-'+ch+'-'+groupId+' .tvc-block-name')).map(e=>e.textContent)
   const items=mockMedia[ch].filter(m=>m.toLowerCase().includes(val.toLowerCase())&&!existing.includes(m))
-  if(!val||!items.length){dd.classList.remove('show');return}
+  if(!val||!items.length){ dd.classList.remove('show'); return }
   dd.innerHTML=items.map(m=>`<div class="dropdown-item" onmousedown="selectMedia('${groupId}','${ch}','${m}')"><div class="di-dot"></div>${m}</div>`).join('')
   dd.classList.add('show')
 }
 
-function selectMedia(groupId, ch, name){
+function selectMedia(groupId,ch,name){
   const key=groupId+'-'+ch
   document.getElementById('dd-'+key).classList.remove('show')
   document.getElementById('search-'+key).value=''
-  addTvcBlock(groupId, ch, name)
-  updateMediaCount(groupId, ch)
-  updateHeaderBadges(groupId)
+  addTvcBlock(groupId,ch,name)
+  updateMediaCount(groupId,ch)
 }
 
-function updateMediaCount(groupId, ch){
+function updateMediaCount(groupId,ch){
   const count=document.querySelectorAll('#tvcarea-'+ch+'-'+groupId+' .tvc-block').length
   const badge=document.getElementById('mediacount-'+ch+'-'+groupId)
   if(!badge) return
@@ -445,264 +746,63 @@ function updateMediaCount(groupId, ch){
   badge.className='media-count-badge'+(count>0?' has-items':'')
 }
 
-function updateHeaderBadges(groupId){
-  const tvCount=document.querySelectorAll('#tvcarea-tv-'+groupId+' .tvc-block').length
-  const posterCount=document.querySelectorAll('#tvcarea-poster-'+groupId+' .tvc-block').length
-  const tvB=document.getElementById('hbadge-tv-'+groupId)
-  const posterB=document.getElementById('hbadge-poster-'+groupId)
-  if(tvB) tvB.style.display=tvCount?'inline-block':'none'
-  if(posterB) posterB.style.display=posterCount?'inline-block':'none'
+function checkEmpty(groupId,ch){
+  const area=document.getElementById('tvcarea-'+ch+'-'+groupId)
+  if(!area.querySelectorAll('.tvc-block').length)
+    area.innerHTML='<div class="empty-hint">Chưa có media nào được chọn</div>'
+  updateGroupTime(groupId)
 }
 
-// ── Timeslot: mỗi khung giờ có nhiều URL, chỉ 1 active/khung, validate overlap ──
-
-function makeUrlNfcRow(tvcId, slotIdx, urlIdx){
-  const uid=`${tvcId}-s${slotIdx}-u${urlIdx}`
-  return `<div class="url-row" id="urlnfcrow-${uid}" style="display:flex;align-items:center;gap:8px;padding:5px 10px;border-bottom:1px solid #EEEEE9;">
-    <input class="url-input" type="text" placeholder="Nhập URL NFC..." id="urlnfc-${uid}"
-      style="flex:1;height:28px;border:1px solid #D8D7D0;border-radius:6px;padding:0 10px;font-size:12px;background:#fff;color:#888;outline:none;">
-    <div class="tog-wrap">
-      <span class="tog-label" id="urntog-lbl-${uid}">Tắt</span>
-      <div class="tog" id="urntog-${uid}" onclick="activateSlotUrl('${tvcId}',${slotIdx},${urlIdx})"><div class="tog-knob"></div></div>
-    </div>
-    <span class="url-del" onclick="removeSlotUrl('${tvcId}',${slotIdx},${urlIdx})">×</span>
-  </div>`
-}
-
-function activateSlotUrl(tvcId, slotIdx, activeUrlIdx){
-  // Chỉ tắt các URL trong cùng 1 khung giờ (slotIdx)
-  const urlArea=document.getElementById('urlarea-'+tvcId+'-s'+slotIdx)
-  if(!urlArea) return
-  urlArea.querySelectorAll('.url-row').forEach((row,i)=>{
-    const inp=row.querySelector('.url-input')
-    const tog=row.querySelector('.tog')
-    const lbl=row.querySelector('.tog-label')
-    if(!inp||!tog||!lbl) return
-    if(i===activeUrlIdx){
-      const isOn=tog.classList.contains('on')
-      if(isOn){
-        tog.classList.remove('on'); lbl.classList.remove('on'); lbl.textContent='Tắt'
-        inp.style.borderColor=''; inp.style.background=''; inp.style.color='#888'
-      } else {
-        tog.classList.add('on'); lbl.classList.add('on'); lbl.textContent='Bật'
-        inp.style.borderColor='#1D9E75'; inp.style.background='#F0FAF5'; inp.style.color='#1a1a1a'
-      }
-    } else {
-      tog.classList.remove('on'); lbl.classList.remove('on'); lbl.textContent='Tắt'
-      inp.style.borderColor=''; inp.style.background=''; inp.style.color='#888'
-    }
-  })
-}
-
-function addSlotUrl(tvcId, slotIdx){
-  const urlArea=document.getElementById('urlarea-'+tvcId+'-s'+slotIdx)
-  if(!urlArea) return
-  const idx=urlArea.querySelectorAll('.url-row').length
-  urlArea.insertAdjacentHTML('beforeend', makeUrlNfcRow(tvcId, slotIdx, idx))
-}
-
-function removeSlotUrl(tvcId, slotIdx, urlIdx){
-  const uid=`${tvcId}-s${slotIdx}-u${urlIdx}`
-  const row=document.getElementById('urlnfcrow-'+uid)
-  if(row) row.remove()
-}
-
-function getSlotData(tvcId){
-  // Trả về mảng các {fromTime, toTime, startDate, endDate} của tất cả khung giờ
-  const container=document.getElementById('tscontainer-'+tvcId)
-  if(!container) return []
-  return Array.from(container.querySelectorAll('.ts-slot')).map((slot,i)=>{
-    return {
-      idx: i,
-      fromTime: document.getElementById('ts-from-'+tvcId+'-'+i)?.value||'',
-      toTime:   document.getElementById('ts-to-'+tvcId+'-'+i)?.value||'',
-      startDate:document.getElementById('ts-start-'+tvcId+'-'+i)?.value||'',
-      endDate:  document.getElementById('ts-end-'+tvcId+'-'+i)?.value||''
-    }
-  })
-}
-
-function timeToMins(t){ const [h,m]=t.split(':').map(Number); return h*60+m }
-
-function slotsOverlap(a, b){
-  // Overlap khi: khoảng ngày giao nhau VÀ khoảng giờ giao nhau
-  if(!a.startDate||!a.endDate||!b.startDate||!b.endDate) return false
-  if(!a.fromTime||!a.toTime||!b.fromTime||!b.toTime) return false
-  const dateOverlap = a.startDate<=b.endDate && b.startDate<=a.endDate
-  if(!dateOverlap) return false
-  const aFrom=timeToMins(a.fromTime), aTo=timeToMins(a.toTime)
-  const bFrom=timeToMins(b.fromTime), bTo=timeToMins(b.toTime)
-  return aFrom<bTo && bFrom<aTo
-}
-
-function validateSlotOverlap(tvcId){
-  const slots=getSlotData(tvcId)
-  // Clear tất cả lỗi trước
-  slots.forEach(s=>{
-    const errEl=document.getElementById('ts-err-'+tvcId+'-'+s.idx)
-    if(errEl){ errEl.textContent=''; errEl.style.display='none' }
-    ;['ts-from-','ts-to-','ts-start-','ts-end-'].forEach(p=>{
-      const el=document.getElementById(p+tvcId+'-'+s.idx)
-      if(el) el.style.borderColor=''
-    })
-  })
-  // Check overlap từng cặp
-  for(let i=0;i<slots.length;i++){
-    for(let j=i+1;j<slots.length;j++){
-      if(slotsOverlap(slots[i],slots[j])){
-        ;[i,j].forEach(k=>{
-          const errEl=document.getElementById('ts-err-'+tvcId+'-'+k)
-          if(errEl){ errEl.textContent='Khung giờ bị trùng với khung khác'; errEl.style.display='block'; errEl.style.color='#E24B4A'; errEl.style.fontSize='11px' }
-          ;['ts-from-','ts-to-','ts-start-','ts-end-'].forEach(p=>{
-            const el=document.getElementById(p+tvcId+'-'+k)
-            if(el) el.style.borderColor='#E24B4A'
-          })
-        })
-      }
-    }
-  }
-}
-
-function makeTimeslotRow(tvcId, idx, gsv, gev, showNfc){
-  const mn=gsv||'', mx=gev||''
-  const nfcHtml=showNfc?`
-    <div style="border-top:1px solid #EEEEE9;">
-      <div id="urlarea-${tvcId}-s${idx}">
-        ${makeUrlNfcRow(tvcId, idx, 0)}
-      </div>
-      <div style="padding:5px 10px;">
-        <button onclick="addSlotUrl('${tvcId}',${idx})"
-          style="font-size:11px;color:#185FA5;cursor:pointer;padding:3px 8px;border-radius:6px;border:1px solid #B5D4F4;background:#fff;font-family:inherit;">
-          + Thêm URL NFC
-        </button>
-      </div>
-    </div>`:''
-  return `<div class="ts-slot" id="tsrow-${tvcId}-${idx}" style="background:#fff;border:1px solid #E5E4DE;border-radius:8px;margin-bottom:8px;overflow:hidden;">
-    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:9px 12px;">
-      <span class="ts-label">Khung giờ</span>
-      <input class="ts-time" type="time" value="00:00" id="ts-from-${tvcId}-${idx}" onchange="validateSlotOverlap('${tvcId}')">
-      <span class="ts-label">tới</span>
-      <input class="ts-time" type="time" value="23:59" id="ts-to-${tvcId}-${idx}" onchange="validateSlotOverlap('${tvcId}')">
-      <span class="ts-label">Từ ngày</span>
-      <div style="position:relative"><input class="ts-date" type="date" id="ts-start-${tvcId}-${idx}" min="${mn}" max="${mx}" onchange="validateSlotOverlap('${tvcId}')"></div>
-      <span class="ts-label">tới ngày</span>
-      <div style="position:relative"><input class="ts-date" type="date" id="ts-end-${tvcId}-${idx}" min="${mn}" max="${mx}" onchange="validateSlotOverlap('${tvcId}')"></div>
-      <span class="ts-del" onclick="removeTimeslot('${tvcId}',${idx})" style="margin-left:auto">×</span>
-    </div>
-    <div id="ts-err-${tvcId}-${idx}" style="display:none;padding:0 12px 6px;"></div>
-    ${nfcHtml}
-  </div>`
-}
-
-function makeTimeslotRowNoNfc(tvcId, idx, gsv, gev){
-  return makeTimeslotRow(tvcId, idx, gsv, gev, false)
-}
-
-function addTimeslot(tvcId){
-  const container=document.getElementById('tscontainer-'+tvcId)
-  const idx=container.querySelectorAll('.ts-slot').length
-  const parts=tvcId.split('-')
-  const groupId=parts[0], ch=parts[1]
-  const gsv=document.getElementById('gstart-'+groupId)?.value||''
-  const gev=document.getElementById('gend-'+groupId)?.value||''
-  const nfcOn=nfcState[groupId+'-'+ch]||false
-  container.insertAdjacentHTML('beforeend', makeTimeslotRow(tvcId, idx, gsv, gev, nfcOn))
-  // Áp dụng min/max ngay sau khi thêm
-  const tsStart=document.getElementById('ts-start-'+tvcId+'-'+idx)
-  const tsEnd=document.getElementById('ts-end-'+tvcId+'-'+idx)
-  if(tsStart){ tsStart.min=gsv; tsStart.max=gev }
-  if(tsEnd){ tsEnd.min=gsv; tsEnd.max=gev }
-}
-
-function removeTimeslot(tvcId, idx){
-  const row=document.getElementById('tsrow-'+tvcId+'-'+idx)
-  if(row){ row.remove(); validateSlotOverlap(tvcId) }
-}
-
-function addTvcBlock(groupId, ch, name){
+function addTvcBlock(groupId,ch,name){
   const area=document.getElementById('tvcarea-'+ch+'-'+groupId)
   const empty=area.querySelector('.empty-hint')
   if(empty) empty.remove()
   const tvcId=groupId+'-'+ch+'-'+Date.now()
-  const key=groupId+'-'+ch
-  const nfcOn=nfcState[key]||false
-  const gsv=document.getElementById('gstart-'+groupId)?.value||''
-  const gev=document.getElementById('gend-'+groupId)?.value||''
-  const dotCls=ch==='tv'?'tvc-dot-tv':'tvc-dot-poster'
+  const isTV=ch==='tv'
+  const nfcOn=isTV?(nfcState[groupId+'-'+ch]||false):true
+  const dotCls=isTV?'tvc-dot-tv':'tvc-dot-poster'
   const block=document.createElement('div')
   block.className='tvc-block'; block.id='tvcblock-'+tvcId
   block.innerHTML=`
     <div class="tvc-block-header">
-      <div class="tvc-block-left">
-        <div class="${dotCls}"></div>
-        <div class="tvc-block-name">${name}</div>
-      </div>
-      <div class="tvc-block-right">
-        <span class="tvc-del-btn" onclick="document.getElementById('tvcblock-${tvcId}').remove();checkEmpty('${groupId}','${ch}');updateMediaCount('${groupId}','${ch}');updateHeaderBadges('${groupId}')">Xóa</span>
-      </div>
+      <div class="tvc-block-left"><div class="${dotCls}"></div><div class="tvc-block-name">${name}</div></div>
+      <span class="tvc-del-btn" onclick="document.getElementById('tvcblock-${tvcId}').remove();checkEmpty('${groupId}','${ch}');updateMediaCount('${groupId}','${ch}')">Xóa</span>
     </div>
     <div class="timeslot-section">
       <div class="timeslot-header">
         <span class="timeslot-title">Khung giờ phát sóng</span>
         <button class="add-slot-btn" onclick="addTimeslot('${tvcId}')">+ Thêm khung giờ</button>
       </div>
-      <div id="tscontainer-${tvcId}">
-        ${makeTimeslotRow(tvcId, 0, gsv, gev, nfcOn)}
-      </div>
+      <div id="tscontainer-${tvcId}">${makeTimeslotRow(tvcId,0)}</div>
     </div>
-    <div class="nfc-locked-notice" style="display:${nfcOn?'none':'flex'}">NFC chưa được kích hoạt cho gói tính năng này</div>`
+    <div id="nfc-section-${tvcId}" style="display:${nfcOn?'block':'none'}">
+      <div style="padding:8px 14px 4px;display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-size:11px;font-weight:500;color:#666">URL NFC</span>
+        <button onclick="addUrl('${tvcId}')" style="font-size:11px;color:#185FA5;cursor:pointer;padding:3px 8px;border-radius:6px;border:1px solid #B5D4F4;background:#fff;font-family:inherit;">+ Thêm URL</button>
+      </div>
+      <div id="nfc-urlarea-${tvcId}" class="nfc-url-section">${makeUrlNfcRow(tvcId,0)}</div>
+    </div>
+    ${isTV?`<div class="nfc-locked-notice" id="nfc-locked-${tvcId}" style="display:${nfcOn?'none':'flex'}">NFC chưa được kích hoạt cho gói tính năng này</div>`:''}`
   area.appendChild(block)
+  updateGroupTime(groupId)
 }
 
-function addUrlRow(tvcId){
-  const list=document.getElementById('urllist-'+tvcId)
-  list.insertAdjacentHTML('beforeend',makeUrlRow(tvcId,list.querySelectorAll('.url-row').length))
-  list.style.display='block'
-}
-
-function activateUrl(tvcId,activeIdx){
-  document.getElementById('urllist-'+tvcId).querySelectorAll('.url-row').forEach((row,i)=>{
-    const inp=row.querySelector('.url-input'),tog=row.querySelector('.tog'),lbl=row.querySelector('.tog-label')
-    if(i===activeIdx){
-      const on=tog.classList.contains('on')
-      if(on){tog.classList.remove('on');lbl.classList.remove('on');lbl.textContent='Tắt';inp.classList.remove('active-input')}
-      else{tog.classList.add('on');lbl.classList.add('on');lbl.textContent='Bật';inp.classList.add('active-input')}
-    } else { tog.classList.remove('on');lbl.classList.remove('on');lbl.textContent='Tắt';inp.classList.remove('active-input') }
-  })
-}
-
-function removeUrl(tvcId,idx){
-  const row=document.getElementById('urlrow-'+tvcId+'-'+idx)
-  if(row) row.remove()
-  const list=document.getElementById('urllist-'+tvcId)
-  if(list&&list.querySelectorAll('.url-row').length===0) list.style.display='none'
-}
-
-function checkEmpty(groupId, ch){
-  const area=document.getElementById('tvcarea-'+ch+'-'+groupId)
-  if(!area.querySelectorAll('.tvc-block').length)
-    area.innerHTML='<div class="empty-hint">Chưa có media nào được chọn</div>'
-}
-
-function formatNum(key, val){
+function formatNum(key,val){
   const text=document.getElementById('numtext-'+key)
   if(!text) return
   const num=parseInt(val.replace(/\D/g,''),10)
-  if(!val||isNaN(num)){ text.textContent='Nhập số thiết bị'; text.style.color='#bbb' }
-  else {
-    // Dấu phẩy phân tách hàng nghìn
-    text.textContent=num.toString().replace(/\B(?=(\d{3})+(?!\d))/g,',')
-    text.style.color='#1a1a1a'
-  }
+  if(!val||isNaN(num)){ text.textContent=key.includes('poster')?'Nhập số vị trí':'Nhập số thiết bị'; text.style.color='#bbb' }
+  else { text.textContent=num.toString().replace(/\B(?=(\d{3})+(?!\d))/g,','); text.style.color='#1a1a1a' }
 }
 
-function buildChPanel(groupId, ch){
-  const key=groupId+'-'+ch
-  const label=ch==='tv'?'Media TV':'Media Poster'
+// ── Build channel panels ──
+function buildTvPanel(groupId){
+  const key=groupId+'-tv'
   return `
+    <div class="ch-panel-title"><div class="ch-panel-title-dot tv"></div>Cấu hình kênh TV</div>
     <div class="field-grid-2" style="margin-bottom:14px">
       <div class="field"><label>Gói tính năng <span class="req">*</span></label>
-        <select id="pkg-${key}" onchange="onPackageChange('${groupId}','${ch}',this.value)">
+        <select id="pkg-${key}" onchange="onPackageChange('${groupId}','tv',this.value)">
           <option value="">Chọn gói</option>
           <option value="standard">Tiêu chuẩn</option>
           <option value="advanced">Nâng cao</option>
@@ -726,39 +826,84 @@ function buildChPanel(groupId, ch){
         </div>
         <div class="switch-wrap">
           <span class="switch-text" id="switchtext-${key}">Tắt</span>
-          <div class="switch" id="switch-${key}" onclick="toggleNfc('${groupId}','${ch}')"><div class="switch-knob"></div></div>
+          <div class="switch" id="switch-${key}" onclick="toggleNfc('${groupId}','tv')"><div class="switch-knob"></div></div>
         </div>
       </div>
     </div>
     <div class="media-label-row">
-      <span class="media-label">${label} <span class="req">*</span></span>
-      <span class="media-count-badge" id="mediacount-${ch}-${groupId}">Danh sách media đã chọn — Đã chọn 0 Media</span>
+      <span class="media-label">Media TV <span class="req">*</span></span>
+      <span class="media-count-badge" id="mediacount-tv-${groupId}">Danh sách media đã chọn — Đã chọn 0 Media</span>
     </div>
     <div class="media-search-wrap">
       <input id="search-${key}" class="media-search" type="text" placeholder="Chọn gói tính năng trước..." disabled
-        oninput="showDropdown('${groupId}','${ch}',this.value)"
+        oninput="showDropdown('${groupId}','tv',this.value)"
         onblur="setTimeout(()=>{const d=document.getElementById('dd-${key}');if(d)d.classList.remove('show')},150)">
       <div id="dd-${key}" class="dropdown"></div>
     </div>
-    <div id="tvcarea-${ch}-${groupId}"><div class="empty-hint">Chưa có media nào được chọn</div></div>`
+    <div id="tvcarea-tv-${groupId}"><div class="empty-hint">Chưa có media nào được chọn</div></div>`
 }
 
+function buildPosterPanel(groupId){
+  const key=groupId+'-poster'
+  return `
+    <div class="ch-panel-title"><div class="ch-panel-title-dot poster"></div>Cấu hình kênh Poster</div>
+    <div class="field-grid-2" style="margin-bottom:14px">
+      <div class="field"><label>Số vị trí theo hợp đồng <span class="req">*</span></label>
+        <div class="num-input-wrap">
+          <div class="num-display" onclick="this.querySelector('input').focus()">
+            <span id="numtext-${key}" style="color:#bbb">Nhập số vị trí</span>
+            <input class="num-real" type="number" min="0" oninput="formatNum('${key}',this.value)">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="nfc-always-on">
+      <div class="addon-left">
+        <div><div class="nfc-always-label">Tính năng NFC</div><div class="nfc-always-desc">Mặc định bật — tất cả media Poster</div></div>
+        <span class="nfc-always-badge">Mặc định</span>
+      </div>
+      <div class="switch-wrap">
+        <span class="switch-text on">Bật</span>
+        <div class="switch on" style="cursor:default;opacity:0.7"><div class="switch-knob"></div></div>
+      </div>
+    </div>
+    <div class="media-label-row">
+      <span class="media-label">Media Poster <span class="req">*</span></span>
+      <span class="media-count-badge" id="mediacount-poster-${groupId}">Danh sách media đã chọn — Đã chọn 0 Media</span>
+    </div>
+    <div class="media-search-wrap">
+      <input id="search-${key}" class="media-search" type="text" placeholder="Tìm kiếm và chọn Media Poster..."
+        oninput="showDropdown('${groupId}','poster',this.value)"
+        onblur="setTimeout(()=>{const d=document.getElementById('dd-${key}');if(d)d.classList.remove('show')},150)">
+      <div id="dd-${key}" class="dropdown"></div>
+    </div>
+    <div id="tvcarea-poster-${groupId}"><div class="empty-hint">Chưa có media nào được chọn</div></div>`
+}
+
+// ── Add group ──
 function addGroup(){
   const id='g'+(++groupCounter)
   const container=document.getElementById('all-groups')
   const num=container.querySelectorAll('.group-card').length+1
-  ;['tv','poster'].forEach(ch=>{ nfcState[id+'-'+ch]=false; pkgState[id+'-'+ch]='' })
-
+  chState[id]={tv:false,poster:false}
+  nfcState[id+'-tv']=false; nfcState[id+'-poster']=true
+  pkgState[id+'-tv']=''; pkgState[id+'-poster']=''
   const div=document.createElement('div')
   div.className='group-card'; div.id='group-'+id
   div.innerHTML=`
     <div class="group-header" onclick="toggleGroup('${id}')">
       <div class="group-header-left">
         <div class="group-index">${num}</div>
-        <div style="display:flex;align-items:center;gap:4px">
-          <div class="group-name-preview">Nhóm quảng cáo ${num}</div>
-          <span class="ch-badge-tv" id="hbadge-tv-${id}" style="display:none">TV</span>
-          <span class="ch-badge-poster" id="hbadge-poster-${id}" style="display:none">Poster</span>
+        <div class="group-title-block">
+          <div class="group-name-row">
+            <div class="group-name-preview">Nhóm quảng cáo ${num}</div>
+            <span class="ch-ind ch-ind-tv" id="hbadge-tv-${id}" style="display:none">TV</span>
+            <span class="ch-ind ch-ind-poster" id="hbadge-poster-${id}" style="display:none">Poster</span>
+          </div>
+          <div class="group-time-row">
+            <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="#bbb" stroke-width="1.2"/><path d="M6 3.5V6l1.5 1.5" stroke="#bbb" stroke-width="1.2" stroke-linecap="round"/></svg>
+            <span id="gtime-${id}" style="color:#bbb">Chưa có thời gian</span>
+          </div>
         </div>
       </div>
       <div class="group-header-right">
@@ -769,43 +914,35 @@ function addGroup(){
     <div class="group-body open" id="body-${id}">
       <div class="field-row-4">
         <div class="field"><label>Tên nhóm quảng cáo <span class="req">*</span></label>
-          <input type="text" placeholder="Nhập tên nhóm"
-            oninput="document.querySelector('#group-${id} .group-name-preview').textContent=this.value||'Nhóm quảng cáo ${num}'">
+          <input type="text" placeholder="Nhập tên nhóm" oninput="document.querySelector('#group-${id} .group-name-preview').textContent=this.value||'Nhóm quảng cáo ${num}'">
         </div>
         <div class="field"><label>Khu vực <span class="req">*</span></label>
-          <select><option value="">Chọn khu vực</option><option value="all">Toàn Quốc</option><option value="north">Miền Bắc</option><option value="south">Miền Nam</option></select>
+          <select><option value="">Chọn khu vực</option><option>Toàn Quốc</option><option>Miền Bắc</option><option>Miền Nam</option></select>
         </div>
         <div class="field"><label>Loại tòa nhà <span class="req">*</span></label>
-          <select><option value="">Loại tòa nhà</option><option value="all">Tất cả</option><option value="apartment">Chung cư</option><option value="office">Văn phòng</option></select>
+          <select><option value="">Loại tòa nhà</option><option>Tất cả</option><option>Chung cư</option><option>Văn phòng</option></select>
         </div>
         <div class="field"><label>Số slot <span class="req">*</span></label>
           <input type="number" value="1" min="1">
         </div>
       </div>
-      <div class="field-grid-2" style="margin-bottom:16px">
-        <div class="field">
-          <label>Ngày bắt đầu nhóm <span class="req">*</span></label>
-          <div class="date-wrap"><input type="date" id="gstart-${id}" onchange="onGroupDateChange('${id}')"></div>
-          <span class="field-error" id="gerr-start-${id}"></span>
-        </div>
-        <div class="field">
-          <label>Ngày kết thúc nhóm <span class="req">*</span></label>
-          <div class="date-wrap"><input type="date" id="gend-${id}" onchange="onGroupDateChange('${id}')"></div>
-          <span class="field-error" id="gerr-end-${id}"></span>
-        </div>
+      <div class="ch-select-label">Kênh chạy <span class="req">*</span></div>
+      <div class="ch-toggle-row">
+        <button class="ch-toggle-btn" id="ch-btn-tv-${id}" onclick="toggleChannel('${id}','tv')"><div class="ch-toggle-dot"></div> TV</button>
+        <button class="ch-toggle-btn" id="ch-btn-poster-${id}" onclick="toggleChannel('${id}','poster')"><div class="ch-toggle-dot"></div> Poster</button>
       </div>
-
-      <div class="ch-label">Cấu hình theo kênh</div>
-      <div class="ch-tabs">
-        <button class="ch-tab-btn active-tv" onclick="switchChTab('${id}','tv',this)">TV</button>
-        <button class="ch-tab-btn" onclick="switchChTab('${id}','poster',this)">Poster</button>
-      </div>
-      <div id="ch-panel-tv-${id}" class="ch-panel active">${buildChPanel(id,'tv')}</div>
-      <div id="ch-panel-poster-${id}" class="ch-panel">${buildChPanel(id,'poster')}</div>
+      <div class="ch-panel-wrap" id="ch-panel-wrap-tv-${id}">${buildTvPanel(id)}</div>
+      <div id="ch-divider-${id}" style="display:none" class="ch-panel-divider"></div>
+      <div class="ch-panel-wrap" id="ch-panel-wrap-poster-${id}">${buildPosterPanel(id)}</div>
     </div>`
   container.appendChild(div)
-  applyGroupDateRange(id)
 }
+
+function toggleGroup(id){
+  document.getElementById('body-'+id).classList.toggle('open')
+  document.getElementById('arrow-'+id).classList.toggle('open')
+}
+function removeGroup(id){ document.getElementById('group-'+id).remove() }
 </script>
 </body>
 </html>
