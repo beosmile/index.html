@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TVC Ticker Playlist</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@700&family=Roboto:wght@700&family=Oswald:wght@600&family=Bebas+Neue&family=Montserrat:wght@700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f5;color:#1a1a1a;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:28px 24px;gap:20px;}
+header{text-align:center;}
+header h1{font-size:17px;font-weight:600;color:#111;}
+header p{font-size:12px;color:#999;margin-top:3px;}
+.main{display:flex;gap:24px;align-items:flex-start;width:100%;max-width:1060px;}
+
+/* TVC Screen */
+.sc{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:6px;}
+.sl{font-size:11px;color:#aaa;letter-spacing:.5px;}
+#tvc{width:450px;height:800px;position:relative;border-radius:10px;overflow:hidden;border:2px solid #2a2a2a;background:#0c0c0c;}
+#av{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;z-index:1;}
+#no-vid{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer;}
+#no-vid svg{opacity:.1;}
+#no-vid span{font-size:10px;color:rgba(255,255,255,.2);text-align:center;letter-spacing:.8px;line-height:1.8;}
+#to{position:absolute;bottom:0;z-index:5;overflow:hidden;}
+#ts{position:absolute;white-space:nowrap;font-weight:700;letter-spacing:.4px;padding:0 6px;}
+
+/* Controls */
+.cc{flex:1;min-width:0;display:flex;flex-direction:column;gap:11px;}
+.lbl{display:block;font-size:13px;color:#555;margin-bottom:4px;}
+.lbl b{font-weight:600;color:#111;}
+.lbl small{font-size:11px;color:#aaa;}
+textarea,input[type=range]{width:100%;}
+textarea{resize:vertical;font-size:13px;border:1px solid #ddd;border-radius:6px;padding:8px 10px;font-family:inherit;background:#fff;color:#111;outline:none;}
+textarea:focus{border-color:#888;}
+input[type=range]{accent-color:#333;cursor:pointer;}
+.pills{display:flex;gap:5px;flex-wrap:wrap;}
+.pill{flex:1;padding:5px 3px;font-size:11px;text-align:center;cursor:pointer;border:1px solid #ddd;color:#777;background:#fff;border-radius:6px;white-space:nowrap;user-select:none;transition:all .12s;}
+.pill:hover{border-color:#bbb;color:#333;}
+.pill.on{border-color:#333;color:#111;background:#f0f0f0;font-weight:500;}
+.sws{display:flex;gap:7px;flex-wrap:wrap;}
+.sw{width:20px;height:20px;border-radius:50%;cursor:pointer;border:2px solid transparent;}
+.sw.on{outline:2.5px solid #111;outline-offset:2px;}
+.row2{display:flex;gap:12px;}
+.row2>div{flex:1;}
+.sep{border:none;border-top:1px solid #eee;margin:2px 0;}
+.box{background:#f8f8f8;border:1px solid #eee;border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:9px;}
+.box-title{font-size:11px;font-weight:600;color:#888;letter-spacing:.5px;text-transform:uppercase;}
+#cr,#dark-row{display:none;}
+
+/* Playlist */
+.pl-header{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.pl-count{font-size:12px;color:#888;font-weight:500;}
+#pl-list{display:flex;flex-direction:column;gap:4px;max-height:168px;overflow-y:auto;border:1px solid #eee;border-radius:6px;padding:4px;}
+#pl-list:empty{display:none;}
+.pl-item{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:5px;cursor:pointer;transition:background .1s;border:1px solid transparent;}
+.pl-item:hover{background:#f0f0f0;}
+.pl-item.active{background:#e8f0fe;border-color:#c5d8fb;}
+.pl-num{font-size:11px;color:#bbb;font-weight:500;flex-shrink:0;width:16px;text-align:center;}
+.pl-item.active .pl-num{color:#2563eb;}
+.pl-name{font-size:12px;color:#444;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;}
+.pl-item.active .pl-name{color:#1d4ed8;font-weight:500;}
+.pl-playing{font-size:10px;color:#2563eb;flex-shrink:0;}
+
+.nav-btns{display:flex;gap:6px;}
+.btn{flex:1;padding:8px 4px;font-size:12px;font-weight:500;border:1px solid #ccc;border-radius:6px;background:#fff;color:#111;cursor:pointer;font-family:inherit;text-align:center;}
+.btn:hover{background:#f5f5f5;}
+.btn:disabled{opacity:.35;cursor:default;}
+.btn.pri{background:#111;color:#fff;border-color:#111;}
+.btn.pri:hover{background:#333;}
+.btn.ico{padding:8px 12px;font-size:15px;flex:0 0 auto;}
+.btn.sm{font-size:11px;padding:6px 10px;flex:0 0 auto;white-space:nowrap;}
+
+.auto-row{display:flex;align-items:center;gap:8px;font-size:12px;color:#666;}
+.toggle{width:32px;height:18px;border-radius:9px;border:none;cursor:pointer;position:relative;flex-shrink:0;transition:background .2s;background:#ccc;}
+.toggle.on{background:#2563eb;}
+.toggle::after{content:'';position:absolute;width:14px;height:14px;border-radius:50%;background:#fff;top:2px;left:2px;transition:left .2s;}
+.toggle.on::after{left:16px;}
+
+footer{font-size:12px;color:#ccc;text-align:center;}
+
+.style-btn{width:34px;height:34px;border:1px solid #ddd;border-radius:6px;background:#fff;color:#555;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .12s;}
+.style-btn:hover{border-color:#bbb;color:#111;}
+.style-btn.on{border-color:#333;background:#111;color:#fff;}
+</style>
+</head>
+<body>
+<header>
+  <h1>TVC Ticker Playlist</h1>
+  <p>1080 × 1920 px · thu nhỏ 42%</p>
+</header>
+
+<div class="main">
+  <!-- Screen -->
+  <div class="sc">
+    <span class="sl">PREVIEW</span>
+    <div id="tvc">
+      <video id="av" muted playsinline></video>
+      <div id="no-vid" onclick="document.getElementById('vup').click()">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5">
+          <rect x="2" y="3" width="20" height="14" rx="2"/><path d="m10 8 5 4-5 4V8Z"/>
+          <path d="M8 21h8M12 17v4"/>
+        </svg>
+        <span>NHẤN ĐỂ CHỌN<br>VIDEO</span>
+      </div>
+      <div id="to"><div id="ts"></div></div>
+    </div>
+    <span class="sl">Thu nhỏ 42%</span>
+  </div>
+
+  <!-- Controls -->
+  <div class="cc">
+
+    <!-- Playlist -->
+    <div class="box">
+      <div class="pl-header">
+        <span class="box-title">Playlist TVC</span>
+        <span class="pl-count" id="pl-count"></span>
+      </div>
+      <div>
+        <button class="btn sm" onclick="document.getElementById('vup').click()">+ Chọn video</button>
+        <input type="file" id="vup" accept="video/*" multiple style="display:none;">
+      </div>
+      <div id="pl-list"></div>
+      <div class="nav-btns" id="nav-btns" style="display:none;">
+        <button class="btn ico" id="btn-prev" title="Video trước" disabled>⏮</button>
+        <button class="btn pri" id="btn-pause">⏸ Tạm dừng</button>
+        <button class="btn ico" id="btn-next" title="Video kế" disabled>⏭</button>
+      </div>
+      <div class="auto-row" id="auto-row" style="display:none;">
+        <button class="toggle" id="auto-tog" onclick="toggleAuto()"></button>
+        <span>Tự chuyển khi hết video</span>
+        <span id="loop-label" style="margin-left:auto;font-size:11px;color:#aaa;">Lặp lại</span>
+        <button class="toggle" id="loop-tog" onclick="toggleLoop()"></button>
+      </div>
+    </div>
+
+    <!-- Ticker text -->
+    <div>
+      <label class="lbl">Nội dung chạy chữ</label>
+      <textarea id="ti" rows="3">ĐÂY LÀ DEMO HƯỚNG DẪN QUÉT NFC</textarea>
+    </div>
+
+    <div class="row2">
+      <div>
+        <label class="lbl">Cỡ chữ — <b id="fsv">9</b>px <small>(≈<span id="fsvr">36</span>px)</small></label>
+        <input type="range" id="fsr" min="7" max="18" value="9" step="1">
+      </div>
+      <div>
+        <label class="lbl">Tốc độ — <b id="sv">50</b>px/s</label>
+        <input type="range" id="sr" min="20" max="250" value="50" step="5">
+      </div>
+    </div>
+
+    <div class="row2" style="align-items:flex-end;">
+      <div>
+        <label class="lbl">Font chữ</label>
+        <div class="pills">
+          <div class="pill ff" data-ff="system-ui">Mặc định</div>
+          <div class="pill ff on" data-ff="'Inter',sans-serif">Inter</div>
+          <div class="pill ff" data-ff="Roboto,sans-serif">Roboto</div>
+          <div class="pill ff" data-ff="Oswald,sans-serif">Oswald</div>
+          <div class="pill ff" data-ff="'Bebas Neue',sans-serif">Bebas</div>
+          <div class="pill ff" data-ff="Montserrat,sans-serif">Montserrat</div>
+        </div>
+      </div>
+      <div style="flex:0 0 auto;">
+        <label class="lbl">Kiểu chữ</label>
+        <div style="display:flex;gap:6px;">
+          <button id="btn-bold" class="style-btn on" title="Đậm" onclick="toggleBold()"><b>B</b></button>
+          <button id="btn-italic" class="style-btn" title="Nghiêng" onclick="toggleItalic()"><i>I</i></button>
+        </div>
+      </div>
+    </div>
+
+    <hr class="sep">
+
+    <div class="box">
+      <span class="box-title">Nền ticker</span>
+      <div>
+        <label class="lbl" style="margin-bottom:6px;">Kiểu nền</label>
+        <div class="pills">
+          <div class="pill bg" data-m="clear">Trong suốt</div>
+          <div class="pill bg on" data-m="dark">Mờ tối</div>
+          <div class="pill bg" data-m="color">Màu đặc</div>
+          <div class="pill bg" data-m="gradient">Gradient</div>
+        </div>
+      </div>
+      <div id="dark-row">
+        <label class="lbl" style="margin-bottom:6px;">Màu nền mờ</label>
+        <div class="sws">
+          <div class="sw dc on" data-dc="0,0,0" style="background:#000;"></div>
+          <div class="sw dc" data-dc="160,0,0" style="background:#a00;"></div>
+          <div class="sw dc" data-dc="0,30,100" style="background:#001e64;"></div>
+          <div class="sw dc" data-dc="0,60,20" style="background:#003c14;"></div>
+          <div class="sw dc" data-dc="60,0,100" style="background:#3c0064;"></div>
+          <div class="sw dc" data-dc="190,110,0" style="background:#be6e00;"></div>
+          <div class="sw dc" data-dc="255,255,255" style="background:#fff;border-color:#ccc;"></div>
+        </div>
+      </div>
+      <div id="cr">
+        <label class="lbl" style="margin-bottom:6px;">Màu nền đặc</label>
+        <div class="sws">
+          <div class="sw bc on" data-bc="204,0,0" style="background:#CC0000;"></div>
+          <div class="sw bc" data-bc="232,92,0" style="background:#E85C00;"></div>
+          <div class="sw bc" data-bc="0,85,165" style="background:#0055A5;"></div>
+          <div class="sw bc" data-bc="0,107,60" style="background:#006B3C;"></div>
+          <div class="sw bc" data-bc="91,45,142" style="background:#5B2D8E;"></div>
+          <div class="sw bc" data-bc="26,26,26" style="background:#1A1A1A;"></div>
+        </div>
+      </div>
+      <div class="row2">
+        <div>
+          <label class="lbl">Độ trong suốt — <b id="opv">20</b>%</label>
+          <input type="range" id="opr" min="5" max="95" value="20" step="5">
+        </div>
+        <div>
+          <label class="lbl">Chiều cao — <b id="hv">15</b>px</label>
+          <input type="range" id="hr" min="10" max="70" value="15" step="1">
+        </div>
+      </div>
+      <div>
+        <label class="lbl">Độ rộng — <b id="wv">100</b>%</label>
+        <input type="range" id="wr" min="30" max="100" value="100" step="5">
+      </div>
+    </div>
+
+    <div>
+      <label class="lbl">Màu chữ</label>
+      <div class="sws">
+        <div class="sw tc on" data-tc="255,255,255" style="background:#fff;border-color:#ccc;"></div>
+        <div class="sw tc" data-tc="255,224,64" style="background:#FFE040;"></div>
+        <div class="sw tc" data-tc="102,255,204" style="background:#66FFCC;"></div>
+        <div class="sw tc" data-tc="255,136,136" style="background:#FF8888;"></div>
+        <div class="sw tc" data-tc="0,0,0" style="background:#000;border-color:#ccc;"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<footer>Chicilon Media — C-Player TVC Ticker Demo</footer>
+
+<script>
+const av=document.getElementById('av');
+const to=document.getElementById('to'),ts=document.getElementById('ts');
+const ti=document.getElementById('ti');
+const noVid=document.getElementById('no-vid');
+const plList=document.getElementById('pl-list');
+const plCount=document.getElementById('pl-count');
+const navBtns=document.getElementById('nav-btns');
+const autoRow=document.getElementById('auto-row');
+const btnPrev=document.getElementById('btn-prev');
+const btnNext=document.getElementById('btn-next');
+const btnPause=document.getElementById('btn-pause');
+const autoTog=document.getElementById('auto-tog');
+const loopTog=document.getElementById('loop-tog');
+const vup=document.getElementById('vup');
+const crEl=document.getElementById('cr'),darkRow=document.getElementById('dark-row');
+
+// Ticker state
+const W=450;
+let posX=W,spd=50,paused=false,going=true,lt=null;
+let bgMode='dark',darkRGB='0,0,0',solidRGB='204,0,0',tRGB='255,255,255';
+let fSize=9,fFamily="'Inter',sans-serif";
+let fontBold=true,fontItalic=false;
+function toggleBold(){fontBold=!fontBold;document.getElementById('btn-bold').classList.toggle('on',fontBold);applyFontStyle();}
+function toggleItalic(){fontItalic=!fontItalic;document.getElementById('btn-italic').classList.toggle('on',fontItalic);applyFontStyle();}
+function applyFontStyle(){ts.style.fontWeight=fontBold?'700':'400';ts.style.fontStyle=fontItalic?'italic':'normal';}
+let opacity=0.2,barH=15,barW=100;
+
+// Playlist state
+let playlist=[]; // [{name, url}]
+let curIdx=0;
+let autoAdvance=true;
+let loopPlaylist=true;
+
+// === PLAYLIST ===
+vup.onchange=function(e){
+  const files=Array.from(e.target.files);
+  if(!files.length) return;
+  // Revoke old URLs
+  playlist.forEach(v=>URL.revokeObjectURL(v.url));
+  playlist=files.map(f=>({name:f.name,url:URL.createObjectURL(f)}));
+  curIdx=0;
+  renderPlaylist();
+  playVideo(0);
+};
+
+function playVideo(idx){
+  if(!playlist.length) return;
+  curIdx=idx;
+  av.src=playlist[idx].url;
+  av.loop=false;
+  av.play().catch(()=>{});
+  noVid.style.display='none';
+  av.style.display='block';
+  renderPlaylist();
+  updateNavBtns();
+}
+
+function renderPlaylist(){
+  plList.innerHTML='';
+  if(!playlist.length){plCount.textContent='';return;}
+  plCount.textContent=`${curIdx+1} / ${playlist.length}`;
+  navBtns.style.display='flex';
+  autoRow.style.display='flex';
+  playlist.forEach((v,i)=>{
+    const item=document.createElement('div');
+    item.className='pl-item'+(i===curIdx?' active':'');
+    const short=v.name.replace(/\.[^.]+$/,'');
+    const label=short.length>32?short.slice(0,30)+'…':short;
+    item.innerHTML=`<span class="pl-num">${i+1}</span><span class="pl-name">${label}</span>${i===curIdx?'<span class="pl-playing">▶</span>':''}`;
+    item.onclick=()=>playVideo(i);
+    plList.appendChild(item);
+  });
+  // Scroll active into view
+  const active=plList.querySelector('.active');
+  if(active) active.scrollIntoView({block:'nearest'});
+}
+
+function updateNavBtns(){
+  btnPrev.disabled=curIdx===0;
+  btnNext.disabled=curIdx===playlist.length-1&&!loopPlaylist;
+}
+
+function goNext(){
+  if(!playlist.length) return;
+  const next=(curIdx+1)%playlist.length;
+  if(next===0&&!loopPlaylist) return;
+  playVideo(next);
+}
+function goPrev(){
+  if(!playlist.length) return;
+  const prev=(curIdx-1+playlist.length)%playlist.length;
+  playVideo(prev);
+}
+
+function toggleAuto(){
+  autoAdvance=!autoAdvance;
+  autoTog.classList.toggle('on',autoAdvance);
+}
+function toggleLoop(){
+  loopPlaylist=!loopPlaylist;
+  loopTog.classList.toggle('on',loopPlaylist);
+  updateNavBtns();
+}
+
+// Auto-advance on video end
+av.addEventListener('ended',()=>{
+  if(autoAdvance) goNext();
+  else if(loopPlaylist) av.play();
+});
+
+// Init toggles
+autoTog.classList.add('on');
+loopTog.classList.add('on');
+
+btnPrev.onclick=goPrev;
+btnNext.onclick=goNext;
+btnPause.onclick=()=>{
+  if(av.paused){av.play();btnPause.textContent='⏸ Tạm dừng';}
+  else{av.pause();btnPause.textContent='▶ Tiếp tục';}
+};
+
+// Also click screen to open file picker (when empty)
+document.getElementById('tvc').addEventListener('click',e=>{
+  if(playlist.length===0) vup.click();
+});
+
+// === TICKER ===
+function applyBg(){
+  if(bgMode==='clear'){
+    to.style.background='transparent';
+    ts.style.textShadow='-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000,0 0 8px rgba(0,0,0,.9)';
+  } else if(bgMode==='dark'){
+    to.style.background='rgba('+darkRGB+','+opacity+')';ts.style.textShadow='none';
+  } else if(bgMode==='color'){
+    to.style.background='rgba('+solidRGB+','+opacity+')';ts.style.textShadow='none';
+  } else if(bgMode==='gradient'){
+    to.style.background='linear-gradient(to bottom,rgba(0,0,0,0),rgba(0,0,0,'+opacity+'))';
+    ts.style.textShadow='0 1px 4px rgba(0,0,0,.7)';
+  }
+}
+function applySize(){
+  to.style.height=barH+'px';
+  to.style.width=barW+'%';
+  to.style.left=((100-barW)/2)+'%';
+  if(bgMode==='gradient'){
+    const lh=Math.max(Math.round(fSize*1.8),Math.round(barH*.55));
+    ts.style.top=Math.max(0,barH-lh)+'px';ts.style.lineHeight=lh+'px';
+  } else {
+    ts.style.top='0';ts.style.lineHeight=barH+'px';
+  }
+  ts.style.fontSize=fSize+'px';ts.style.fontFamily=fFamily;applyFontStyle();
+}
+function applyMode(m){
+  bgMode=m;
+  darkRow.style.display=m==='dark'?'block':'none';
+  crEl.style.display=m==='color'?'block':'none';
+  applyBg();applySize();
+}
+function frame(t){
+  if(going&&!paused&&lt!==null){
+    posX-=spd*(t-lt)/1000;
+    if(posX<-(ts.offsetWidth+20))posX=W;
+    ts.style.transform='translateX('+Math.round(posX)+'px)';
+  }
+  lt=t;requestAnimationFrame(frame);
+}
+ts.style.color='rgba(255,255,255,1)';
+applyMode('dark');ts.textContent=ti.value;
+applyFontStyle();
+requestAnimationFrame(frame);
+
+ti.addEventListener('input',()=>ts.textContent=ti.value);
+document.getElementById('sr').oninput=e=>{spd=+e.target.value;document.getElementById('sv').textContent=spd;};
+document.getElementById('fsr').oninput=e=>{fSize=+e.target.value;document.getElementById('fsv').textContent=fSize;document.getElementById('fsvr').textContent=fSize*4;applySize();};
+document.getElementById('opr').oninput=e=>{opacity=+e.target.value/100;document.getElementById('opv').textContent=e.target.value;applyBg();};
+document.getElementById('hr').oninput=e=>{barH=+e.target.value;document.getElementById('hv').textContent=barH;applySize();};
+document.getElementById('wr').oninput=e=>{barW=+e.target.value;document.getElementById('wv').textContent=barW;applySize();};
+
+document.querySelectorAll('.pill.bg').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.pill.bg').forEach(el=>el.classList.remove('on'));
+  b.classList.add('on');applyMode(b.dataset.m);
+});
+document.querySelectorAll('.pill.ff').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.pill.ff').forEach(el=>el.classList.remove('on'));
+  b.classList.add('on');fFamily=b.dataset.ff;applySize();
+});
+document.querySelectorAll('.sw.dc').forEach(s=>s.onclick=()=>{
+  document.querySelectorAll('.sw.dc').forEach(el=>el.classList.remove('on'));
+  s.classList.add('on');darkRGB=s.dataset.dc;if(bgMode==='dark')applyBg();
+});
+document.querySelectorAll('.sw.bc').forEach(s=>s.onclick=()=>{
+  document.querySelectorAll('.sw.bc').forEach(el=>el.classList.remove('on'));
+  s.classList.add('on');solidRGB=s.dataset.bc;if(bgMode==='color')applyBg();
+});
+document.querySelectorAll('.sw.tc').forEach(s=>s.onclick=()=>{
+  document.querySelectorAll('.sw.tc').forEach(el=>el.classList.remove('on'));
+  s.classList.add('on');tRGB=s.dataset.tc;ts.style.color='rgba('+tRGB+',1)';
+});
+</script>
+</body>
+</html>
